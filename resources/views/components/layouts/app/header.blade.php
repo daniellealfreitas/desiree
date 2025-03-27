@@ -8,20 +8,42 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
             <a href="{{ route('dashboard') }}" class="ml-2 mr-5 flex items-center space-x-2 lg:ml-0" wire:navigate>
-                <x-app-logo />
+                <img src="{{ asset('images/logo.png') }}" alt="Desiree Swing Club" class="img-fluid" style="max-width: 100px;" />
             </a>
 
             <flux:navbar class="-mb-px max-lg:hidden">
                 <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:navbar.item>
+                <flux:navbar.item icon="layout-grid" :href="route('busca')" :current="request()->routeIs('busca')" wire:navigate>
+                    {{ __('Busca') }}
+                </flux:navbar.item>
+                <flux:navbar.item icon="layout-grid" :href="route('contos')" :current="request()->routeIs('contos')" wire:navigate>
+                    {{ __('Contos') }}
+                </flux:navbar.item>
+                <flux:navbar.item icon="layout-grid" :href="route('ultimas')" :current="request()->routeIs('ultimas')" wire:navigate>
+                    {{ __('Ultimas') }}
+                </flux:navbar.item>
+                <flux:navbar.item icon="layout-grid" :href="route('radar')" :current="request()->routeIs('radar')" wire:navigate>
+                    {{ __('Radar') }}
+                </flux:navbar.item>
+                <flux:navbar.item icon="layout-grid" :href="route('grupos')" :current="request()->routeIs('grupos')" wire:navigate>
+                    {{ __('Grupos') }}
+                </flux:navbar.item>
+                <flux:navbar.item icon="layout-grid" :href="route('Bate-Papo')" :current="request()->routeIs('Bate-Papo')" wire:navigate>
+                    {{ __('Bate Papo') }}
+                </flux:navbar.item>
+                <flux:navbar.item icon="layout-grid" :href="route('caixa_de_mensagens')" :current="request('caixa_de_mensagens')->routeIs('caixa_de_mensagens')" wire:navigate>
+                    {{ __('Caixa de Mensagens') }}
+                </flux:navbar.item> 
+
             </flux:navbar>
 
             <flux:spacer />
 
             <flux:navbar class="mr-1.5 space-x-0.5 py-0!">
-                <flux:tooltip :content="__('Search')" position="bottom">
-                    <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" :label="__('Search')" />
+                <flux:tooltip :content="__('Buscar')" position="bottom">
+                    <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" :label="__('Buscar')" />
                 </flux:tooltip>
                 <flux:tooltip :content="__('Repository')" position="bottom">
                     <flux:navbar.item
