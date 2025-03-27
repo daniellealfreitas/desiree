@@ -68,7 +68,6 @@
             </div>
           </nav>
 
-        
 
         <section class="hero-section" id="section_1">
             <div class="section-overlay"></div>
