@@ -13,6 +13,8 @@
     <link href="<?php echo e(asset('css/bootstrap.min.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(asset('css/bootstrap-icons.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(asset('css/style.css')); ?>" rel="stylesheet">
+
+    
 </head>
 
 <body>
@@ -824,6 +826,7 @@
     <script src="js/jquery.sticky.js"></script>
     <script src="js/click-scroll.js"></script>
     <script src="js/custom.js"></script>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </body>
 </html><?php /**PATH C:\xampp\htdocs\desiree2\resources\views/home.blade.php ENDPATH**/ ?>
