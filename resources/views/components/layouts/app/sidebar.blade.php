@@ -18,7 +18,7 @@
                         <flux:navmenu.item href="#">Nenhuma Solicitação</flux:navmenu.item>                  
                     </flux:navmenu>
                 </flux:dropdown>
-                {{-- <flux:separator vertical variant="subtle" class="my-2"/> --}}
+              
                 <flux:dropdown class="max-lg:hidden">
                     <flux:navbar.item icon="bell">Notificações</flux:navbar.item>
                     <flux:navmenu>
