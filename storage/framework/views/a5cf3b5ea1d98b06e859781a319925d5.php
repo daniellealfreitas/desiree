@@ -9,14 +9,14 @@ use Livewire\Volt\Component;
 
     <?php if (isset($component)) { $__componentOriginal951a5936e8413b65cd052beecc1fba57 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal951a5936e8413b65cd052beecc1fba57 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings.layout','data' => ['heading' => __('Appearance'),'subheading' =>  __('Update the appearance settings for your account')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.settings.layout','data' => ['heading' => __('Aparência'),'subheading' =>  __('Mude a aparencia do seu painek')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('settings.layout'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['heading' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Appearance')),'subheading' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute( __('Update the appearance settings for your account'))]); ?>
+<?php $component->withAttributes(['heading' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Aparência')),'subheading' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute( __('Mude a aparencia do seu painek'))]); ?>
         <?php if (isset($component)) { $__componentOriginale5140a44d7461450cb1378cd5b47dfc8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginale5140a44d7461450cb1378cd5b47dfc8 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.group.index','data' => ['xData' => true,'variant' => 'segmented','xModel' => '$flux.appearance']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -36,7 +36,7 @@ use Livewire\Volt\Component;
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['value' => 'light','icon' => 'sun']); ?><?php echo e(__('Light')); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['value' => 'light','icon' => 'sun']); ?><?php echo e(__('Claro')); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
 <?php $attributes = $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
@@ -55,7 +55,7 @@ use Livewire\Volt\Component;
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['value' => 'dark','icon' => 'moon']); ?><?php echo e(__('Dark')); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['value' => 'dark','icon' => 'moon']); ?><?php echo e(__('Escuro')); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
 <?php $attributes = $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
@@ -74,7 +74,7 @@ use Livewire\Volt\Component;
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['value' => 'system','icon' => 'computer-desktop']); ?><?php echo e(__('System')); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['value' => 'system','icon' => 'computer-desktop']); ?><?php echo e(__('Sistema')); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
 <?php $attributes = $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357; ?>

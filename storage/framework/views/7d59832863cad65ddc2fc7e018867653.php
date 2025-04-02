@@ -35,46 +35,6 @@
 <?php $component = $__componentOriginal1b6467b07b302021134396bbd98e74a9; ?>
 <?php unset($__componentOriginal1b6467b07b302021134396bbd98e74a9); ?>
 <?php endif; ?>
-            <?php if (isset($component)) { $__componentOriginal6cdb42459f68d5ce2e97131ae988e57c = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal6cdb42459f68d5ce2e97131ae988e57c = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::brand','data' => ['href' => '#','logo' => 'https://fluxui.dev/img/demo/logo.png','name' => 'Acme Inc.','class' => 'max-lg:hidden dark:hidden']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('flux::brand'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => '#','logo' => 'https://fluxui.dev/img/demo/logo.png','name' => 'Acme Inc.','class' => 'max-lg:hidden dark:hidden']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal6cdb42459f68d5ce2e97131ae988e57c)): ?>
-<?php $attributes = $__attributesOriginal6cdb42459f68d5ce2e97131ae988e57c; ?>
-<?php unset($__attributesOriginal6cdb42459f68d5ce2e97131ae988e57c); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal6cdb42459f68d5ce2e97131ae988e57c)): ?>
-<?php $component = $__componentOriginal6cdb42459f68d5ce2e97131ae988e57c; ?>
-<?php unset($__componentOriginal6cdb42459f68d5ce2e97131ae988e57c); ?>
-<?php endif; ?>
-            <?php if (isset($component)) { $__componentOriginal6cdb42459f68d5ce2e97131ae988e57c = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal6cdb42459f68d5ce2e97131ae988e57c = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::brand','data' => ['href' => '#','logo' => 'https://fluxui.dev/img/demo/dark-mode-logo.png','name' => 'Acme Inc.','class' => 'max-lg:hidden! hidden dark:flex']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('flux::brand'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['href' => '#','logo' => 'https://fluxui.dev/img/demo/dark-mode-logo.png','name' => 'Acme Inc.','class' => 'max-lg:hidden! hidden dark:flex']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal6cdb42459f68d5ce2e97131ae988e57c)): ?>
-<?php $attributes = $__attributesOriginal6cdb42459f68d5ce2e97131ae988e57c; ?>
-<?php unset($__attributesOriginal6cdb42459f68d5ce2e97131ae988e57c); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal6cdb42459f68d5ce2e97131ae988e57c)): ?>
-<?php $component = $__componentOriginal6cdb42459f68d5ce2e97131ae988e57c; ?>
-<?php unset($__componentOriginal6cdb42459f68d5ce2e97131ae988e57c); ?>
-<?php endif; ?>
             <?php if (isset($component)) { $__componentOriginald33a3439ec8f8da64b388b23a8637b39 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginald33a3439ec8f8da64b388b23a8637b39 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.index','data' => ['class' => '-mb-px max-lg:hidden']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

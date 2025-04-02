@@ -41,7 +41,7 @@ unset($__defined_vars); ?>
     <?php echo e($attributes->merge(['class' => 'text-sm'])); ?>
 
 >
-    <?php echo e($slot->isEmpty() ? __('Saved.') : $slot); ?>
+    <?php echo e($slot->isEmpty() ? __('Salvo.') : $slot); ?>
 
 </div>
 <?php /**PATH C:\xampp\htdocs\desiree2\resources\views/components/action-message.blade.php ENDPATH**/ ?>
