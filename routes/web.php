@@ -1,7 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\FollowController;
+use App\Http\Controllers\UserLevelController;
+use App\Http\Livewire\UserProfileForm;
 use Livewire\Volt\Volt;
+use App\Http\Livewire\PostFeed;
 
 Route::get('/', function () {
     return view('home');
@@ -69,5 +75,21 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
 });
+
+// Recursos de Postagens
+Route::resource('posts', PostController::class)->middleware('auth');
+
+// Rota para alternar curtidas (Livewire pode ser usado, mas aqui um POST simples)
+Route::post('likes/toggle/{post}', [LikeController::class, 'toggle'])->name('likes.toggle')->middleware('auth');
+
+// Recursos de Seguidores
+Route::post('follows/toggle/{user}', [FollowController::class, 'toggle'])->name('follows.toggle')->middleware('auth');
+
+// Rotas para editar perfil (Livewire)
+// Route::get('profile/edit', UserProfileForm::class)->name('user.profile.edit')->middleware('auth');
+
+// Rotas para níveis (apenas leitura)
+Route::get('levels', [UserLevelController::class, 'index'])->name('levels.index')->middleware('auth');
+
 
 require __DIR__.'/auth.php';
