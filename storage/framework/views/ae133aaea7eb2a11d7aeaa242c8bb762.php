@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="p-6 mb-6 border border-gray-200 rounded-lg shadow-md">
             <div class="flex items-center space-x-3 mb-4">
-                <img src="<?php echo e(asset('images/users/' . ($post->user->avatar ?? 'default.jpg'))); ?>" class="w-10 h-10 rounded-full">
+                <img src="<?php echo e(asset('images/users/' . ($post->user->profile ?? 'default.jpg'))); ?>" class="w-10 h-10 rounded-full">
                 <div>
                     <h4 class="font-semibold"><?php echo e($post->user->name); ?></h4>
                     <p class="text-sm text-gray-500">{{ $post->user->username }}</p>
@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
             </div>
 
             <!--[if BLOCK]><![endif]--><?php if($post->image): ?>
-                <img src="<?php echo e(asset('images/posts/' . $post->image)); ?>" class="w-full rounded-lg mb-4">
+                <img src="<?php echo e(asset( $post->image)); ?>" class="w-full rounded-lg mb-4">
             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
             <p class="text-gray-700"><?php echo e($post->content); ?></p>
@@ -27,9 +27,9 @@ use Illuminate\Support\Facades\Auth;
                     wire:click="toggleLike(<?php echo e($post->id); ?>)"
                     class="<?php echo e($post->isLikedBy(auth()->user()) ? 'text-red-600' : 'text-gray-400'); ?>"
                 >
-                    ❤️ Like
+                    ❤️ Curtir
                 </button>
-                <span><?php echo e($post->likedByUsers->count()); ?> likes</span>
+                <span><?php echo e($post->likedByUsers->count()); ?> Curtida</span>
             </div>
 
             <input

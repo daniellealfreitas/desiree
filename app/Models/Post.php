@@ -4,11 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Like;
+use App\Models\UserPoint;
+use App\Models\PostUserLike;
 
 class Post extends Model {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'content', 'image', 'video'];
+    protected $fillable = [
+        'user_id',
+        'content',
+        'image',
+        'video',
+        'likes_count'
+    ];
 
     public function user() {
         return $this->belongsTo(User::class);
