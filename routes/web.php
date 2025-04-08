@@ -8,6 +8,7 @@ use App\Http\Controllers\UserLevelController;
 use App\Http\Livewire\UserProfileForm;
 use Livewire\Volt\Volt;
 use App\Http\Livewire\PostFeed;
+use App\Livewire\CreatePost;
 
 Route::get('/', function () {
     return view('home');
@@ -23,46 +24,46 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-    Route::view('busca', 'busca')
+Route::view('busca', 'busca')
     ->middleware(['auth', 'verified'])
     ->name('busca');
 
     
-    Route::view('contos', 'contos')
+Route::view('contos', 'contos')
     ->middleware(['auth', 'verified'])
     ->name('contos');
 
 
-    Route::view('feed_imagens', 'feed_imagens')
+Route::view('feed_imagens', 'feed_imagens')
     ->middleware(['auth', 'verified'])
     ->name('feed_imagens');
 
-    Route::view('feed_videos', 'feed_videos')
+Route::view('feed_videos', 'feed_videos')
     ->middleware(['auth', 'verified'])
     ->name('feed_videos');
 
 
-    Route::view('programacao', 'programacao')
+Route::view('programacao', 'programacao')
     ->middleware(['auth', 'verified'])
     ->name('programacao');
 
 
-    Route::view('radar', 'radar')
+Route::view('radar', 'radar')
     ->middleware(['auth', 'verified'])
     ->name('radar');
 
 
-    Route::view('grupos', 'grupos')
+Route::view('grupos', 'grupos')
     ->middleware(['auth', 'verified'])
     ->name('grupos');
 
 
-    Route::view('bate_papo', 'bate_papo')
+Route::view('bate_papo', 'bate_papo')
     ->middleware(['auth', 'verified'])
     ->name('bate_papo');
 
 
-    Route::view('caixa_de_mensagens', 'caixa_de_mensagens')
+Route::view('caixa_de_mensagens', 'caixa_de_mensagens')
     ->middleware(['auth', 'verified'])
     ->name('caixa_de_mensagens');
 
@@ -90,6 +91,5 @@ Route::post('follows/toggle/{user}', [FollowController::class, 'toggle'])->name(
 
 // Rotas para níveis (apenas leitura)
 Route::get('levels', [UserLevelController::class, 'index'])->name('levels.index')->middleware('auth');
-
 
 require __DIR__.'/auth.php';

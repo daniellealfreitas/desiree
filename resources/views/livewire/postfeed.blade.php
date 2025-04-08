@@ -33,7 +33,7 @@ $toggleLike = action(function ($postId) {
     @foreach ($posts as $post)
         <div class="p-6 mb-6 border border-gray-200 rounded-lg shadow-md">
             <div class="flex items-center space-x-3 mb-4">
-                <img src="{{ asset('images/users/' . ($post->user->avatar ?? 'default.jpg')) }}" class="w-10 h-10 rounded-full">
+                <img src="{{ asset('images/users/' . ($post->user->profile ?? 'default.jpg')) }}" class="w-10 h-10 rounded-full">
                 <div>
                     <h4 class="font-semibold">{{ $post->user->name }}</h4>
                     <p class="text-sm text-gray-500">@{{ $post->user->username }}</p>
@@ -41,7 +41,7 @@ $toggleLike = action(function ($postId) {
             </div>
 
             @if ($post->image)
-                <img src="{{ asset('images/posts/' . $post->image) }}" class="w-full rounded-lg mb-4">
+                <img src="{{ asset( $post->image) }}" class="w-full rounded-lg mb-4">
             @endif
 
             <p class="text-gray-700">{{ $post->content }}</p>
@@ -51,9 +51,9 @@ $toggleLike = action(function ($postId) {
                     wire:click="toggleLike({{ $post->id }})"
                     class="{{ $post->isLikedBy(auth()->user()) ? 'text-red-600' : 'text-gray-400' }}"
                 >
-                    ❤️ Like
+                    ❤️ Curtir
                 </button>
-                <span>{{ $post->likedByUsers->count() }} likes</span>
+                <span>{{ $post->likedByUsers->count() }} Curtida</span>
             </div>
 
             <input

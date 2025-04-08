@@ -9,9 +9,9 @@
 <?php endif; ?>
 <?php $component->withAttributes(['title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Dashboard'))]); ?>
     <div class="grid md:grid-cols-3 gap-6">
-        <!-- Container para Sidebar e Feed -->
+        <!-- Container para coluna esquerda -->
         <div class="col-span-1 space-y-6">
-            <!-- Sidebar Perfil -->
+            <!--   Perfil -->
             <div class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
                 <div class="relative h-32 bg-cover bg-center rounded-t-lg" 
                     style="background:url(<?php echo e(asset('images/users/capa.jpg')); ?>); background-size: cover; background-position: center;">
@@ -61,31 +61,29 @@
         </div>
         <!-- Container para Feed de Postagens -->
         <div class="col-span-2 space-y-6">
-            <div class="p-6 border border-neutral-200 dark:border-neutral-700 shadow-md rounded-lg">
-                <form action="#" method="POST" enctype="multipart/form-data">
-                    <textarea name="text_content" rows="3" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Compartilhe o que você pensa com fotos ou vídeos..."></textarea>
-                    <div class="flex justify-between mt-3">
-                        <div class="flex space-x-4">
-                            <label for="image_content" class="cursor-pointer flex items-center text-gray-500">
-                                📷 <input id="image_content" name="image_content" type="file" accept="image/*" class="hidden">
-                            </label>
-                            <label for="video_content" class="cursor-pointer flex items-center text-gray-500">
-                                🎥 <input id="video_content" name="video_content" type="file" accept="video/*" class="hidden">
-                            </label>
-                        </div>
-                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg">Postar</button>
-                    </div>
-                </form>
-            </div>
-            <!-- Postagens -->
-            
+            <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('create-post', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-0', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
             <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
 [$__name, $__params] = $__split('postfeed', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-0', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-1', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 

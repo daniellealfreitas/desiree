@@ -1,8 +1,8 @@
 <x-layouts.app :title="__('Dashboard')">
     <div class="grid md:grid-cols-3 gap-6">
-        <!-- Container para Sidebar e Feed -->
+        <!-- Container para coluna esquerda -->
         <div class="col-span-1 space-y-6">
-            <!-- Sidebar Perfil -->
+            <!--   Perfil -->
             <div class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
                 <div class="relative h-32 bg-cover bg-center rounded-t-lg" 
                     style="background:url({{ asset('images/users/capa.jpg') }}); background-size: cover; background-position: center;">
@@ -52,40 +52,7 @@
         </div>
         <!-- Container para Feed de Postagens -->
         <div class="col-span-2 space-y-6">
-            <div class="p-6 border border-neutral-200 dark:border-neutral-700 shadow-md rounded-lg">
-                <form action="#" method="POST" enctype="multipart/form-data">
-                    <textarea name="text_content" rows="3" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Compartilhe o que você pensa com fotos ou vídeos..."></textarea>
-                    <div class="flex justify-between mt-3">
-                        <div class="flex space-x-4">
-                            <label for="image_content" class="cursor-pointer flex items-center text-gray-500">
-                                📷 <input id="image_content" name="image_content" type="file" accept="image/*" class="hidden">
-                            </label>
-                            <label for="video_content" class="cursor-pointer flex items-center text-gray-500">
-                                🎥 <input id="video_content" name="video_content" type="file" accept="video/*" class="hidden">
-                            </label>
-                        </div>
-                        <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg">Postar</button>
-                    </div>
-                </form>
-            </div>
-            <!-- Postagens -->
-            {{-- @for ($i = 0; $i < 3; $i++)
-                <div class="p-6 border border-neutral-200 dark:border-neutral-700 shadow-md rounded-lg">
-                    <div class="flex justify-between items-center mb-4">
-                        <div class="flex items-center space-x-3">
-                            <img src="{{ asset('images/users/avatar.jpg') }}" class="w-10 h-10 rounded-full">
-                            <div>
-                                <h4 class="font-semibold">Nome do Usuário</h4>
-                                <p class="text-gray-500 text-sm">@usuario</p>
-                            </div>
-                        </div>
-                        <button class="text-red-500">❤️ Curtir</button>
-                    </div>
-                    <img src="{{ asset('images/posts/post.jpg') }}" class="w-full rounded-lg mb-4">
-                    <p class="text-gray-700">Texto da postagem...</p>
-                    <input type="text" class="w-full p-2 border border-gray-300 rounded-lg mt-3" placeholder="Escreva um comentário...">
-                </div>
-            @endfor --}}
+            <livewire:create-post />
             <livewire:postfeed />
         </div>
     </div>
