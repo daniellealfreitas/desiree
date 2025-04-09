@@ -5,6 +5,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\FollowController;
 use App\Http\Controllers\UserLevelController;
+use App\Http\Controllers\UserController;
 use App\Http\Livewire\UserProfileForm;
 use Livewire\Volt\Volt;
 use App\Http\Livewire\PostFeed;
@@ -75,6 +76,7 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+    Volt::route('settings/profile-with-avatar', 'settings.profile-with-avatar')->name('settings.profile-with-avatar');
 });
 
 // Recursos de Postagens
@@ -91,5 +93,8 @@ Route::post('follows/toggle/{user}', [FollowController::class, 'toggle'])->name(
 
 // Rotas para níveis (apenas leitura)
 Route::get('levels', [UserLevelController::class, 'index'])->name('levels.index')->middleware('auth');
+
+// Rota para processar o upload da foto
+Route::post('/user/upload-photo', [UserController::class, 'uploadPhoto'])->name('user.uploadPhoto');
 
 require __DIR__.'/auth.php';
