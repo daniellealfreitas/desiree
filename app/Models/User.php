@@ -64,7 +64,16 @@ class User extends Authenticatable
         return $this->belongsToMany(PreferenceOption::class, 'user_preferences', 'user_id', 'preference_option_id');
     }
 
+    // Relacionamento com fotos
+    public function photos()
+    {
+        return $this->hasMany(UserPhoto::class);
+    }
 
+    public function userPhotos()
+    {
+        return $this->hasMany(UserPhoto::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.
