@@ -10,40 +10,47 @@
             <flux:navbar class="-mb-px max-lg:hidden">
                 <flux:navbar.item icon="map-pin" href="#" >Radar</flux:navbar.item>
                 <flux:navbar.item icon="inbox" badge="12" href="#">Mensagens</flux:navbar.item>
-                <flux:dropdown class="max-lg:hidden">
-                    <flux:navbar.item icon="user-plus">Solicitações</flux:navbar.item>
-                    <flux:navmenu>
-                        <flux:navmenu.item href="#">Nenhuma Solicitação</flux:navmenu.item>                  
-                    </flux:navmenu>
-                </flux:dropdown>
-              
-                <flux:dropdown class="max-lg:hidden">
-                    <flux:navbar.item icon="bell">Notificações</flux:navbar.item>
-                    <flux:navmenu>
-                        <flux:navmenu.item href="#">Nenhuma Notificação</flux:navmenu.item>                  
-                    </flux:navmenu>
-                </flux:dropdown>
+                <livewire:follow-request-notifications />
+                <livewire:notifications />
             </flux:navbar>
             <flux:spacer />
             <flux:navbar class="me-4">
                 <flux:navbar.item icon="magnifying-glass" href="#" label="Search" />
-                <flux:navbar.item class="max-lg:hidden" icon="cog-6-tooth" href="#" label="Settings" />
+                <flux:navbar.item class="max-lg:hidden" icon="cog-6-tooth" :href="route('settings.profile')" label="Settings" />
                 <flux:navbar.item class="max-lg:hidden" icon="information-circle" href="#" label="Help" />
             </flux:navbar>
             <flux:dropdown position="top" align="start">
-                <flux:profile avatar="https://fluxui.dev/img/demo/user.png" />
+                <flux:profile :avatar="auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')" />
                 <flux:menu>
                     <flux:menu.radio.group>
-                        <flux:menu.radio checked>Olivia Martin</flux:menu.radio>
+                        <flux:menu.radio checked>{{ auth()->user()->name }}</flux:menu.radio>
                     </flux:menu.radio.group>
                     
                     <flux:menu.separator />
-                    <flux:menu.item icon="arrow-right-start-on-rectangle" href="#">Meu Perfil</flux:menu.item>
-                    <flux:menu.item icon="arrow-right-start-on-rectangle" href="#">Configuações</flux:menu.item>
+                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="'/' . auth()->user()->username">Meu Perfil</flux:menu.item>
+                    <flux:menu.item icon="user-plus" :href="route('follow.requests')" wire:navigate>
+                        Solicitações para seguir
+                        @php
+                            $pendingCount = \App\Models\FollowRequest::where('receiver_id', auth()->id())
+                                ->where('status', 'pending')
+                                ->count();
+                        @endphp
+                        @if($pendingCount > 0)
+                            <span class="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
+                                {{ $pendingCount }}
+                            </span>
+                        @endif
+                    </flux:menu.item>
+                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('settings.profile')">Configurações</flux:menu.item>
                     <flux:menu.item icon="arrow-right-start-on-rectangle" href="#">Meus Visitantes</flux:menu.item>
                     <flux:menu.item icon="arrow-right-start-on-rectangle" href="#">Renovar VIP</flux:menu.item>
                     <flux:menu.item icon="arrow-right-start-on-rectangle" href="#">Meus Pagamentos</flux:menu.item>
-                    <flux:menu.item icon="arrow-right-start-on-rectangle">Sair</flux:menu.item>
+                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                        @csrf
+                        <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
+                            {{ __('Sair') }}
+                        </flux:menu.item>
+                    </form>
                 </flux:menu>
             </flux:dropdown>
         </flux:header>
@@ -98,7 +105,7 @@
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
                 <flux:profile :name="auth()->user()->name"
-                    :initials="auth()->user()->initials()"
+                    :avatar="auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')"
                     icon-trailing="chevrons-up-down"
                 />
 
@@ -107,11 +114,9 @@
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <span
-                                        class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
-                                    >
-                                        {{ auth()->user()->initials() }}
-                                    </span>
+                                    <img src="{{ auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}" 
+                                         class="h-full w-full object-cover" 
+                                         alt="{{ auth()->user()->name }}">
                                 </span>
 
                                 <div class="grid flex-1 text-left text-sm leading-tight">
@@ -151,6 +156,7 @@
             <flux:dropdown position="top" align="start">
                 <flux:profile
                     :initials="auth()->user()->initials()"
+                    :avatar="auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')"
                     icon-trailing="chevron-down"
                 />
 
@@ -159,11 +165,9 @@
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <span
-                                        class="flex h-full w-full items-center justify-center rounded-lg bg-neutral-200 text-black dark:bg-neutral-700 dark:text-white"
-                                    >
-                                        {{ auth()->user()->initials() }}
-                                    </span>
+                                    <img src="{{ auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}" 
+                                         class="h-full w-full object-cover" 
+                                         alt="{{ auth()->user()->name }}">
                                 </span>
 
                                 <div class="grid flex-1 text-left text-sm leading-tight">

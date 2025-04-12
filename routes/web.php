@@ -10,6 +10,9 @@ use App\Http\Livewire\UserProfileForm;
 use Livewire\Volt\Volt;
 use App\Http\Livewire\PostFeed;
 use App\Livewire\CreatePost;
+use App\Livewire\ProfileComponent;
+use App\Http\Livewire\FollowRequestsHandler;
+use App\Livewire\FollowRequestNotifications;
 
 Route::get('/', function () {
     return view('home');
@@ -69,6 +72,15 @@ Route::view('caixa_de_mensagens', 'caixa_de_mensagens')
     ->name('caixa_de_mensagens');
 
 
+Route::middleware('guest')->group(function () {
+    Route::get('login', function () {
+        return view('auth.login');
+    })->name('login');
+
+    Route::get('register', function () {
+        return view('auth.register');
+    })->name('register');
+});
 
 
 Route::middleware(['auth'])->group(function () {
@@ -77,6 +89,8 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
     Volt::route('settings/profile-with-avatar', 'settings.profile-with-avatar')->name('settings.profile-with-avatar');
+    Volt::route('settings/profile-with-cover', 'settings.profile-with-cover')->name('settings.profile-with-cover');
+    Route::get('/follow-requests', FollowRequestNotifications::class)->name('follow.requests');
 });
 
 // Recursos de Postagens
@@ -96,5 +110,10 @@ Route::get('levels', [UserLevelController::class, 'index'])->name('levels.index'
 
 // Rota para processar o upload da foto
 Route::post('/user/upload-photo', [UserController::class, 'uploadPhoto'])->name('user.uploadPhoto');
+
+// Rota para exibir perfil do usuário pelo username
+Route::get('/{username}', function($username) {
+    return view('profile-page', ['username' => $username]);
+})->name('user.profile');
 
 require __DIR__.'/auth.php';
