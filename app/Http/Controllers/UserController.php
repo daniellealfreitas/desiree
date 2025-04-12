@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\UserPhoto;
+use App\Models\User;
 
 class UserController extends Controller
 {
@@ -28,5 +29,11 @@ class UserController extends Controller
 
         // Retorna para a página anterior com uma mensagem de sucesso
         return back()->with('success', 'Photo uploaded successfully!');
+    }
+
+    public function show($username)
+    {
+        $user = User::where('username', $username)->firstOrFail();
+        return view('perfil', compact('user'));
     }
 }

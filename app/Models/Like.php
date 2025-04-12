@@ -23,6 +23,16 @@ class Like extends Model {
         parent::boot();
 
         static::created(function ($like) {
+            // Só cria notificação se o like não for no próprio post
+            if ($like->post->user_id !== $like->user_id) {
+                Notification::create([
+                    'user_id' => $like->post->user_id,
+                    'sender_id' => $like->user_id,
+                    'type' => 'like',
+                    'post_id' => $like->post_id
+                ]);
+            }
+
             $userPoint = UserPoint::firstOrCreate(['user_id' => $like->post->user_id]);
             $userPoint->increment('points', 2);
             $like->post->user->updateLevel();

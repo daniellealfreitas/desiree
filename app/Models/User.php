@@ -18,11 +18,12 @@ class User extends Authenticatable
 
 
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'role', 'level', 'profile_photo_path', 'cover_photo_path'
+        'name', 'username', 'email', 'password', 'role', 'level', 
     ];
 
     // Relação com posts
-    public function posts() {
+    public function posts()
+    {
         return $this->hasMany(Post::class);
     }
 
@@ -73,6 +74,71 @@ class User extends Authenticatable
     public function userPhotos()
     {
         return $this->hasMany(UserPhoto::class);
+    }
+
+    public function userPhoto()
+    {
+        return $this->hasOne(UserPhoto::class);
+    }
+
+    public function userCoverPhotos()
+    {
+        return $this->hasMany(UserCoverPhoto::class);
+    }
+
+    /**
+     * Usuários que seguem este usuário
+     */
+    public function followers()
+    {
+        return $this->belongsToMany(User::class, 'user_followers', 'following_id', 'follower_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Usuários que este usuário segue
+     */
+    public function following()
+    {
+        return $this->belongsToMany(User::class, 'user_followers', 'follower_id', 'following_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if the user is following another user
+     */
+    public function isFollowing(User $user)
+    {
+        return $this->following()->where('following_id', $user->id)->exists();
+    }
+
+    /**
+     * Relacionamento com notificações
+     */
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class);
+    }
+
+    /**
+     * Relacionamento com solicitações de seguir
+     */
+    public function followRequests()
+    {
+        return $this->hasMany(FollowRequest::class, 'receiver_id');
+    }
+
+    public function sentFollowRequests()
+    {
+        return $this->hasMany(FollowRequest::class, 'sender_id');
+    }
+
+    public function hasPendingFollowRequestFrom(User $user)
+    {
+        return $this->followRequests()
+            ->where('sender_id', $user->id)
+            ->where('status', 'pending')
+            ->exists();
     }
 
     /**

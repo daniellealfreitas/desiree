@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Like;
 use App\Models\UserPoint;
 use App\Models\PostUserLike;
+use App\Models\Comment;
 
 class Post extends Model {
     use HasFactory;
@@ -28,7 +29,11 @@ class Post extends Model {
         return $this->hasMany(Like::class);
     }
 
-    
+    public function comments()
+    {
+        return $this->hasMany(Comment::class)->latest();
+    }
+
     public function likedByUsers()
     {
         return $this->belongsToMany(User::class, 'post_user_likes')->withTimestamps();
@@ -38,7 +43,6 @@ class Post extends Model {
     {
         return $user ? $this->likedByUsers->contains($user) : false;
     }
-
 
     // Ao criar ou deletar um post, atualiza os pontos do usuário
     protected static function boot() {

@@ -5,6 +5,7 @@
             <flux:navlist.item :href="route('settings.password')" wire:navigate>{{ __('Senha') }}</flux:navlist.item>
             <flux:navlist.item :href="route('settings.appearance')" wire:navigate>{{ __('Aparência') }}</flux:navlist.item>
             <flux:navlist.item :href="route('settings.profile-with-avatar')" wire:navigate>{{ __('Foto de Perfil') }}</flux:navlist.item>
+            <flux:navlist.item :href="route('settings.profile-with-cover')" wire:navigate>{{ __('Foto de Capa') }}</flux:navlist.item>
         </flux:navlist>
     </div>
 

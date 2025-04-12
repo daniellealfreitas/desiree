@@ -13,6 +13,8 @@ new class extends Component implements Livewire\Volt\Contracts\FunctionalCompone
 
     public $limit;
 
+    public $newComment;
+
     public $posts;
 
     public function mount()
@@ -34,6 +36,13 @@ new class extends Component implements Livewire\Volt\Contracts\FunctionalCompone
         $arguments = [static::$__context, $this, func_get_args()];
 
         return (new Actions\CallMethod('toggleLike'))->execute(...$arguments);
+    }
+
+    public function addComment($postId)
+    {
+        $arguments = [static::$__context, $this, func_get_args()];
+
+        return (new Actions\CallMethod('addComment'))->execute(...$arguments);
     }
 
 };
