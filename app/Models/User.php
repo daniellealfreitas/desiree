@@ -9,7 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-
+use App\Models\Conto;
+use App\Models\City;
+use App\Models\State;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -18,7 +22,7 @@ class User extends Authenticatable
 
 
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'role', 'level', 
+        'name', 'username', 'email', 'password', 'role', 'level', 'latitude', 'longitude',
     ];
 
     // Relação com posts
@@ -35,6 +39,11 @@ class User extends Authenticatable
     public function likedPosts()
     {
         return $this->belongsToMany(Post::class, 'post_user_likes')->withTimestamps();
+    }
+
+    public function contos()
+    {
+        return $this->hasMany(Conto::class);
     }
 
     // Relação com pontos (pontuação do usuário)
@@ -139,6 +148,16 @@ class User extends Authenticatable
             ->where('sender_id', $user->id)
             ->where('status', 'pending')
             ->exists();
+    }
+
+    public function city()
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function state()
+    {
+        return $this->belongsTo(State::class);
     }
 
     /**

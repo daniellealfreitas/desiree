@@ -8,49 +8,26 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Contos'))]); ?>
-    <?php $__env->startPush('styles'); ?>
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-    <?php $__env->stopPush(); ?>
-
-    <div class="container mx-auto max-w-6xl p-4">
-        <?php
-$__split = function ($name, $params = []) {
-    return [$name, $params];
-};
-[$__name, $__params] = $__split('create-conto', []);
-
-$__html = app('livewire')->mount($__name, $__params, 'lw-1862919999-0', $__slots ?? [], get_defined_vars());
-
-echo $__html;
-
-unset($__html);
-unset($__name);
-unset($__params);
-unset($__split);
-if (isset($__slots)) unset($__slots);
-?>
-        <?php
-$__split = function ($name, $params = []) {
-    return [$name, $params];
-};
-[$__name, $__params] = $__split('list-contos', []);
-
-$__html = app('livewire')->mount($__name, $__params, 'lw-1862919999-1', $__slots ?? [], get_defined_vars());
-
-echo $__html;
-
-unset($__html);
-unset($__name);
-unset($__params);
-unset($__split);
-if (isset($__slots)) unset($__slots);
-?>
-    </div>
-
-    <?php $__env->startPush('scripts'); ?>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-    <?php $__env->stopPush(); ?>
+    <h1>Lista de Contos</h1>
+    <?php if(session('message')): ?>
+        <p><?php echo e(session('message')); ?></p>
+    <?php endif; ?>
+    <?php if(isset($contos) && $contos->isNotEmpty()): ?>
+        <ul>
+            <?php $__currentLoopData = $contos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $conto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <li>
+                    <a href="<?php echo e(route('contos.show', $conto)); ?>"><?php echo e($conto->title); ?></a>
+                    <form action="<?php echo e(route('contos.destroy', $conto)); ?>" method="POST" style="display:inline;">
+                        <?php echo csrf_field(); ?>
+                        <?php echo method_field('DELETE'); ?>
+                        <button type="submit">Deletar</button>
+                    </form>
+                </li>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </ul>
+    <?php else: ?>
+        <p>Nenhum conto encontrado.</p>
+    <?php endif; ?>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal5863877a5171c196453bfa0bd807e410)): ?>
@@ -60,5 +37,4 @@ if (isset($__slots)) unset($__slots);
 <?php if (isset($__componentOriginal5863877a5171c196453bfa0bd807e410)): ?>
 <?php $component = $__componentOriginal5863877a5171c196453bfa0bd807e410; ?>
 <?php unset($__componentOriginal5863877a5171c196453bfa0bd807e410); ?>
-<?php endif; ?>
-<?php /**PATH C:\xampp\htdocs\desiree2\resources\views/contos.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH C:\xampp\htdocs\desiree2\resources\views/contos/index.blade.php ENDPATH**/ ?>

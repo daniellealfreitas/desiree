@@ -13,6 +13,10 @@ use App\Livewire\CreatePost;
 use App\Livewire\ProfileComponent;
 use App\Http\Livewire\FollowRequestsHandler;
 use App\Livewire\FollowRequestNotifications;
+use App\Http\Livewire\ContosForm;
+use App\Http\Controllers\GroupController;
+use App\Http\Livewire\NearbyUsers;
+use App\Http\Controllers\LocationController;
 
 Route::get('/', function () {
     return view('home');
@@ -33,9 +37,9 @@ Route::view('busca', 'busca')
     ->name('busca');
 
     
-Route::view('contos', 'contos')
-    ->middleware(['auth', 'verified'])
-    ->name('contos');
+Route::get('/contos', function () {
+    return view('contos');
+})->middleware(['auth', 'verified'])->name('contos');
 
 
 Route::view('feed_imagens', 'feed_imagens')
@@ -52,10 +56,8 @@ Route::view('programacao', 'programacao')
     ->name('programacao');
 
 
-Route::view('radar', 'radar')
-    ->middleware(['auth', 'verified'])
-    ->name('radar');
-
+// Radar routes
+Route::view('/radar', 'radar')->name('radar')->middleware('auth');
 
 Route::view('grupos', 'grupos')
     ->middleware(['auth', 'verified'])
@@ -70,6 +72,14 @@ Route::view('bate_papo', 'bate_papo')
 Route::view('caixa_de_mensagens', 'caixa_de_mensagens')
     ->middleware(['auth', 'verified'])
     ->name('caixa_de_mensagens');
+
+Route::view('renovar-vip', 'renovar-vip')
+    ->middleware(['auth', 'verified'])
+    ->name('renovar-vip');
+
+Route::view('meus-pagamentos', 'meus-pagamentos')
+    ->middleware(['auth', 'verified'])
+    ->name('meus-pagamentos');
 
 
 Route::middleware('guest')->group(function () {
@@ -93,8 +103,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/follow-requests', FollowRequestNotifications::class)->name('follow.requests');
 });
 
-// Recursos de Postagens
-Route::resource('posts', PostController::class)->middleware('auth');
 
 // Rota para alternar curtidas (Livewire pode ser usado, mas aqui um POST simples)
 Route::post('likes/toggle/{post}', [LikeController::class, 'toggle'])->name('likes.toggle')->middleware('auth');
@@ -102,11 +110,8 @@ Route::post('likes/toggle/{post}', [LikeController::class, 'toggle'])->name('lik
 // Recursos de Seguidores
 Route::post('follows/toggle/{user}', [FollowController::class, 'toggle'])->name('follows.toggle')->middleware('auth');
 
-// Rotas para editar perfil (Livewire)
-// Route::get('profile/edit', UserProfileForm::class)->name('user.profile.edit')->middleware('auth');
 
-// Rotas para níveis (apenas leitura)
-Route::get('levels', [UserLevelController::class, 'index'])->name('levels.index')->middleware('auth');
+
 
 // Rota para processar o upload da foto
 Route::post('/user/upload-photo', [UserController::class, 'uploadPhoto'])->name('user.uploadPhoto');
@@ -115,5 +120,11 @@ Route::post('/user/upload-photo', [UserController::class, 'uploadPhoto'])->name(
 Route::get('/{username}', function($username) {
     return view('profile-page', ['username' => $username]);
 })->name('user.profile');
+
+
+// Rotas para buscar estados e cidades
+Route::get('/estados', [LocationController::class, 'getStates'])->name('get.states');
+Route::get('/cidades/{state}', [LocationController::class, 'getCities'])->name('get.cities');
+
 
 require __DIR__.'/auth.php';

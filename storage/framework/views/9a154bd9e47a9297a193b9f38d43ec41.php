@@ -1,3 +1,4 @@
+
 <?php if (isset($component)) { $__componentOriginal5863877a5171c196453bfa0bd807e410 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal5863877a5171c196453bfa0bd807e410 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.layouts.app','data' => ['title' => __('Radar')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -8,9 +9,14 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Radar'))]); ?>
-    <div class="grid ">
-        <div class="row-span-full p-6 border border-neutral-200 dark:border-neutral-700 shadow-md rounded-lg">
-            Radar
+    <div class="grid md:grid-cols-3 gap-6">
+        <!-- Container para coluna esquerda -->
+        <div class="col-span-1 space-y-6">
+Radar
+        </div>
+        <!-- Container para Feed de Postagens -->
+        <div class="col-span-2 space-y-6">
+
         </div>
     </div>
  <?php echo $__env->renderComponent(); ?>

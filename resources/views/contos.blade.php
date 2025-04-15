@@ -1,7 +1,15 @@
 <x-layouts.app :title="__('Contos')">
-    <div class="grid ">
-        <div class="row-span-full p-6 border border-neutral-200 dark:border-neutral-700 shadow-md rounded-lg">
-            Contos
-        </div>
+    @push('styles')
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    @endpush
+
+    <div class="container mx-auto max-w-6xl p-4">
+        <livewire:create-conto />
+        <livewire:list-contos />
     </div>
+
+    @push('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    @endpush
 </x-layouts.app>

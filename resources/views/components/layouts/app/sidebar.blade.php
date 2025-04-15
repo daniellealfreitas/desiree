@@ -43,8 +43,8 @@
                     </flux:menu.item>
                     <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('settings.profile')">Configurações</flux:menu.item>
                     <flux:menu.item icon="arrow-right-start-on-rectangle" href="#">Meus Visitantes</flux:menu.item>
-                    <flux:menu.item icon="arrow-right-start-on-rectangle" href="#">Renovar VIP</flux:menu.item>
-                    <flux:menu.item icon="arrow-right-start-on-rectangle" href="#">Meus Pagamentos</flux:menu.item>
+                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('renovar-vip')">Renovar VIP</flux:menu.item>
+                    <flux:menu.item icon="credit-card" :href="route('meus-pagamentos')">Meus Pagamentos</flux:menu.item>
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
                         <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">

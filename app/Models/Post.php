@@ -9,17 +9,24 @@ use App\Models\Like;
 use App\Models\UserPoint;
 use App\Models\PostUserLike;
 use App\Models\Comment;
+use App\Models\Group;
 
 class Post extends Model {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'content',
+        'user_id',
+        'group_id',
         'image',
         'video',
         'likes_count'
     ];
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
 
     public function user() {
         return $this->belongsTo(User::class);

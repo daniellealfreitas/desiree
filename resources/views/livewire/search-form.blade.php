@@ -1,0 +1,58 @@
+<div>
+    <form wire:submit.prevent="search" class="space-y-4">
+        <div class="grid grid-cols-4 gap-4">
+            <div>
+                <label for="id" class="block text-sm font-medium text-gray-300">ID</label>
+                <input type="text" id="id" wire:model="filters.id" class="mt-1 block w-full border border-neutral-200 dark:border-neutral-700 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+            </div>
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
+                <input type="text" id="username" wire:model="filters.username" class="mt-1 block w-full border border-neutral-200 dark:border-neutral-700 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+            </div>
+            <div>
+                <label for="anuncio" class="block text-sm font-medium text-gray-300">Anúncio</label>
+                <input type="text" id="anuncio" wire:model="filters.anuncio" class="mt-1 block w-full border border-neutral-200 dark:border-neutral-700 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="estado" class="block text-sm font-medium text-gray-300">Estado</label>
+                <select id="estado" wire:model="selectedState" class="mt-1 block w-full border border-neutral-200 dark:border-neutral-700 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 bg-zinc-50 dark:bg-neutral-800">
+                    <option value="">Selecione</option>
+                    @foreach($states as $state)
+                        <option value="{{ $state->id }}">{{ $state->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label for="cidade" class="block text-sm font-medium text-gray-300">Cidade</label>
+                <select id="cidade" wire:model="selectedCity" class="mt-1 block w-full border border-neutral-200 dark:border-neutral-700 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
+                    <option value="">Selecione</option>
+                    @foreach($cities as $city)
+                        <option value="{{ $city->id }}">{{ $city->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        <div class="flex justify-end">
+            <button type="submit" class="px-4 py-2 bg-red-500 text-white font-medium rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                Buscar
+            </button>
+        </div>
+    </form>
+
+    <div class="mt-6">
+        <h2 class="text-lg font-medium text-gray-300">Resultados</h2>
+        <ul class="mt-4 space-y-2">
+            @forelse($results as $result)
+                <li class="p-4 border border-neutral-200 dark:border-neutral-700 rounded-md">
+                    <p><strong>ID:</strong> {{ $result->id }}</p>
+                    <p><strong>Username:</strong> {{ $result->username }}</p>
+                    <p><strong>Anúncio:</strong> {{ $result->anuncio }}</p>
+                </li>
+            @empty
+                <li class="text-gray-500">Nenhum resultado encontrado.</li>
+            @endforelse
+        </ul>
+    </div>
+</div>

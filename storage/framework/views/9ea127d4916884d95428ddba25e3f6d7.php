@@ -44,12 +44,18 @@ function accept($requestId) {
         
         $request->update(['status' => 'accepted']);
         
-        Notification::create([
-            'user_id' => $request->sender_id,
-            'sender_id' => auth()->id(),
-            'type' => 'follow_accepted',
-            'message' => auth()->user()->username . ' aceitou sua solicitação para seguir'
-        ]);
+        // Avoid duplicate notifications
+        if (!Notification::where('user_id', $request->sender_id)
+                          ->where('sender_id', auth()->id())
+                          ->where('type', 'follow_accepted')
+                          ->exists()) {
+            Notification::create([
+                'user_id' => $request->sender_id,
+                'sender_id' => auth()->id(),
+                'type' => 'follow_accepted',
+                'message' => auth()->user()->username . ' aceitou sua solicitação para seguir'
+            ]);
+        }
 
         $this->dispatch('notification-received');
         $this->loadFollowRequests();
@@ -62,12 +68,18 @@ function reject($requestId) {
     $request = FollowRequest::findOrFail($requestId);
     $request->update(['status' => 'rejected']);
     
-    Notification::create([
-        'user_id' => $request->sender_id,
-        'sender_id' => auth()->id(),
-        'type' => 'follow_rejected',
-        'message' => auth()->user()->username . ' rejeitou sua solicitação para seguir'
-    ]);
+    // Avoid duplicate notifications
+    if (!Notification::where('user_id', $request->sender_id)
+                      ->where('sender_id', auth()->id())
+                      ->where('type', 'follow_rejected')
+                      ->exists()) {
+        Notification::create([
+            'user_id' => $request->sender_id,
+            'sender_id' => auth()->id(),
+            'type' => 'follow_rejected',
+            'message' => auth()->user()->username . ' rejeitou sua solicitação para seguir'
+        ]);
+    }
 
     $this->dispatch('notification-received');
     $this->loadFollowRequests();
