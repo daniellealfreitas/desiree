@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Group;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,23 +20,18 @@ class PostController extends Controller {
     }
 
     // Armazena o post
-    public function store(Request $request) {
-        $data = $request->validate([
+    public function store(Request $request, Group $group) {
+        $request->validate([
             'content' => 'required|string',
-            'image'   => 'nullable|image',
-            'video'   => 'nullable|mimetypes:video/mp4,video/avi,video/mpeg'
         ]);
-        $data['user_id'] = Auth::id();
 
-        if($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('posts', 'public');
-        }
-        if($request->hasFile('video')) {
-            $data['video'] = $request->file('video')->store('posts', 'public');
-        }
+        Post::create([
+            'content' => $request->content,
+            'user_id' => auth()->id(),
+            'group_id' => $group->id,
+        ]);
 
-        Post::create($data);
-        return redirect()->route('posts.index')->with('success', 'Post criado com sucesso.');
+        return redirect()->route('grupos.show', $group);
     }
 
     // Exibe um post específico

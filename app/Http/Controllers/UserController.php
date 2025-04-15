@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\UserPhoto;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use App\Models\State;
+use App\Models\City;
 
 class UserController extends Controller
 {
@@ -35,5 +38,16 @@ class UserController extends Controller
     {
         $user = User::where('username', $username)->firstOrFail();
         return view('perfil', compact('user'));
+    }
+
+    public function getStates()
+    {
+        return view('states.index', ['states' => State::orderBy('name', 'asc')->get()]);
+    }
+
+    public function getCities($stateId)
+    {
+        $cities = City::where('state_id', $stateId)->orderBy('name', 'asc')->get();
+        return view('cities.index', ['cities' => $cities]);
     }
 }
