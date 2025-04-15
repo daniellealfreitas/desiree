@@ -28,5 +28,11 @@ Homestead.json
 .env.production
 .phpactor.json
 auth.json
-# Ignorar arquivos SQLite em toda a estrutura do projeto
+
+# Log files
+/storage/logs/*.log
+/storage/logs/*-*/*.log
+*.log
+
+# Ignore SQLite files
 *.sqlite*
