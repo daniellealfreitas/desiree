@@ -42,8 +42,8 @@ unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         </div>
 
         <div>
-            <textarea wire:model="content" id="summernote" placeholder="Escreva seu conto aqui..."
-                      class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <textarea wire:model="content" id="summernote"
+                      class="summernote w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                       rows="10"></textarea>
             <!--[if BLOCK]><![endif]--><?php $__errorArgs = ['content'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -56,6 +56,7 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?><!--[if ENDBLOCK]><![endif]-->
         </div>
+        
 
         <div>
             <button wire:click="store" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">

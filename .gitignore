@@ -36,3 +36,4 @@ auth.json
 
 # Ignore SQLite files
 *.sqlite*
+.qodo

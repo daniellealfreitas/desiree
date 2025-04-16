@@ -36,7 +36,7 @@ class PostController extends Controller {
 
     // Exibe um post específico
     public function show(Post $post) {
-        return view('posts.show', compact('post'));
+        return view('post.show', compact('post'));
     }
 
     // Exibe o formulário de edição

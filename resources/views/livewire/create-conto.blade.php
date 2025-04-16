@@ -27,13 +27,14 @@
         </div>
 
         <div>
-            <textarea wire:model="content" id="summernote" placeholder="Escreva seu conto aqui..."
-                      class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <textarea wire:model="content" id="summernote"
+                      class="summernote w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                       rows="10"></textarea>
             @error('content')
                 <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
         </div>
+        
 
         <div>
             <button wire:click="store" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">

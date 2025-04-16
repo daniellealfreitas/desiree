@@ -17,6 +17,7 @@ use App\Http\Livewire\ContosForm;
 use App\Http\Controllers\GroupController;
 use App\Http\Livewire\NearbyUsers;
 use App\Http\Controllers\LocationController;
+use App\Models\Post;
 
 Route::get('/', function () {
     return view('home');
@@ -42,9 +43,10 @@ Route::get('/contos', function () {
 })->middleware(['auth', 'verified'])->name('contos');
 
 
-Route::view('feed_imagens', 'feed_imagens')
-    ->middleware(['auth', 'verified'])
-    ->name('feed_imagens');
+Route::get('feed_imagens', function () {
+    $posts = Post::whereNotNull('image')->get();
+    return view('feed_imagens', compact('posts'));
+})->middleware(['auth', 'verified'])->name('feed_imagens');
 
 Route::view('feed_videos', 'feed_videos')
     ->middleware(['auth', 'verified'])
@@ -126,5 +128,8 @@ Route::get('/{username}', function($username) {
 Route::get('/estados', [LocationController::class, 'getStates'])->name('get.states');
 Route::get('/cidades/{state}', [LocationController::class, 'getCities'])->name('get.cities');
 
+Route::get('post/{post}', function (Post $post) {
+    return view('post.show', compact('post'));
+})->name('post.show');
 
 require __DIR__.'/auth.php';

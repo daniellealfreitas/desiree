@@ -6,7 +6,7 @@
             <!-- card  -->
             <div
                 class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
+                <div class="absolute top-3 right-3 rounded-full text-gray-100  w-6 h-6 text-center bg-zinc-600">
                     24
                 </div>
                 <div class="p-2 flex justify-center">
@@ -22,7 +22,7 @@
                         <a href="#">
                             <h5
                                 class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Card
+                                Sexo no mesmo ambiente
                             </h5>
                         </a>
     
@@ -37,7 +37,7 @@
             <!-- card  -->
             <div
                 class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
+                <div class="absolute top-3 right-3 rounded-full text-gray-100 bg-zinc-600  w-6 h-6 text-center">
                     19
                 </div>
     
@@ -54,7 +54,7 @@
                         <a href="#">
                             <h5
                                 class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Input
+                                Troca de casais
                             </h5>
                         </a>
     
@@ -68,7 +68,7 @@
             <!-- card  -->
             <div
                 class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
+                <div class="absolute top-3 right-3 rounded-full text-gray-100 bg-zinc-600  w-6 h-6 text-center">
                     18
                 </div>
                 <div class="p-2 flex justify-center">
@@ -84,7 +84,7 @@
                         <a href="#">
                             <h5
                                 class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Button
+                                Exibicionismo
                             </h5>
                         </a>
                         <p class="antialiased text-gray-600 dark:text-gray-400 text-sm break-all">
@@ -98,7 +98,7 @@
             <div
                 class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
     
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
+                <div class="absolute top-3 right-3 rounded-full text-gray-100 bg-zinc-600  w-6 h-6 text-center">
                     15
                 </div>
     
@@ -116,7 +116,7 @@
                         <a href="https://tailwindflex.com/tag/form">
                             <h5
                                 class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Form
+                                Bondage
                             </h5>
                         </a>
     
@@ -131,7 +131,7 @@
             <!-- card  -->
             <div
                 class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
+                <div class="absolute top-3 right-3 rounded-full text-gray-100 bg-zinc-600  w-6 h-6 text-center">
                     10
                 </div>
                 <div class="p-2 flex justify-center">
@@ -148,7 +148,7 @@
                         <a href="#">
                             <h5
                                 class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Alert
+                                Sexo em locais públicos
                             </h5>
                         </a>
     
@@ -162,7 +162,7 @@
             <!-- card  -->
             <div
                 class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
+                <div class="absolute top-3 right-3 rounded-full text-gray-100 bg-zinc-600  w-6 h-6 text-center">
                     9
                 </div>
                 <div class="p-2 flex justify-center">
@@ -177,7 +177,7 @@
                         <a href="#">
                             <h5
                                 class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Gradient
+                                Fotos e Filmagens
                             </h5>
                         </a>
     
@@ -192,7 +192,7 @@
             <div
                 class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
     
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
+                <div class="absolute top-3 right-3 rounded-full text-gray-100 bg-zinc-600  w-6 h-6 text-center">
                     8
                 </div>
     
@@ -209,7 +209,7 @@
                         <a href="https://tailwindflex.com/tag/badge">
                             <h5
                                 class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Badge
+                                Sexo Grupal
                             </h5>
                         </a>
                         <p class="antialiased text-gray-600 dark:text-gray-400 text-sm break-all">
@@ -222,7 +222,7 @@
             <!-- card  -->
             <div
                 class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
+                <div class="absolute top-3 right-3 rounded-full text-gray-100 bg-zinc-600  w-6 h-6 text-center">
                     7
                 </div>
     
@@ -240,7 +240,7 @@
                         <a href="#">
                             <h5
                                 class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Button Group
+                               Acessórios
                             </h5>
                         </a>
     
@@ -255,7 +255,7 @@
             <!-- card  -->
             <div
                 class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
+                <div class="absolute top-3 right-3 rounded-full text-gray-100 bg-zinc-600  w-6 h-6 text-center">
                     7
                 </div>
     
@@ -272,7 +272,7 @@
                         <a href="#">
                             <h5
                                 class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Feature
+                                Dominação
                             </h5>
                         </a>
                         <p class="antialiased text-gray-600 dark:text-gray-400 text-sm break-all">
@@ -281,98 +281,7 @@
                     </div>
                 </div>
             </div>
-    
-            <!-- card  -->
-            <div
-                class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
-                    6
-                </div>
-    
-                <div class="p-2 flex justify-center">
-                    <a href="https://tailwindflex.com/tag/call-to-action">
-                        <img class="rounded-md"
-                        src="https://tailwindflex.com/public/images/thumbnails/hero-header-with-search-button/thumb_u.min.webp"
-                        loading="lazy">
-                    </a>
-                </div>
-    
-                <div class="px-4 pb-3">
-                    <div>
-                        <a href="https://tailwindflex.com/tag/call-to-action">
-                            <h5
-                                class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Call to Action
-                            </h5>
-                        </a>
-                        <p class="antialiased text-gray-600 dark:text-gray-400 text-sm break-all">
-                            description
-                        </p>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- card  -->
-            <div
-                class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
-                <div class="absolute top-3 right-3 rounded-full text-gray-200  w-6 h-6 text-center">
-                    6
-                </div>
-                <div class="p-2 flex justify-center">
-                    <a href="#">
-                        <img class="rounded-md"
-                        src="https://tailwindflex.com/public/images/thumbnails/feature-showcase/canvas.min.webp"
-                        loading="lazy">
-                    </a>
-                </div>
-    
-                <div class="px-4 pb-3">
-                    <div>
-                        <a href="#">
-                            <h5
-                                class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Grid
-                            </h5>
-                        </a>
-    
-                        <p class="antialiased text-gray-600 dark:text-gray-400 text-sm break-all">
-                            description
-                        </p>
-                    </div>
-                </div>
-            </div>
-    
-            <!-- card  -->
-            <div
-                class="relative  border rounded-lg shadow-md dark:border-gray-700 transform transition duration-500 hover:scale-105">
-                <div class="absolute top-3 right-3 rounded-full text-gray-200 w-6 h-6 text-center">
-                    6
-                </div>
-    
-                <div class="p-2 flex justify-center">
-                    <a href="#">
-                        <img class="rounded-md"
-                        src="https://tailwindflex.com/public/images/thumbnails/login-form-with-icon/thumb_u.min.webp"
-                        loading="lazy">
-                    </a>
-                </div>
-    
-    
-                <div class="px-4 pb-3">
-                    <div>
-                        <a href="#">
-                            <h5
-                                class="text-xl font-semibold tracking-tight hover:text-violet-800 dark:hover:text-violet-300 text-gray-900 dark:text-white ">
-                                Login
-                            </h5>
-                        </a>
-                        <p class="antialiased text-gray-600 dark:text-gray-400 text-sm break-all">
-                            description
-                        </p>
-                    </div>
-                </div>
-            </div>
-    
+
         </div>
     
     </div>

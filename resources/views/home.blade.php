@@ -482,11 +482,11 @@
                 <h1 class="text-danger fw-bold text-uppercase mt-5">Agendar Reserva</h1>
                 
                 <div class="position-relative mt-4">
-        <img src="{{ asset('images/background.jpg') }}" class="img-fluid w-100" style="filter: brightness(20%);">
-        <div class="position-absolute top-50 start-50 translate-middle text-center">
-            <button class="btn btn-danger fw-bold text-uppercase px-4 py-2">Faça sua reserva</button>
-        </div>
-    </div>
+                <img src="{{ asset('images/background.jpg') }}" class="img-fluid w-100" style="filter: brightness(20%);">
+                <div class="position-absolute top-50 start-50 translate-middle text-center">
+                    <button class="btn btn-danger fw-bold text-uppercase px-4 py-2">Faça sua reserva</button>
+                </div>
+            </div>
             
                 <div class="row mt-5">
                     <div class="col-md-6 col-lg-3 mb-4">
