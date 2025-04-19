@@ -12,6 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;400;700&display=swap" rel="stylesheet">
     <link href="<?php echo e(asset('css/bootstrap.min.css')); ?>" rel="stylesheet">
     <link href="<?php echo e(asset('css/bootstrap-icons.css')); ?>" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link href="<?php echo e(asset('css/style.css')); ?>" rel="stylesheet">
 
     
@@ -136,154 +137,94 @@
                 </video>
             </div>
         </section>
-
         <section class="about-section section-padding" id="section_2">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 col-12 mb-4 mb-lg-0 d-flex align-items-center">
+                    <div class="col-lg-6 col-12 mb-4 mb-lg-0 d-flex align-items-center" data-aos="fade-right">
                         <div class="services-info">
                             <h2 class="text-white mb-4">Sobre a Desiree</h2>
-                            <p class="text-white">Somos o Desiree Swing Club, o mais tradicional, genuíno e experiente club de swing e ménagedo sul do Brasil, ou seja, o espaço ideal criado para casais, solteiros e solteirasliberais.</p>
-
+                            <p class="text-white">Somos o Desiree Swing Club...</p>
+        
                             <h6 class="text-white mt-4">Venham conhecer tudo o que temos a oferecer</h6>
-
-                            <p class="text-white">Com 1200m² divididos em vários ambientes, nossa infra - estrutura foi criada para oferecer aos visitantes tudo o que estes merecem para realizar seus desejos mais sensuais: diversão, liberdade, erotismo, conforto, segurança, organização, privacidade e respeito!</p>
-
+                            <p class="text-white">Com 1200m² divididos em vários ambientes...</p>
+        
                             <h6 class="text-white mt-4">Nossa Proposta</h6>
-
-                            <p class="text-white">ser o espaço ideal para quem busca conhecer o universo liberal, realizar seus desejos e fantasias sensuais.</p>
+                            <p class="text-white">ser o espaço ideal para quem busca conhecer...</p>
                         </div>
                     </div>
-
-                    <div class="col-lg-6 col-12">
+        
+                    <div class="col-lg-6 col-12" data-aos="fade-left">
                         <div class="about-text-wrap">
                             <img src="<?php echo e(asset('images/pexels-alexander-suhorucov-6457579.jpg')); ?>" class="about-image img-fluid">
-                            <div class="about-text-info d-flex">
+                            <div class="about-text-info d-flex" data-aos="zoom-in" data-aos-delay="300">
                                 <div class="d-flex">
                                     <i class="about-text-icon bi bi-arrow-through-heart"></i>
                                 </div>
-
-
                                 <div class="ms-4">
                                     <h3>Desiree Swing Club</h3>
-
                                     <p class="mb-0">Caso ainda não tenhamos nos conhecido, muito prazer!</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
-
+        
 
         <section class="artists-section section-padding" id="section_3">
             <div class="container">
                 <div class="row justify-content-center">
-
-                    <div class="col-12 text-center">
-                        <h2 class="mb-4">Atrações</h1>
+        
+                    <div class="col-12 text-center" data-aos="fade-up">
+                        <h2 class="mb-4">Atrações</h2>
                     </div>
-
-                    <div class="col-lg-5 col-12">
+        
+                    <div class="col-lg-5 col-12" data-aos="zoom-in" data-aos-delay="100">
                         <div class="artists-thumb">
                             <div class="artists-image-wrap">
-                                <img src="images/artists/joecalih-UmTZqmMvQcw-unsplash.jpg"
-                                    class="artists-image img-fluid">
+                                <img src="images/artists/joecalih-UmTZqmMvQcw-unsplash.jpg" class="artists-image img-fluid">
                             </div>
-
                             <div class="artists-hover">
-                                <p>
-                                    <strong>Name:</strong>
-                                    Madona
-                                </p>
-
-                                <p>
-                                    <strong>Birthdate:</strong>
-                                    August 16, 1958
-                                </p>
-
-                                <p>
-                                    <strong>Music:</strong>
-                                    Pop, R&amp;B
-                                </p>
-
+                                <p><strong>Name:</strong> Madona</p>
+                                <p><strong>Birthdate:</strong> August 16, 1958</p>
+                                <p><strong>Music:</strong> Pop, R&amp;B</p>
                                 <hr>
-
-                                <p class="mb-0">
-                                    <strong>Youtube Channel:</strong>
-                                    <a href="#">Madona Official</a>
-                                </p>
+                                <p class="mb-0"><strong>Youtube Channel:</strong> <a href="#">Madona Official</a></p>
                             </div>
                         </div>
                     </div>
-
-                    <div class="col-lg-5 col-12">
-                        <div class="artists-thumb">
+        
+                    <div class="col-lg-5 col-12" data-aos="zoom-in" data-aos-delay="200">
+                        <div class="artists-thumb mb-4">
                             <div class="artists-image-wrap">
-                                <img src="images/artists/abstral-official-bdlMO9z5yco-unsplash.jpg"
-                                    class="artists-image img-fluid">
+                                <img src="images/artists/abstral-official-bdlMO9z5yco-unsplash.jpg" class="artists-image img-fluid">
                             </div>
-
                             <div class="artists-hover">
-                                <p>
-                                    <strong>Name:</strong>
-                                    Rihana
-                                </p>
-
-                                <p>
-                                    <strong>Birthdate:</strong>
-                                    Feb 20, 1988
-                                </p>
-
-                                <p>
-                                    <strong>Music:</strong>
-                                    Country
-                                </p>
-
+                                <p><strong>Name:</strong> Rihana</p>
+                                <p><strong>Birthdate:</strong> Feb 20, 1988</p>
+                                <p><strong>Music:</strong> Country</p>
                                 <hr>
-
-                                <p class="mb-0">
-                                    <strong>Youtube Channel:</strong>
-                                    <a href="#">Rihana Official</a>
-                                </p>
+                                <p class="mb-0"><strong>Youtube Channel:</strong> <a href="#">Rihana Official</a></p>
                             </div>
                         </div>
-
-                        <div class="artists-thumb">
-                            <img src="images/artists/soundtrap-rAT6FJ6wltE-unsplash.jpg"
-                                class="artists-image img-fluid">
-
+        
+                        <div class="artists-thumb" data-aos="zoom-in" data-aos-delay="300">
+                            <img src="images/artists/soundtrap-rAT6FJ6wltE-unsplash.jpg" class="artists-image img-fluid">
                             <div class="artists-hover">
-                                <p>
-                                    <strong>Name:</strong>
-                                    Bruno Bros
-                                </p>
-
-                                <p>
-                                    <strong>Birthdate:</strong>
-                                    October 8, 1985
-                                </p>
-
-                                <p>
-                                    <strong>Music:</strong>
-                                    Pop
-                                </p>
-
+                                <p><strong>Name:</strong> Bruno Bros</p>
+                                <p><strong>Birthdate:</strong> October 8, 1985</p>
+                                <p><strong>Music:</strong> Pop</p>
                                 <hr>
-
-                                <p class="mb-0">
-                                    <strong>Youtube Channel:</strong>
-                                    <a href="#">Bruno Official</a>
-                                </p>
+                                <p class="mb-0"><strong>Youtube Channel:</strong> <a href="#">Bruno Official</a></p>
                             </div>
                         </div>
                     </div>
-
+        
                 </div>
             </div>
         </section>
+        
 
 
         <section class="schedule-section section-padding" id="section_4">
@@ -383,36 +324,31 @@
         </section>
 
 
-        <section class="pricing-section section-padding section-bg-light" id="section_5">
+        <section class="pricing-section section-padding section-bg-light" id="section_5" data-aos="fade-up" data-aos-duration="1000">
             <div class="container">
                 <div class="row">
-
-                    <div class="col-lg-8 col-12 mx-auto">
+        
+                    <div class="col-lg-8 col-12 mx-auto" data-aos="fade-up" data-aos-delay="100">
                         <h2 class="text-center mb-4">Assinatura VIP</h2>
                     </div>
-
-                    <div class="col-lg-6 col-12">
+        
+                    <div class="col-lg-6 col-12" data-aos="zoom-in-up" data-aos-delay="200">
                         <div class="pricing-thumb">
                             <div class="d-flex">
                                 <div>
                                     <h3><small>6 Meses</small> R$280</h3>
-
                                     <p>Benefícios de ser VIP:</p>
                                 </div>
-
-                                <p class="pricing-tag ms-auto">Economize <span>50%</span></h2>
+                                <p class="pricing-tag ms-auto">Economize <span>50%</span></p>
                             </div>
-
+        
                             <ul class="pricing-list mt-3">
                                 <li class="pricing-list-item">Rede social Exclusiva Desiree Club</li>
-
                                 <li class="pricing-list-item">Chat com casais e solteiros</li>
-
                                 <li class="pricing-list-item">Postagem de imagens e vídeos</li>
-
                                 <li class="pricing-list-item">Radar, Grupos e Contos</li>
                             </ul>
-
+        
                             <a class="link-fx-1 color-contrast-higher mt-4" href="ticket.html">
                                 <span>Assinar</span>
                                 <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
@@ -425,27 +361,23 @@
                             </a>
                         </div>
                     </div>
-
-                    <div class="col-lg-6 col-12 mt-4 mt-lg-0">
+        
+                    <div class="col-lg-6 col-12 mt-4 mt-lg-0" data-aos="zoom-in-up" data-aos-delay="400">
                         <div class="pricing-thumb">
                             <div class="d-flex">
                                 <div>
                                     <h3><small>1 Mês</small> R$60</h3>
-
                                     <p>Benefícios de ser VIP:</p>
                                 </div>
                             </div>
-
+        
                             <ul class="pricing-list mt-3">
                                 <li class="pricing-list-item">Rede social Exclusiva Desiree Club</li>
-
                                 <li class="pricing-list-item">Chat com casais e solteiros</li>
-
                                 <li class="pricing-list-item">Postagem de imagens e vídeos</li>
-
                                 <li class="pricing-list-item">Radar, Grupos e Contos</li>
                             </ul>
-
+        
                             <a class="link-fx-1 color-contrast-higher mt-4" href="ticket.html">
                                 <span>Assinar</span>
                                 <svg class="icon" viewBox="0 0 32 32" aria-hidden="true">
@@ -458,10 +390,12 @@
                             </a>
                         </div>
                     </div>
-
+        
                 </div>
             </div>
         </section>
+        
+        
         
         <section class="reserva-section section-padding section-bg-dark" id="reserva">
             <div class="container text-center text-white">
@@ -560,49 +494,53 @@
         <section class="estrutura-section paddig section-bg-dark" id="estrutura">
             <div class="container py-5">               
                 <div class="row">
-                    <h2 class="text-center mb-4">Estrutura</h2>
+                    <h2 class="text-center mb-4" data-aos="fade-up">Estrutura</h2>
+        
                     <div class="col-md-4">
                         <h3><i class="bi bi-fire text-warning"></i> Primeiro Piso</h3>
                         <h5>Casais e Solteiras</h5>
                         <ul class="list-unstyled">
-                            <li><i class="bi bi-fire text-warning"></i> Sala B.D.S.M</li>
-                            <li><i class="bi bi-fire text-warning"></i> Quartos privativos</li>
-                            <li><i class="bi bi-fire text-warning"></i> Baladinha para casais</li>
-                            <li><i class="bi bi-fire text-warning"></i> Dark room</li>
-                            <li><i class="bi bi-fire text-warning"></i> Cabines glory hole</li>
-                            <li><i class="bi bi-fire text-warning"></i> Quarto aquário</li>
-                            <li><i class="bi bi-fire text-warning"></i> Cabine glory coletiva</li>
-                            <li><i class="bi bi-fire text-warning"></i> Camão coletivo</li>
-                            <li><i class="bi bi-fire text-warning"></i> Cabines de silhueta</li>
+                            <li data-aos="fade-up" data-aos-delay="100"><i class="bi bi-fire text-warning"></i> Sala B.D.S.M</li>
+                            <li data-aos="fade-up" data-aos-delay="200"><i class="bi bi-fire text-warning"></i> Quartos privativos</li>
+                            <li data-aos="fade-up" data-aos-delay="300"><i class="bi bi-fire text-warning"></i> Baladinha para casais</li>
+                            <li data-aos="fade-up" data-aos-delay="400"><i class="bi bi-fire text-warning"></i> Dark room</li>
+                            <li data-aos="fade-up" data-aos-delay="500"><i class="bi bi-fire text-warning"></i> Cabines glory hole</li>
+                            <li data-aos="fade-up" data-aos-delay="600"><i class="bi bi-fire text-warning"></i> Quarto aquário</li>
+                            <li data-aos="fade-up" data-aos-delay="700"><i class="bi bi-fire text-warning"></i> Cabine glory coletiva</li>
+                            <li data-aos="fade-up" data-aos-delay="800"><i class="bi bi-fire text-warning"></i> Camão coletivo</li>
+                            <li data-aos="fade-up" data-aos-delay="900"><i class="bi bi-fire text-warning"></i> Cabines de silhueta</li>
                         </ul>
                     </div>
+        
                     <div class="col-md-4">
                         <h3><i class="bi bi-fire text-warning"></i> Segundo Piso</h3>
                         <h5>Área Mista</h5>
                         <ul class="list-unstyled">
-                            <li><i class="bi bi-fire text-warning"></i> Quartos abertos</li>
-                            <li><i class="bi bi-fire text-warning"></i> Sala Cuckold</li>
-                            <li><i class="bi bi-fire text-warning"></i> Canines glory hole</li>
-                            <li><i class="bi bi-fire text-warning"></i> Cabine glory coletiva</li>
-                            <li><i class="bi bi-fire text-warning"></i> Dark room</li>
+                            <li data-aos="fade-up" data-aos-delay="100"><i class="bi bi-fire text-warning"></i> Quartos abertos</li>
+                            <li data-aos="fade-up" data-aos-delay="200"><i class="bi bi-fire text-warning"></i> Sala Cuckold</li>
+                            <li data-aos="fade-up" data-aos-delay="300"><i class="bi bi-fire text-warning"></i> Canines glory hole</li>
+                            <li data-aos="fade-up" data-aos-delay="400"><i class="bi bi-fire text-warning"></i> Cabine glory coletiva</li>
+                            <li data-aos="fade-up" data-aos-delay="500"><i class="bi bi-fire text-warning"></i> Dark room</li>
                         </ul>
                     </div>
+        
                     <div class="col-md-4">
                         <h3><i class="bi bi-fire text-warning"></i> Terceiro Piso</h3>
                         <h5>Área Mista</h5>
                         <ul class="list-unstyled">
-                            <li><i class="bi bi-fire text-warning"></i> Quartos abertos</li>
-                            <li><i class="bi bi-fire text-warning"></i> Sala Cuckold</li>
-                            <li><i class="bi bi-fire text-warning"></i> Canines glory hole</li>
-                            <li><i class="bi bi-fire text-warning"></i> Cabine glory coletiva</li>
-                            <li><i class="bi bi-fire text-warning"></i> Dark room</li>
+                            <li data-aos="fade-up" data-aos-delay="100"><i class="bi bi-fire text-warning"></i> Quartos abertos</li>
+                            <li data-aos="fade-up" data-aos-delay="200"><i class="bi bi-fire text-warning"></i> Sala Cuckold</li>
+                            <li data-aos="fade-up" data-aos-delay="300"><i class="bi bi-fire text-warning"></i> Canines glory hole</li>
+                            <li data-aos="fade-up" data-aos-delay="400"><i class="bi bi-fire text-warning"></i> Cabine glory coletiva</li>
+                            <li data-aos="fade-up" data-aos-delay="500"><i class="bi bi-fire text-warning"></i> Dark room</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
+        
 
-
+p
         <section class="contact-section section-padding" id="section_6">
             <div class="container">
                 <div class="row">
@@ -817,6 +755,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
     <script src="js/jquery.sticky.js"></script>
     <script src="js/click-scroll.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000, // tempo padrão da animação
+            once: true,     // anima apenas na primeira vez que aparece
+        });
+    </script>
+    
+
     <script src="js/custom.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>

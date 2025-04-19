@@ -14,8 +14,8 @@ class ProfileComponent extends Component
 {
     public User $user;
     public array $followStatus = [];
-   
-    
+    public $topUsers; // Add this property to store top users
+
     public function mount(string $username)
     {
         $this->user = User::with(['followers', 'posts'])
@@ -23,12 +23,30 @@ class ProfileComponent extends Component
             ->firstOrFail();
             
         $this->followStatus[$this->user->id] = $this->user->followers->contains(Auth::id());
+
+        // Fetch top users ordered by ranking points
+        $this->topUsers = User::orderBy('ranking_points', 'desc')->take(10)->get();
+
+        // Add avatars to the top users
+        $this->topUsers->each(function ($user) {
+            $user->avatar = $this->getAvatar($user->id);
+        });
     }
     
     public function avatar()
     {
         $path = UserPhoto::where('user_id', $this->user->id)->latest()->value('photo_path');
         return $path ? Storage::url($path) : null;
+    }
+
+    public function getAvatar($userId)
+    {
+        // Fetch the latest avatar for a specific user
+        $path = UserPhoto::where('user_id', $userId)
+            ->where('type', 'avatar') // Assuming a 'type' column exists to specify avatar
+            ->latest()
+            ->value('photo_path');
+        return $path ? Storage::url($path) : asset('images/default-avatar.jpg');
     }
     
     public function cover()
@@ -43,7 +61,7 @@ class ProfileComponent extends Component
         if ($this->followStatus[$userId]) {
             $user->followers()->detach(Auth::id());
             $this->followStatus[$userId] = false;
-        } else {
+    } else {
             $user->followers()->attach(Auth::id());
             $this->followStatus[$userId] = true;
         }
@@ -73,6 +91,8 @@ class ProfileComponent extends Component
 
     public function render()
     {
-        return view('livewire.profile');
+        return view('livewire.profile', [
+            'topUsers' => $this->topUsers, // Pass top users to the view
+        ]);
     }
 }

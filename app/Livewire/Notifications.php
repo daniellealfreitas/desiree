@@ -17,21 +17,22 @@ class Notifications extends Component
 
     public function loadNotifications()
     {
+        // Busca apenas notificações não lidas
         $this->notifications = auth()->user()->notifications()
+            ->where('read', false)
             ->with(['sender', 'post'])
             ->latest()
             ->take(5)
             ->get();
-        
-        $this->unreadCount = auth()->user()->notifications()
-            ->where('read', false)
-            ->count();
+
+        // Conta quantas não lidas existem
+        $this->unreadCount = $this->notifications->count();
     }
 
     public function markAsRead($notificationId)
     {
-        $notification = Notification::find($notificationId);
-        if ($notification) {
+        $notification = auth()->user()->notifications()->where('id', $notificationId)->first();
+        if ($notification && !$notification->read) {
             $notification->update(['read' => true]);
             $this->loadNotifications();
         }

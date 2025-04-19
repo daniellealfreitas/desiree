@@ -46,11 +46,7 @@ class User extends Authenticatable
         return $this->hasMany(Conto::class);
     }
 
-    // Relação com pontos (pontuação do usuário)
-    public function points(): HasOne {
-        return $this->hasOne(UserPoint::class);
-    }
-
+  
     // Método para atualizar o nível do usuário com base nos pontos
     public function updateLevel() {
         $points = $this->points ? $this->points->points : 0;
@@ -158,6 +154,15 @@ class User extends Authenticatable
     public function state()
     {
         return $this->belongsTo(State::class);
+    }
+
+    /**
+     * Increment ranking points
+     */
+    public function incrementRankingPoints($points)
+    {
+        $this->ranking_points += $points;
+        $this->save();
     }
 
     /**

@@ -4,6 +4,7 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 ?>
@@ -59,7 +60,7 @@ use Illuminate\Support\Facades\Auth;
             <div class="mt-4 space-y-4">
                 <form wire:submit="addComment(<?php echo e($post->id); ?>)" class="flex gap-2">
                     <input
-                        wire:model="newComment"
+                        wire:model="newComment.<?php echo e($post->id); ?>"
                         type="text"
                         class="flex-1 p-2 border border-neutral-200 dark:border-neutral-700 rounded-lg"
                         placeholder="Escreva um comentário..."

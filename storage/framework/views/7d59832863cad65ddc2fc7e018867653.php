@@ -5,6 +5,11 @@
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
 
+        <?php
+            $latestPhoto = auth()->user()->userPhotos()->latest()->first();
+            $avatarUrl = $latestPhoto ? asset($latestPhoto->photo_path) : asset('images/default-avatar.jpg');
+        ?>
+
         <?php if (isset($component)) { $__componentOriginale96c14d638c792103c11b984a4ed1896 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginale96c14d638c792103c11b984a4ed1896 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::header','data' => ['container' => true,'class' => 'bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -237,14 +242,14 @@ if (isset($__slots)) unset($__slots);
 <?php $component->withAttributes(['position' => 'top','align' => 'start']); ?>
                 <?php if (isset($component)) { $__componentOriginal2e5cdd03843a4c4d68fb9a6d7bd7e994 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal2e5cdd03843a4c4d68fb9a6d7bd7e994 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::profile','data' => ['avatar' => auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::profile','data' => ['avatar' => $avatarUrl]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::profile'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['avatar' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg'))]); ?>
+<?php $component->withAttributes(['avatar' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($avatarUrl)]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal2e5cdd03843a4c4d68fb9a6d7bd7e994)): ?>
@@ -859,10 +864,6 @@ if (isset($__slots)) unset($__slots);
 <?php unset($__componentOriginal4a4f7aa062a095c651c2f80bb685a42a); ?>
 <?php endif; ?>    
         
-       
-
-         
-
             <!-- Desktop User Menu -->
             <?php if (isset($component)) { $__componentOriginal2b4bb2cd4b8f1a3c08bae49ea918b888 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal2b4bb2cd4b8f1a3c08bae49ea918b888 = $attributes; } ?>
@@ -876,14 +877,14 @@ if (isset($__slots)) unset($__slots);
 <?php $component->withAttributes(['position' => 'bottom','align' => 'start']); ?>
                 <?php if (isset($component)) { $__componentOriginal2e5cdd03843a4c4d68fb9a6d7bd7e994 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal2e5cdd03843a4c4d68fb9a6d7bd7e994 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::profile','data' => ['name' => auth()->user()->name,'avatar' => auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg'),'iconTrailing' => 'chevrons-up-down']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::profile','data' => ['name' => auth()->user()->name,'avatar' => $avatarUrl,'iconTrailing' => 'chevrons-up-down']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::profile'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['name' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(auth()->user()->name),'avatar' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')),'icon-trailing' => 'chevrons-up-down']); ?>
+<?php $component->withAttributes(['name' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(auth()->user()->name),'avatar' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($avatarUrl),'icon-trailing' => 'chevrons-up-down']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal2e5cdd03843a4c4d68fb9a6d7bd7e994)): ?>
@@ -918,7 +919,7 @@ if (isset($__slots)) unset($__slots);
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="<?php echo e(auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')); ?>" 
+                                    <img src="<?php echo e($avatarUrl); ?>" 
                                          class="h-full w-full object-cover" 
                                          alt="<?php echo e(auth()->user()->name); ?>">
                                 </span>
@@ -1078,8 +1079,6 @@ if (isset($__slots)) unset($__slots);
 <?php unset($__componentOriginal17e56bc23bb0192e474b351c4358d446); ?>
 <?php endif; ?>
 
-       
-
         <!-- Mobile User Menu -->
         <?php if (isset($component)) { $__componentOriginale96c14d638c792103c11b984a4ed1896 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginale96c14d638c792103c11b984a4ed1896 = $attributes; } ?>
@@ -1145,14 +1144,14 @@ if (isset($__slots)) unset($__slots);
 <?php $component->withAttributes(['position' => 'top','align' => 'start']); ?>
                 <?php if (isset($component)) { $__componentOriginal2e5cdd03843a4c4d68fb9a6d7bd7e994 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal2e5cdd03843a4c4d68fb9a6d7bd7e994 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::profile','data' => ['initials' => auth()->user()->initials(),'avatar' => auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg'),'iconTrailing' => 'chevron-down']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::profile','data' => ['initials' => auth()->user()->initials(),'avatar' => $avatarUrl,'iconTrailing' => 'chevron-down']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::profile'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['initials' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(auth()->user()->initials()),'avatar' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')),'icon-trailing' => 'chevron-down']); ?>
+<?php $component->withAttributes(['initials' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(auth()->user()->initials()),'avatar' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($avatarUrl),'icon-trailing' => 'chevron-down']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal2e5cdd03843a4c4d68fb9a6d7bd7e994)): ?>
@@ -1187,7 +1186,7 @@ if (isset($__slots)) unset($__slots);
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="<?php echo e(auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')); ?>" 
+                                    <img src="<?php echo e($avatarUrl); ?>" 
                                          class="h-full w-full object-cover" 
                                          alt="<?php echo e(auth()->user()->name); ?>">
                                 </span>
@@ -1336,8 +1335,6 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginal2b4bb2cd4b8f1a3c08bae49ea918b888; ?>
 <?php unset($__componentOriginal2b4bb2cd4b8f1a3c08bae49ea918b888); ?>
 <?php endif; ?>
-
-            
          <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginale96c14d638c792103c11b984a4ed1896)): ?>
@@ -1348,9 +1345,6 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginale96c14d638c792103c11b984a4ed1896; ?>
 <?php unset($__componentOriginale96c14d638c792103c11b984a4ed1896); ?>
 <?php endif; ?>
-
-
-        
 
         <?php echo e($slot); ?>
 

@@ -5,11 +5,12 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 state([
     'limit' => 5,
-    'newComment' => '',
+    'newComment' => [], // Change to an array to store comments per post
     'posts' => fn() => Post::with([
         'user.userPhotos' => function($query) {
             $query->latest()->take(1);
@@ -46,6 +47,8 @@ $toggleLike = action(function ($postId) {
     } else {
         // Adiciona curtida
         $post->likedByUsers()->attach($user->id);
+        // Adiciona pontos ao usuário
+        $user->increment('ranking_points', 10);
         // Cria notificação se não for post próprio
         if ($post->user_id !== $user->id) {
             Notification::create([
@@ -74,16 +77,19 @@ $toggleLike = action(function ($postId) {
 
 $addComment = action(function ($postId) {
     $this->validate([
-        'newComment' => 'required|min:1'
+        "newComment.$postId" => 'required|min:1' // Validate comment for the specific post
     ]);
 
     Comment::create([
         'user_id' => Auth::id(),
         'post_id' => $postId,
-        'body' => $this->newComment
+        'body' => $this->newComment[$postId]
     ]);
+    
+    // Adiciona pontos ao usuário
+    Auth::user()->increment('ranking_points', 10);
 
-    $this->newComment = '';
+    $this->newComment[$postId] = ''; // Clear the comment for the specific post
     $this->posts = Post::with([
         'user.userPhotos' => function($query) {
             $query->latest()->take(1);
@@ -151,7 +157,7 @@ $addComment = action(function ($postId) {
             <div class="mt-4 space-y-4">
                 <form wire:submit="addComment({{ $post->id }})" class="flex gap-2">
                     <input
-                        wire:model="newComment"
+                        wire:model="newComment.{{ $post->id }}"
                         type="text"
                         class="flex-1 p-2 border border-neutral-200 dark:border-neutral-700 rounded-lg"
                         placeholder="Escreva um comentário..."

@@ -5,6 +5,11 @@
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
 
+        @php
+            $latestPhoto = auth()->user()->userPhotos()->latest()->first();
+            $avatarUrl = $latestPhoto ? asset($latestPhoto->photo_path) : asset('images/default-avatar.jpg');
+        @endphp
+
         <flux:header container class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" />
             <flux:navbar class="-mb-px max-lg:hidden">
@@ -20,7 +25,7 @@
                 <flux:navbar.item class="max-lg:hidden" icon="information-circle" href="#" label="Help" />
             </flux:navbar>
             <flux:dropdown position="top" align="start">
-                <flux:profile :avatar="auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')" />
+                <flux:profile :avatar="$avatarUrl" />
                 <flux:menu>
                     <flux:menu.radio.group>
                         <flux:menu.radio checked>{{ auth()->user()->name }}</flux:menu.radio>
@@ -98,14 +103,10 @@
             </flux:navlist>
             <flux:spacer />    
         
-       
-
-         
-
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
                 <flux:profile :name="auth()->user()->name"
-                    :avatar="auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')"
+                    :avatar="$avatarUrl"
                     icon-trailing="chevrons-up-down"
                 />
 
@@ -114,7 +115,7 @@
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="{{ auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}" 
+                                    <img src="{{ $avatarUrl }}" 
                                          class="h-full w-full object-cover" 
                                          alt="{{ auth()->user()->name }}">
                                 </span>
@@ -145,8 +146,6 @@
             </flux:dropdown>
         </flux:sidebar>
 
-       
-
         <!-- Mobile User Menu -->
         <flux:header class="lg:hidden">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
@@ -156,7 +155,7 @@
             <flux:dropdown position="top" align="start">
                 <flux:profile
                     :initials="auth()->user()->initials()"
-                    :avatar="auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')"
+                    :avatar="$avatarUrl"
                     icon-trailing="chevron-down"
                 />
 
@@ -165,7 +164,7 @@
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="{{ auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}" 
+                                    <img src="{{ $avatarUrl }}" 
                                          class="h-full w-full object-cover" 
                                          alt="{{ auth()->user()->name }}">
                                 </span>
@@ -194,12 +193,7 @@
                     </form>
                 </flux:menu>
             </flux:dropdown>
-
-            
         </flux:header>
-
-
-        
 
         {{ $slot }}
 

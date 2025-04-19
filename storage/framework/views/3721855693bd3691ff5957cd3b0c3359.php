@@ -6,8 +6,7 @@
         x-transition:enter-start="opacity-0 scale-90"
         x-transition:enter-end="opacity-100 scale-100"
         x-show="show"
-        class="relative w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden"
-    >
+        class="relative w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
         <div class="relative w-full">
             <div class="w-full h-80 bg-cover bg-center" style="background-image: url('<?php echo e($this->cover() ?? asset('images/default-banner.jpg')); ?>');"></div>
             
@@ -44,6 +43,25 @@
                     
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
+        </div>
+    </div>
+    <div class="mt-6">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Ranking</h3>
+        <div class="flex flex-col gap-4">
+            <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $topUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rank): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow">
+                    <div class="flex items-center gap-4">
+                        
+                        <div>
+                            <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200"><?php echo e($rank->name); ?></h4>
+                            <p class="text-xs text-gray-600 dark:text-gray-400"><?php echo e('@' . $rank->username); ?></p>
+                        </div>
+                    </div>
+                    <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                        <?php echo e($rank->ranking_points); ?> pontos
+                    </div>
+                </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
         </div>
     </div>
 </div><?php /**PATH C:\xampp\htdocs\desiree2\resources\views/livewire/profile.blade.php ENDPATH**/ ?>
