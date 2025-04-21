@@ -17,19 +17,19 @@
         <div class="grid grid-cols-2 gap-4">
             <div>
                 <label for="estado" class="block text-sm font-medium text-gray-300">Estado</label>
-                <select id="estado" wire:model="selectedState" class="mt-1 block w-full border border-neutral-200 dark:border-neutral-700 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 bg-zinc-50 dark:bg-neutral-800">
-                    <option value="">Selecione</option>
+                <select id="estado" wire:model.live="selectedState" class="mt-1 block w-full border border-neutral-200 dark:border-neutral-700 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 bg-zync-800 text-gray-300">
+                    <option value="" class="bg-zinc-800" >Selecione</option>
                     @foreach($states as $state)
-                        <option value="{{ $state->id }}">{{ $state->name }}</option>
+                        <option value="{{ $state->id }}" class="bg-zinc-800">{{ $state->name }}</option>
                     @endforeach
                 </select>
             </div>
             <div>
                 <label for="cidade" class="block text-sm font-medium text-gray-300">Cidade</label>
-                <select id="cidade" wire:model="selectedCity" class="mt-1 block w-full border border-neutral-200 dark:border-neutral-700 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500">
-                    <option value="">Selecione</option>
+                <select id="cidade" wire:model.live="selectedCity" class="mt-1 block w-full border border-neutral-200 dark:border-neutral-700 rounded-md shadow-sm focus:ring-red-500 focus:border-red-500 bg-zync-800 text-gray-300" >
+                    <option value="" class="bg-zinc-800">Selecione</option>
                     @foreach($cities as $city)
-                        <option value="{{ $city->id }}">{{ $city->name }}</option>
+                        <option value="{{ $city->id }}" class="bg-zinc-800">{{ $city->name }}</option>
                     @endforeach
                 </select>
             </div>
