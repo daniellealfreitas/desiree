@@ -1,2 +1,0 @@
-<img src="<?php echo e(asset('images/logo.png')); ?>" alt="Desiree Swing Club" class="img-fluid" style="max-width: 200px;" />
-<?php /**PATH C:\xampp\htdocs\desiree2\resources\views/components/app-logo-icon.blade.php ENDPATH**/ ?>

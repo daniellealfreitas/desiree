@@ -22,11 +22,24 @@ class SearchForm extends Component
         'ordenar' => null,
         'cadastrados' => null,
     ];
+    
+    public function rules()
+    {
+        return [
+            'filters.id' => ['nullable'],
+            'filters.username' => ['nullable'],
+            'filters.anuncio' => ['nullable'],
+            'selectedState' => ['nullable'],
+            'selectedCity' => ['nullable'],
+        ];
+    }
     public $results = [];
+    public $hasSearched = false;
 
     public function mount()
     {
         $this->states = State::orderBy('name', 'asc')->get();
+        $this->hasSearched = false;
     }
 
     public function updatedSelectedState($stateId)
@@ -37,6 +50,28 @@ class SearchForm extends Component
 
     public function search()
     {
+        $this->resetErrorBag();
+        $this->validate();
+        
+        // Validação extra: pelo menos um campo preenchido
+        if (
+            empty($this->filters['id']) &&
+            empty($this->filters['username']) &&
+            empty($this->filters['anuncio']) &&
+            empty($this->selectedState) &&
+            empty($this->selectedCity) &&
+            empty($this->filters['foto']) &&
+            empty($this->filters['busco']) &&
+            empty($this->filters['ordenar']) &&
+            empty($this->filters['cadastrados'])
+        ) {
+            $this->addError('global', 'Preencha pelo menos um campo para buscar.');
+            $this->hasSearched = false;
+            $this->results = [];
+            return;
+        }
+        
+        $this->hasSearched = true;
         $query = User::query();
 
         if ($this->filters['id']) {

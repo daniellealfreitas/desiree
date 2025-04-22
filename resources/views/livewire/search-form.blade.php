@@ -1,5 +1,11 @@
 <div>
-    <form wire:submit.prevent="search" class="space-y-4">
+    @if($errors->has('global'))
+        <div class="mb-4 p-3 rounded bg-red-100 text-red-700 border border-red-400">
+            {{ $errors->first('global') }}
+        </div>
+    @endif
+    <div id="searchform" class="p-6 border border-neutral-200 dark:border-neutral-700 shadow-md rounded-lg">
+        <form wire:submit.prevent="search" class="space-y-4">
         <div class="grid grid-cols-4 gap-4">
             <div>
                 <label for="id" class="block text-sm font-medium text-gray-300">ID</label>
@@ -39,20 +45,24 @@
                 Buscar
             </button>
         </div>
-    </form>
-
-    <div class="mt-6">
-        <h2 class="text-lg font-medium text-gray-300">Resultados</h2>
-        <ul class="mt-4 space-y-2">
-            @forelse($results as $result)
-                <li class="p-4 border border-neutral-200 dark:border-neutral-700 rounded-md">
-                    <p><strong>ID:</strong> {{ $result->id }}</p>
-                    <p><strong>Username:</strong> {{ $result->username }}</p>
-                    <p><strong>Anúncio:</strong> {{ $result->anuncio }}</p>
-                </li>
-            @empty
-                <li class="text-gray-500">Nenhum resultado encontrado.</li>
-            @endforelse
-        </ul>
+        </form>
     </div>
+   @if($hasSearched)
+   <div id="results" class="p-6 border border-neutral-200 dark:border-neutral-700 shadow-md rounded-lg">
+        <div class="mt-6">
+            <h2 class="text-lg font-medium text-gray-300">Resultados</h2>
+            <ul class="mt-4 space-y-2">
+                @forelse($results as $result)
+                    <li class="p-4 border border-neutral-200 dark:border-neutral-700 rounded-md">
+                        <p><strong>ID:</strong> {{ $result->id }}</p>
+                        <p><strong>Username:</strong> {{ $result->username }}</p>
+                        <p><strong>Anúncio:</strong> {{ $result->anuncio }}</p>
+                    </li>
+                @empty
+                    <li class="text-gray-500">Nenhum resultado encontrado.</li>
+                @endforelse
+            </ul>
+        </div>
+    </div>
+   @endif
 </div>

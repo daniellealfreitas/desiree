@@ -1,1 +1,0 @@
-<?php /**PATH C:\xampp\htdocs\desiree2\resources\views\livewire/follow-user.blade.php ENDPATH**/ ?>

@@ -15,13 +15,11 @@ class Conto extends Model
 
     protected $fillable = [
         'title',
-        'content',
+        'slug',
         'category_id',
+        'content',        
         'user_id',
-        'anonimo',
-        'nome_anonimo',
         'number_views',
-        'status'
     ];
 
     protected static function boot()

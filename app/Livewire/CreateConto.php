@@ -18,7 +18,6 @@ class CreateConto extends Component
     {
         return [
             'title' => 'required|min:3',
-            'category_id' => 'required|exists:contos_categorias,id',
             'content' => 'required|min:10'
         ];
     }
@@ -39,11 +38,11 @@ class CreateConto extends Component
                 Log::info('Conto created successfully', ['conto' => $conto->toArray()]);
                 $this->reset(['title', 'category_id', 'content']);
                 session()->flash('message', 'Conto publicado com sucesso!');
-                return redirect()->route('contos');
+                // Não redireciona, apenas mostra a mensagem na tela
             }
         } catch (\Exception $e) {
             Log::error('Error creating conto: ' . $e->getMessage());
-            session()->flash('error', 'Erro ao criar o conto: ' . $e->getMessage());
+            session()->flash('error', 'Erro ao criar o conto. Por favor, tente novamente!');
         }
     }
 
