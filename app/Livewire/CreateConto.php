@@ -13,7 +13,25 @@ class CreateConto extends Component
     public $title = '';
     public $category_id = '';
     public $content = '';
-    
+    public $contoId;
+
+    public function mount($contoId = null)
+    {
+        $this->contoId = $contoId;
+
+        if ($this->contoId) {
+            $conto = Conto::findOrFail($this->contoId);
+
+            if (auth()->id() !== $conto->user_id) {
+                abort(403, 'Você não tem permissão para editar este conto.');
+            }
+
+            $this->title = $conto->title;
+            $this->category_id = $conto->category_id;
+            $this->content = $conto->content;
+        }
+    }
+
     public function rules()
     {
         return [
@@ -36,9 +54,8 @@ class CreateConto extends Component
 
             if ($conto) {
                 Log::info('Conto created successfully', ['conto' => $conto->toArray()]);
-                $this->reset(['title', 'category_id', 'content']);
                 session()->flash('message', 'Conto publicado com sucesso!');
-                // Não redireciona, apenas mostra a mensagem na tela
+                return redirect()->to('/contos'); // Redireciona para a mesma página
             }
         } catch (\Exception $e) {
             Log::error('Error creating conto: ' . $e->getMessage());
@@ -46,9 +63,56 @@ class CreateConto extends Component
         }
     }
 
+    public function update()
+    {
+        try {
+            $this->validate();
+
+            $conto = Conto::findOrFail($this->contoId);
+
+            if (auth()->id() !== $conto->user_id) {
+                abort(403, 'Você não tem permissão para editar este conto.');
+            }
+
+            $conto->update([
+                'title' => $this->title,
+                'category_id' => $this->category_id,
+                'content' => $this->content,
+            ]);
+
+            Log::info('Conto updated successfully', ['conto' => $conto->toArray()]);
+            session()->flash('message', 'Conto atualizado com sucesso!');
+            return redirect()->to('/contos');
+        } catch (\Exception $e) {
+            Log::error('Error updating conto: ' . $e->getMessage());
+            session()->flash('error', 'Erro ao atualizar o conto. Por favor, tente novamente!');
+        }
+    }
+
+    public function destroy()
+    {
+        try {
+            $conto = Conto::findOrFail($this->contoId);
+
+            if (auth()->id() !== $conto->user_id) {
+                abort(403, 'Você não tem permissão para excluir este conto.');
+            }
+
+            $conto->delete();
+
+            Log::info('Conto deleted successfully', ['conto_id' => $this->contoId]);
+            session()->flash('message', 'Conto excluído com sucesso!');
+            return redirect()->to('/contos');
+        } catch (\Exception $e) {
+            Log::error('Error deleting conto: ' . $e->getMessage());
+            session()->flash('error', 'Erro ao excluir o conto. Por favor, tente novamente!');
+        }
+    }
+
     public function render()
     {
-        return view('livewire.create-conto', [
+        // Carrega a view 'edit-conto' se $contoId estiver definido, caso contrário, 'create-conto'
+        return view($this->contoId ? 'livewire.edit-conto' : 'livewire.create-conto', [
             'categories' => ContosCategoria::all()
         ]);
     }

@@ -18,6 +18,8 @@ use App\Http\Controllers\GroupController;
 use App\Http\Livewire\NearbyUsers;
 use App\Http\Controllers\LocationController;
 use App\Models\Post;
+use App\Livewire\CreateConto;
+use App\Livewire\EditConto;
 
 Route::get('/', function () {
     return view('home');
@@ -41,6 +43,11 @@ Route::view('busca', 'busca')
 Route::get('/contos', function () {
     return view('contos');
 })->middleware(['auth', 'verified'])->name('contos');
+
+Route::get('/contos/{id}', function($id) {
+    $conto = App\Models\Conto::with(['user', 'category'])->find($id);
+    return view('livewire.show-conto', compact('conto'));
+})->middleware(['auth', 'verified'])->name('contos.show');
 
 
 Route::get('feed_imagens', function () {
@@ -103,6 +110,19 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile-with-avatar', 'settings.profile-with-avatar')->name('settings.profile-with-avatar');
     Volt::route('settings/profile-with-cover', 'settings.profile-with-cover')->name('settings.profile-with-cover');
     Route::get('/follow-requests', FollowRequestNotifications::class)->name('follow.requests');
+    Route::get('/contos/create', CreateConto::class)->name('contos.create');
+    Route::get('/contos/{conto}/edit', EditConto::class)->name('contos.edit')->where('conto', '[0-9]+');
+    Route::delete('/contos/{conto}', function ($conto) {
+        $conto = App\Models\Conto::findOrFail($conto);
+
+        if (auth()->id() !== $conto->user_id) {
+            abort(403, 'Você não tem permissão para excluir este conto.');
+        }
+
+        $conto->delete();
+
+        return redirect()->route('contos')->with('message', 'Conto excluído com sucesso!');
+    })->name('contos.destroy');
 });
 
 

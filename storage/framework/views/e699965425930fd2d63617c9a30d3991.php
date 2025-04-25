@@ -8,16 +8,33 @@
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Contos'))]); ?>
-    <?php $__env->startPush('styles'); ?>
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-    <?php $__env->stopPush(); ?>
 
     <div class="container mx-auto max-w-6xl p-4">
+        <!-- Mensagem de sucesso -->
+        <?php if(session()->has('message')): ?>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4">
+                <?php echo e(session('message')); ?>
+
+            </div>
+        <?php endif; ?>
+
+        <!-- Botão para abrir o modal -->
+        <div class="flex justify-end mb-4">
+            <button 
+                x-data 
+                x-on:click="$dispatch('open-modal')" 
+                class="bg-purple-600 text-white px-6 py-2 rounded-lg shadow-md hover:bg-purple-700 hover:shadow-lg transition duration-300 ease-in-out">
+                <?php echo e(__('Criar Conto')); ?>
+
+            </button>
+        </div>
+
+        <!-- Lista de contos -->
         <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('create-conto', []);
+[$__name, $__params] = $__split('list-contos', []);
 
 $__html = app('livewire')->mount($__name, $__params, 'lw-1862919999-0', $__slots ?? [], get_defined_vars());
 
@@ -29,11 +46,23 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
-        <?php
+    </div>
+
+    <!-- Modal -->
+    <div 
+        x-data="{show : false}"
+        x-show="show"
+        x-on:open-modal.window="show = true"
+        x-on:close-modal.window="show = false"
+        x-on:keydown.escape.window="show = false"
+        x-on:click.away="show = false"
+        class="fixed inset-0 flex items-center justify-center bg-zinc-800 z-50">
+        <div class="rounded-lg shadow-lg p-6 w-full max-w-lg">
+            <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('list-contos', []);
+[$__name, $__params] = $__split('create-conto', []);
 
 $__html = app('livewire')->mount($__name, $__params, 'lw-1862919999-1', $__slots ?? [], get_defined_vars());
 
@@ -45,12 +74,9 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
+        </div>
     </div>
 
-    <?php $__env->startPush('scripts'); ?>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-    <?php $__env->stopPush(); ?>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal5863877a5171c196453bfa0bd807e410)): ?>
