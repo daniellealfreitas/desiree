@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Group;
 use App\Models\Post;
+use App\Models\UserPoint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -30,6 +31,10 @@ class PostController extends Controller {
             'user_id' => auth()->id(),
             'group_id' => $group->id,
         ]);
+
+        // Increment user points
+        $userPoint = UserPoint::firstOrCreate(['user_id' => auth()->id()]);
+        $userPoint->increment('points', 10);
 
         return redirect()->route('grupos.show', $group);
     }

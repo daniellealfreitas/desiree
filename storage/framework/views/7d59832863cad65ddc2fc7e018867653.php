@@ -71,14 +71,14 @@
 <?php endif; ?>
                 <?php if (isset($component)) { $__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.item','data' => ['icon' => 'inbox','badge' => '12','href' => '#']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.item','data' => ['icon' => 'inbox','badge' => '12','href' => route('messages.index')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::navbar.item'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['icon' => 'inbox','badge' => '12','href' => '#']); ?>Mensagens <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['icon' => 'inbox','badge' => '12','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('messages.index'))]); ?>Mensagens <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48)): ?>
 <?php $attributes = $__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48; ?>
@@ -579,14 +579,14 @@ if (isset($__slots)) unset($__slots);
 <?php $component->withAttributes(['variant' => 'outline']); ?>
                 <?php if (isset($component)) { $__componentOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.group','data' => ['heading' => __('Platform'),'class' => 'grid']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.group','data' => ['class' => 'grid']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::navlist.group'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['heading' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Platform')),'class' => 'grid']); ?>
+<?php $component->withAttributes(['class' => 'grid']); ?>
                     <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'home','href' => route('dashboard'),'current' => request()->routeIs('dashboard'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -1352,6 +1352,89 @@ if (isset($__slots)) unset($__slots);
         <?php app('livewire')->forceAssetInjection(); ?>
 <?php echo app('flux')->scripts(); ?>
 
+
+        <script>
+            // Function to trigger confetti animation
+            window.triggerConfetti = function() {
+                // Create a canvas element dynamically
+                const canvas = document.createElement('canvas');
+                document.body.appendChild(canvas);
+                canvas.style.position = 'fixed';
+                canvas.style.top = '0';
+                canvas.style.left = '0';
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                canvas.style.pointerEvents = 'none';
+                const ctx = canvas.getContext('2d');
+                const confettiCount = 300;
+                const confetti = [];
+
+                // Initialize confetti particles
+                for (let i = 0; i < confettiCount; i++) {
+                    confetti.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height - canvas.height,
+                        r: Math.random() * 6 + 2,
+                        dx: Math.random() * 4 - 2,
+                        dy: Math.random() * 4 + 2,
+                        color: `hsl(${Math.random() * 360}, 100%, 50%)`
+                    });
+                }
+
+                // Resize canvas to match the window size
+                function resizeCanvas() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+
+                // Animation loop
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    confetti.forEach(p => {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color;
+                        ctx.fill();
+                        p.x += p.dx;
+                        p.y += p.dy;
+                        if (p.y > canvas.height) p.y = -p.r;
+                    });
+                    requestAnimationFrame(animate);
+                }
+                animate();
+
+                // Remove canvas after 2 seconds
+                setTimeout(() => {
+                    window.removeEventListener('resize', resizeCanvas);
+                    canvas.remove();
+                }, 2000);
+            };
+
+            // Function to trigger XP popup
+            window.triggerXpPopup = function(points) {
+                // Create a popup element dynamically
+                const popup = document.createElement('div');
+                popup.textContent = `+${points} XP!`;
+                popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-4xl font-bold bg-blue-500 px-6 py-3 rounded-lg shadow-lg animate-pulse';
+                document.body.appendChild(popup);
+
+                // Remove popup after 2 seconds
+                setTimeout(() => {
+                    popup.remove();
+                }, 2000);
+            };
+
+            // Add keyboard shortcut to trigger animations
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'F10') {
+                    // Trigger both animations when F10 is pressed
+                    window.triggerConfetti();
+                    window.triggerXpPopup(50); // Example: 50 XP
+                }
+            });
+        </script>
     </body>
 </html>
 <?php /**PATH C:\xampp\htdocs\desiree2\resources\views/components/layouts/app/sidebar.blade.php ENDPATH**/ ?>

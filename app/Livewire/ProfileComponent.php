@@ -41,9 +41,8 @@ class ProfileComponent extends Component
 
     public function getAvatar($userId)
     {
-        // Fetch the latest avatar for a specific user
+        // Fetch the latest photo for a specific user
         $path = UserPhoto::where('user_id', $userId)
-            ->where('type', 'avatar') // Assuming a 'type' column exists to specify avatar
             ->latest()
             ->value('photo_path');
         return $path ? Storage::url($path) : asset('images/default-avatar.jpg');

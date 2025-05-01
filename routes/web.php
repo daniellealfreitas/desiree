@@ -20,6 +20,11 @@ use App\Http\Controllers\LocationController;
 use App\Models\Post;
 use App\Livewire\CreateConto;
 use App\Livewire\EditConto;
+use App\Livewire\Timeline;
+use App\Http\Controllers\PaymentController;
+use App\Livewire\Messages;
+use App\Models\Message;
+use App\Http\Controllers\MessageController;
 
 Route::get('/', function () {
     return view('home');
@@ -86,9 +91,7 @@ Route::view('renovar-vip', 'renovar-vip')
     ->middleware(['auth', 'verified'])
     ->name('renovar-vip');
 
-Route::view('meus-pagamentos', 'meus-pagamentos')
-    ->middleware(['auth', 'verified'])
-    ->name('meus-pagamentos');
+Route::get('/meus-pagamentos', [PaymentController::class, 'index'])->name('meus-pagamentos');
 
 
 Route::middleware('guest')->group(function () {
@@ -123,6 +126,9 @@ Route::middleware(['auth'])->group(function () {
 
         return redirect()->route('contos')->with('message', 'Conto excluído com sucesso!');
     })->name('contos.destroy');
+    Route::get('/timeline', Timeline::class)->name('timeline');
+    Route::resource('messages', MessageController::class)->only(['index', 'store', 'destroy']);
+    
 });
 
 
@@ -151,5 +157,6 @@ Route::get('/cidades/{state}', [LocationController::class, 'getCities'])->name('
 Route::get('post/{post}', function (Post $post) {
     return view('post.show', compact('post'));
 })->name('post.show');
+
 
 require __DIR__.'/auth.php';

@@ -14,7 +14,7 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" />
             <flux:navbar class="-mb-px max-lg:hidden">
                 <flux:navbar.item icon="map-pin" :href="route('radar')" >Radar</flux:navbar.item>
-                <flux:navbar.item icon="inbox" badge="12" href="#">Mensagens</flux:navbar.item>
+                <flux:navbar.item icon="inbox" badge="12" :href="route('messages.index')">Mensagens</flux:navbar.item>
                 <livewire:follow-request-notifications />
                 <livewire:notifications />
             </flux:navbar>
@@ -68,7 +68,7 @@
             </a>
 
             <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
+                <flux:navlist.group class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Principal') }}
                     </flux:navlist.item>
@@ -198,5 +198,88 @@
         {{ $slot }}
 
         @fluxScripts
+
+        <script>
+            // Function to trigger confetti animation
+            window.triggerConfetti = function() {
+                // Create a canvas element dynamically
+                const canvas = document.createElement('canvas');
+                document.body.appendChild(canvas);
+                canvas.style.position = 'fixed';
+                canvas.style.top = '0';
+                canvas.style.left = '0';
+                canvas.style.width = '100%';
+                canvas.style.height = '100%';
+                canvas.style.pointerEvents = 'none';
+                const ctx = canvas.getContext('2d');
+                const confettiCount = 300;
+                const confetti = [];
+
+                // Initialize confetti particles
+                for (let i = 0; i < confettiCount; i++) {
+                    confetti.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height - canvas.height,
+                        r: Math.random() * 6 + 2,
+                        dx: Math.random() * 4 - 2,
+                        dy: Math.random() * 4 + 2,
+                        color: `hsl(${Math.random() * 360}, 100%, 50%)`
+                    });
+                }
+
+                // Resize canvas to match the window size
+                function resizeCanvas() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+                resizeCanvas();
+                window.addEventListener('resize', resizeCanvas);
+
+                // Animation loop
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    confetti.forEach(p => {
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fillStyle = p.color;
+                        ctx.fill();
+                        p.x += p.dx;
+                        p.y += p.dy;
+                        if (p.y > canvas.height) p.y = -p.r;
+                    });
+                    requestAnimationFrame(animate);
+                }
+                animate();
+
+                // Remove canvas after 2 seconds
+                setTimeout(() => {
+                    window.removeEventListener('resize', resizeCanvas);
+                    canvas.remove();
+                }, 2000);
+            };
+
+            // Function to trigger XP popup
+            window.triggerXpPopup = function(points) {
+                // Create a popup element dynamically
+                const popup = document.createElement('div');
+                popup.textContent = `+${points} XP!`;
+                popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-4xl font-bold bg-blue-500 px-6 py-3 rounded-lg shadow-lg animate-pulse';
+                document.body.appendChild(popup);
+
+                // Remove popup after 2 seconds
+                setTimeout(() => {
+                    popup.remove();
+                }, 2000);
+            };
+
+            // Add keyboard shortcut to trigger animations
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'F10') {
+                    // Trigger both animations when F10 is pressed
+                    window.triggerConfetti();
+                    window.triggerXpPopup(50); // Example: 50 XP
+                }
+            });
+        </script>
     </body>
 </html>

@@ -52,7 +52,11 @@ new class extends Component {
         <img src="{{ $this->avatar() ?? asset('images/users/avatar.jpg') }}" 
             alt="Foto de Perfil" class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
         <h2 class="text-xl font-semibold mt-2">{{ $user->name }}</h2>
-        <p class="text-gray-600">{{ '@' . $user->username }}</p>
+        <p class="text-gray-600">
+            <a href="{{ route('user.profile', ['username' => $user->username]) }}" class="hover:underline">
+                {{ '@' . $user->username }}
+            </a>
+        </p>
         <div class="mt-4 flex justify-around w-full">
             <div class="text-center">
                 <p class="text-lg font-semibold">{{ $this->postsCount() }}</p>

@@ -18,7 +18,12 @@ use Livewire\Volt\Component;
         <img src="<?php echo e($this->avatar() ?? asset('images/users/avatar.jpg')); ?>" 
             alt="Foto de Perfil" class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
         <h2 class="text-xl font-semibold mt-2"><?php echo e($user->name); ?></h2>
-        <p class="text-gray-600"><?php echo e('@' . $user->username); ?></p>
+        <p class="text-gray-600">
+            <a href="<?php echo e(route('user.profile', ['username' => $user->username])); ?>" class="hover:underline">
+                <?php echo e('@' . $user->username); ?>
+
+            </a>
+        </p>
         <div class="mt-4 flex justify-around w-full">
             <div class="text-center">
                 <p class="text-lg font-semibold"><?php echo e($this->postsCount()); ?></p>

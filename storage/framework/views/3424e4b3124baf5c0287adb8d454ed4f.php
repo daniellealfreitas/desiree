@@ -25,6 +25,14 @@
                      alt="Preview">
             </div>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+        <!--[if BLOCK]><![endif]--><?php if($video): ?>
+            <div class="mt-2">
+                <video controls class="max-w-xs h-auto rounded-lg shadow-sm">
+                    <source src="<?php echo e($video->temporaryUrl()); ?>" type="video/mp4">
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+            </div>
+        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
         <div class="flex justify-between mt-3">
             <div class="flex space-x-4">

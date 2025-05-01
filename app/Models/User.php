@@ -1,19 +1,30 @@
 <?php
 
 namespace App\Models;
-use App\Models\Like;
+
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Conto;
+use App\Models\City;
+use App\Models\State;
+use App\Models\Like;
+use App\Models\UserLevel;
+use App\Models\UserPoint;
+use App\Models\Notification;
+use App\Models\FollowRequest;
+use App\Models\LookingForOption;
+use App\Models\PreferenceOption;
+use App\Models\UserPhoto;
+use App\Models\UserCoverPhoto;
+use App\Models\Post;
+use App\Models\Payment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use App\Models\Conto;
-use App\Models\City;
-use App\Models\State;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -22,7 +33,7 @@ class User extends Authenticatable
 
 
     protected $fillable = [
-        'name', 'username', 'email', 'password', 'role', 'level', 'latitude', 'longitude',
+        'name', 'username', 'email', 'password','city_id', 'state_id', 'latitude', 'longitude',
     ];
 
     // Relação com posts
@@ -163,6 +174,14 @@ class User extends Authenticatable
     {
         $this->ranking_points += $points;
         $this->save();
+    }
+
+    /**
+     * Relacionamento com pontos do usuário
+     */
+    public function userPoints()
+    {
+        return $this->hasMany(UserPoint::class);
     }
 
     /**

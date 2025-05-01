@@ -27,6 +27,22 @@ state([
 
 $loadMore = action(function () {
     $this->limit += 5;
+
+    // Atualiza os posts para refletir o novo limite
+    $this->posts = Post::with([
+        'user.userPhotos' => function($query) {
+            $query->latest()->take(1);
+        }, 
+        'likedByUsers', 
+        'comments.user.userPhotos' => function($query) {
+            $query->latest()->take(1);
+        }
+    ])
+        ->latest()
+        ->take($this->limit)
+        ->get();
+
+    
 });
 
 $toggleLike = action(function ($postId) {
@@ -121,10 +137,16 @@ $addComment = action(function ($postId) {
             </div>
 
             @if ($post->image)
-                <img src="{{ asset( $post->image) }}" class="w-full rounded-lg mb-4">
+                <img src="{{ Storage::url($post->image) }}" class="w-full rounded-lg mb-4">
             @endif
 
-            <p class="text-gray-700">{{ $post->body }}</p>
+            @if ($post->video)
+                <video controls class="w-full rounded-lg mb-4">
+                    <source src="{{ Storage::url($post->video) }}" type="video/mp4">
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+            @endif
+            <p class="text-gray-700">{{ $post->content }}</p>
 
             <div class="mt-3 flex items-center space-x-2">
                 <button
@@ -186,7 +208,10 @@ $addComment = action(function ($postId) {
         </div>
     @endforeach
 
-    <button wire:click="loadMore" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-        Load More
-    </button>
+    <div class="mt-4 flex items-center space-x-2">
+        <flux:button wire:click="loadMore" >
+            Carregar mais postagens 
+        </flux:button>
+    </div>
+    
 </div>

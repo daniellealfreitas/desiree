@@ -10,6 +10,88 @@
         </select>
     </div>
 
+    <!-- category substitute !!!@@@ -->
+    <?php if (isset($component)) { $__componentOriginale5140a44d7461450cb1378cd5b47dfc8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginale5140a44d7461450cb1378cd5b47dfc8 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.group.index','data' => ['wire:model' => 'role','label' => 'Role','variant' => 'segmented']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::radio.group'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['wire:model' => 'role','label' => 'Role','variant' => 'segmented']); ?>
+        <?php if (isset($component)) { $__componentOriginal63a6e9bef56b25b50cfa996fe1154357 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.index','data' => ['label' => 'Admin']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::radio'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['label' => 'Admin']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
+<?php $attributes = $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
+<?php unset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
+<?php $component = $__componentOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
+<?php unset($__componentOriginal63a6e9bef56b25b50cfa996fe1154357); ?>
+<?php endif; ?>
+        <?php if (isset($component)) { $__componentOriginal63a6e9bef56b25b50cfa996fe1154357 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.index','data' => ['label' => 'Editor']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::radio'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['label' => 'Editor']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
+<?php $attributes = $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
+<?php unset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
+<?php $component = $__componentOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
+<?php unset($__componentOriginal63a6e9bef56b25b50cfa996fe1154357); ?>
+<?php endif; ?>
+        <?php if (isset($component)) { $__componentOriginal63a6e9bef56b25b50cfa996fe1154357 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.index','data' => ['label' => 'Viewer']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::radio'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['label' => 'Viewer']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
+<?php $attributes = $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
+<?php unset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
+<?php $component = $__componentOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
+<?php unset($__componentOriginal63a6e9bef56b25b50cfa996fe1154357); ?>
+<?php endif; ?>
+     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginale5140a44d7461450cb1378cd5b47dfc8)): ?>
+<?php $attributes = $__attributesOriginale5140a44d7461450cb1378cd5b47dfc8; ?>
+<?php unset($__attributesOriginale5140a44d7461450cb1378cd5b47dfc8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginale5140a44d7461450cb1378cd5b47dfc8)): ?>
+<?php $component = $__componentOriginale5140a44d7461450cb1378cd5b47dfc8; ?>
+<?php unset($__componentOriginale5140a44d7461450cb1378cd5b47dfc8); ?>
+<?php endif; ?>
+
     <!-- Contos Grid -->
     <div class="md:columns-2 lg:columns-3 gap-6 p-4 sm:p-1">
         <!--[if BLOCK]><![endif]--><?php $__empty_1 = true; $__currentLoopData = $contos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $conto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
@@ -19,13 +101,15 @@
                         <div class="flex justify-between">
                             <div class="flex space-x-6">
                                 <div class="flex space-x-4 flex-shrink-0 w-52">
-                                    <img src="<?php echo e($conto->user->userPhotos->first() ? asset($conto->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')); ?>"
-                                         class="w-10 h-10 rounded-full">
+                                    <a href="<?php echo e(route('user.profile', $conto->user->username)); ?>">
+                                        <img src="<?php echo e($conto->user->userPhotos->first() ? asset($conto->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')); ?>"
+                                             class="w-10 h-10 rounded-full">
+                                    </a>
                                     <div>
-                                        <div class="font-semibold">
+                                        <a href="<?php echo e(route('user.profile', $conto->user->username)); ?>" class="font-semibold hover:underline">
                                             <?php echo e($conto->user->name); ?>
 
-                                        </div>
+                                        </a>
                                         <div class="text-sm">
                                             <?php echo e('@' . $conto->user->username); ?>
 

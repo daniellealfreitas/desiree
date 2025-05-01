@@ -9,7 +9,10 @@ class UserPhoto extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'photo_path'];
+    protected $fillable = [
+        'user_id',
+        'photo_path',
+    ];
 
     public function user()
     {

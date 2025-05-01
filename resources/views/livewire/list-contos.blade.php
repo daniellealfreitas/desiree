@@ -10,6 +10,13 @@
         </select>
     </div>
 
+    <!-- category substitute !!!@@@ -->
+    <flux:radio.group wire:model="role" label="Role" variant="segmented">
+        <flux:radio label="Admin" />
+        <flux:radio label="Editor" />
+        <flux:radio label="Viewer" />
+    </flux:radio.group>
+
     <!-- Contos Grid -->
     <div class="md:columns-2 lg:columns-3 gap-6 p-4 sm:p-1">
         @forelse($contos as $conto)
@@ -19,12 +26,14 @@
                         <div class="flex justify-between">
                             <div class="flex space-x-6">
                                 <div class="flex space-x-4 flex-shrink-0 w-52">
-                                    <img src="{{ $conto->user->userPhotos->first() ? asset($conto->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
-                                         class="w-10 h-10 rounded-full">
+                                    <a href="{{ route('user.profile', $conto->user->username) }}">
+                                        <img src="{{ $conto->user->userPhotos->first() ? asset($conto->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
+                                             class="w-10 h-10 rounded-full">
+                                    </a>
                                     <div>
-                                        <div class="font-semibold">
+                                        <a href="{{ route('user.profile', $conto->user->username) }}" class="font-semibold hover:underline">
                                             {{ $conto->user->name }}
-                                        </div>
+                                        </a>
                                         <div class="text-sm">
                                             {{ '@' . $conto->user->username }}
                                         </div>

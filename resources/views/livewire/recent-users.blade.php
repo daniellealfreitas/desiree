@@ -13,11 +13,15 @@ $getRecentUsers = function () {
     $this->recentUsers = User::with(['userPhotos' => function($query) {
         $query->latest()->take(1);
     }])
-    ->select('id', 'name', 'last_login_at')
+    ->select('id', 'name', 'username', 'last_login_at') // Added 'username'
     ->orderBy('last_login_at', 'desc')
     ->take(5)
     ->get()
     ->map(function ($user) {
+        // Ensure 'username' is included in the user data
+        if (!isset($user->username)) {
+            $user->username = User::find($user->id)->username;
+        }
         // Check for existing follow request
         $request = FollowRequest::where('sender_id', Auth::id())
             ->where('receiver_id', $user->id)
@@ -60,7 +64,11 @@ mount(function () {
             <li class="flex items-center justify-between space-x-3">
                 <div class="flex items-center space-x-3">
                     <img src="{{ asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg') }}" class="w-10 h-10 rounded-full object-cover">
-                    <span>{{ $user['name'] }}</span>
+                    <span>
+                        <a href="/{{ $user['username'] }}" class="text-blue-500 hover:underline">
+                            {{ $user['name'] }}
+                        </a>
+                    </span>
                 </div>
                 @if($user['id'] !== Auth::id())
                     <button wire:click="toggleFollow({{ $user['id'] }})" 

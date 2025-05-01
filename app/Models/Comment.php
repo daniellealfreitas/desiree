@@ -15,6 +15,16 @@ class Comment extends Model
         'body'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($comment) {
+            $userPoint = UserPoint::firstOrCreate(['user_id' => $comment->user_id]);
+            $userPoint->increment('points', 5);
+        });
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

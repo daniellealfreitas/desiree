@@ -13,7 +13,12 @@ use Illuminate\Support\Facades\Auth;
             <li class="flex items-center justify-between space-x-3">
                 <div class="flex items-center space-x-3">
                     <img src="<?php echo e(asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg')); ?>" class="w-10 h-10 rounded-full object-cover">
-                    <span><?php echo e($user['name']); ?></span>
+                    <span>
+                        <a href="/<?php echo e($user['username']); ?>" class="text-blue-500 hover:underline">
+                            <?php echo e($user['name']); ?>
+
+                        </a>
+                    </span>
                 </div>
                 <!--[if BLOCK]><![endif]--><?php if($user['id'] !== Auth::id()): ?>
                     <button wire:click="toggleFollow(<?php echo e($user['id']); ?>)" 

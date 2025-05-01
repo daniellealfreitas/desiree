@@ -23,6 +23,14 @@
                      alt="Preview">
             </div>
         @endif
+        @if ($video)
+            <div class="mt-2">
+                <video controls class="max-w-xs h-auto rounded-lg shadow-sm">
+                    <source src="{{ $video->temporaryUrl() }}" type="video/mp4">
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+            </div>
+        @endif
 
         <div class="flex justify-between mt-3">
             <div class="flex space-x-4">

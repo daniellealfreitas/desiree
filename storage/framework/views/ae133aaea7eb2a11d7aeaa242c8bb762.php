@@ -24,10 +24,16 @@ use Illuminate\Support\Facades\Auth;
             </div>
 
             <!--[if BLOCK]><![endif]--><?php if($post->image): ?>
-                <img src="<?php echo e(asset( $post->image)); ?>" class="w-full rounded-lg mb-4">
+                <img src="<?php echo e(Storage::url($post->image)); ?>" class="w-full rounded-lg mb-4">
             <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
-            <p class="text-gray-700"><?php echo e($post->body); ?></p>
+            <!--[if BLOCK]><![endif]--><?php if($post->video): ?>
+                <video controls class="w-full rounded-lg mb-4">
+                    <source src="<?php echo e(Storage::url($post->video)); ?>" type="video/mp4">
+                    Seu navegador não suporta o elemento de vídeo.
+                </video>
+            <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+            <p class="text-gray-700"><?php echo e($post->content); ?></p>
 
             <div class="mt-3 flex items-center space-x-2">
                 <button
@@ -90,7 +96,28 @@ use Illuminate\Support\Facades\Auth;
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
 
-    <button wire:click="loadMore" class="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
-        Load More
-    </button>
+    <div class="mt-4 flex items-center space-x-2">
+        <?php if (isset($component)) { $__componentOriginalc04b147acd0e65cc1a77f86fb0e81580 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['wire:click' => 'loadMore']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::button'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['wire:click' => 'loadMore']); ?>
+            Carregar mais postagens 
+         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580)): ?>
+<?php $attributes = $__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580; ?>
+<?php unset($__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc04b147acd0e65cc1a77f86fb0e81580)): ?>
+<?php $component = $__componentOriginalc04b147acd0e65cc1a77f86fb0e81580; ?>
+<?php unset($__componentOriginalc04b147acd0e65cc1a77f86fb0e81580); ?>
+<?php endif; ?>
+    </div>
+    
 </div><?php /**PATH C:\xampp\htdocs\desiree2\resources\views\livewire/postfeed.blade.php ENDPATH**/ ?>
