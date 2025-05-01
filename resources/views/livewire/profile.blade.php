@@ -9,7 +9,7 @@
         x-show="show"
         class="relative w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
 
-        <div class="relative w-full">
+        <div id="profile_header" class="relative w-full">
             {{-- Foto de capa Backgrond cover --}}
             <div class="w-full h-80 bg-cover bg-center" style="background-image: url('{{ $this->cover() ?? asset('images/default-banner.jpg') }}');"></div>
             
@@ -26,7 +26,7 @@
             </div>
         </div>
 
-        <div class="flex flex-wrap items-center justify-between border-t border-gray-200 dark:border-gray-700 px-6 py-3 mt-4 text-sm text-gray-700 dark:text-gray-300">
+        <div id="profile_navigation" class="flex flex-wrap items-center justify-between border-t border-gray-200 dark:border-gray-700 px-6 py-3 mt-4 text-sm text-gray-700 dark:text-gray-300">
             <div class="flex flex-wrap gap-4">
                <flux:button.group>
                     <flux:button variant="ghost" icon="photo" >
@@ -96,12 +96,6 @@
                     @endforeach
                 </div>
             </section>
-        </div>
-        <div class="w-2/3">
-            <section id="create-post">
-                <livewire:create-post />
-                <livewire:postfeed />
-            </section>
             <section id="procurando" class="mt-6">
                 <flux:text>
                     <h2>Procurando</h2>
@@ -116,58 +110,12 @@
                 </flux:text>
             </section>
         </div>
+        <div class="w-2/3">
+            <section id="create-post">
+                <livewire:create-post />
+                <livewire:postfeed />
+            </section>
+            
+        </div>
     </div>
-    <section id="progress-bar" class="mt-6 w-1/3">
-        <flux:text>Preenchimento de perfil</flux:text>
-        <div class="relative mx-5 my-10">
-            <div class="mb-4 flex h-5 overflow-hidden rounded text-xs border border-gray-500">
-                <div style="width: 10%" class="bg-green-500 transition-all duration-500 ease-out "></div>
-
-            </div>
-            <div class="mb-2 flex items-center justify-between text-xs">
-                <div class="text-gray-600">Progresso</div>
-                <div class="text-gray-600">20%</div>
-            </div>
-        </div>
-    </section>
-    <section id="ranking" class="mt-6 w-1/3">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Ranking</h3>
-        <div class="flex flex-col gap-4">
-            @foreach($topUsers as $rank)
-                <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow">
-                    <div class="flex items-center gap-4">
-                         <div class="w-12 h-12 rounded-full overflow-hidden">
-                            <img src="{{ $rank->avatar ?? asset('images/default-avatar.jpg') }}" class="w-full h-full object-cover" />
-                        </div> 
-                        <div>
-                            <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200">{{ $rank->name }}</h4>
-                            <p class="text-xs text-gray-600 dark:text-gray-400">{{ '@' . $rank->username }}</p>
-                            <flux:text>Level 1</flux:text>
-                        </div>
-                    </div>
-                    <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">
-                        {{ $rank->ranking_points }} pontos
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </section>
-    <section id="create-post" class="w-2/3">
-        <livewire:create-post />
-        <livewire:postfeed />
-    </section>
-    <section id="procurando" >
-        <flux:text>
-            <h2>Procurando</h2>
-            <p>Procurando por um amor verdadeiro, alguém que me faça feliz e que me faça rir. Se você é essa pessoa, entre em contato!</p>
-        </flux:text>
-    </section>
-
-    <section id="skills">
-        <flux:text>
-            <ul>
-                <li>17 cm de pica </li> Comprovado. por zilandaxxx, delilah, 
-            </ul>
-        </flux:text>
-    </section>
 </div>

@@ -18,5 +18,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Livewire::component('create-post', CreatePost::class);
         Livewire::component('profile-component', ProfileComponent::class);
+        Livewire::component('settings.profile-form', \App\Livewire\Settings\ProfileForm::class);
     }
 }

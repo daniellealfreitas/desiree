@@ -15,7 +15,6 @@ $getRecentUsers = function () {
     }])
     ->select('id', 'name', 'username', 'last_login_at') // Added 'username'
     ->orderBy('last_login_at', 'desc')
-    ->take(5)
     ->get()
     ->map(function ($user) {
         // Ensure 'username' is included in the user data

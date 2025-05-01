@@ -33,7 +33,18 @@ class User extends Authenticatable
 
 
     protected $fillable = [
-        'name', 'username', 'email', 'password','city_id', 'state_id', 'latitude', 'longitude',
+        'name', 
+        'username', 
+        'email', 
+        'password',
+        'city_id', 
+        'state_id', 
+        'latitude', 
+        'longitude',
+        'sexo',
+        'aniversario',
+        'privado',
+        'bio'
     ];
 
     // Relação com posts
@@ -184,6 +195,16 @@ class User extends Authenticatable
         return $this->hasMany(UserPoint::class);
     }
 
+    public function hobbies(): BelongsToMany
+    {
+        return $this->belongsToMany(Hobby::class);
+    }
+
+    public function procuras(): BelongsToMany
+    {
+        return $this->belongsToMany(Procura::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -204,6 +225,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'aniversario' => 'date',
+            'privado' => 'boolean',
         ];
     }
 

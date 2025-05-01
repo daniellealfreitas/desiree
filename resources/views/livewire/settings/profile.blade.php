@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use App\Models\State;
+use App\Models\City;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
@@ -10,15 +12,54 @@ new class extends Component {
     public string $name = '';
     public string $email = '';
     public ?string $username = '';
+    public ?string $bio = '';
+    public ?string $aniversario = '';
+    public ?string $sexo = '';
+    public bool $privado = false;
+    public $states = [];
+    public $cities = [];
+    public $selectedState = null;
+    public $selectedCity = null;
 
     /**
      * Mount the component.
      */
     public function mount(): void
     {
-        $this->name = Auth::user()->name;
-        $this->email = Auth::user()->email;
-        $this->username = Auth::user()->username ?? '';
+        $user = Auth::user();
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->username = $user->username ?? '';
+        $this->bio = $user->bio ?? '';
+        $this->aniversario = $user->aniversario ? $user->aniversario->format('Y-m-d') : '';
+        $this->sexo = $user->sexo ?? '';
+        $this->privado = $user->privado ?? false;
+        $this->selectedState = $user->state_id;
+        $this->selectedCity = $user->city_id;
+        $this->states = State::orderBy('name', 'asc')->get();
+        if ($this->selectedState) {
+            $this->cities = City::where('state_id', $this->selectedState)->orderBy('name', 'asc')->get();
+        }
+    }
+
+    public function updatedSelectedState($stateId): void
+    {
+        $this->cities = $stateId ? City::where('state_id', $stateId)->orderBy('name', 'asc')->get() : [];
+        $this->selectedCity = null;
+        
+        // Atualiza o state_id do usuário
+        $user = Auth::user();
+        $user->state_id = $stateId;
+        $user->city_id = null; // Limpa a cidade quando muda o estado
+        $user->save();
+    }
+
+    public function updatedSelectedCity($cityId): void
+    {
+        // Atualiza o city_id do usuário
+        $user = Auth::user();
+        $user->city_id = $cityId;
+        $user->save();
     }
 
     /**
@@ -39,6 +80,12 @@ new class extends Component {
                 'max:255',
                 Rule::unique(User::class)->ignore($user->id)
             ],
+            'bio' => ['nullable', 'string', 'max:500'],
+            'aniversario' => ['nullable', 'date'],
+            'sexo' => ['nullable', 'string', 'in:Homem,Mulher,Casal'],
+            'privado' => ['boolean'],
+            'selectedState' => ['nullable', 'exists:states,id'],
+            'selectedCity' => ['nullable', 'exists:cities,id'],
         ]);
 
         $user->fill($validated);
@@ -74,7 +121,7 @@ new class extends Component {
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <x-settings.layout :heading="__('Perfil')" :subheading="__('Editar seu nome e email')">
+    <x-settings.layout :heading="__('Perfil')" :subheading="__('Editar suas informações pessoais')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
             <flux:input wire:model="name" :label="__('Nome')" type="text" required autofocus autocomplete="name" />
             
@@ -101,6 +148,43 @@ new class extends Component {
                     </div>
                 @endif
             </div>
+
+            <flux:textarea wire:model="bio" :label="__('Sobre você')" rows="auto" />
+
+            <flux:input wire:model="aniversario" :label="__('Data de Nascimento')" type="date" />
+
+            <flux:select wire:model="sexo" :label="__('Gênero')">
+                <option value="">Selecione...</option>
+                <option value="Homem">Homem</option>
+                <option value="Mulher">Mulher</option>
+                <option value="Casal">Casal</option>
+            </flux:select>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <flux:select wire:model.live="selectedState" :label="__('Estado')">
+                        <option value="">{{ __('Selecione...') }}</option>
+                        @foreach ($states as $state)
+                            <option value="{{ $state->id }}">{{ $state->name }}</option>
+                        @endforeach
+                    </flux:select>
+                </div>
+
+                <div>
+                    <flux:select wire:model.live="selectedCity" :label="__('Cidade')">
+                        <option value="">{{ __('Selecione...') }}</option>
+                        @foreach ($cities as $city)
+                            <option value="{{ $city->id }}">{{ $city->name }}</option>
+                        @endforeach
+                    </flux:select>
+                </div>
+            </div>
+
+            <flux:field variant="inline">
+                <flux:label>{{ __('Perfil Privado') }}</flux:label>
+                <flux:switch wire:model="privado" />
+                <flux:error name="privado" />
+            </flux:field>
 
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">

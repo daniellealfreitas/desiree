@@ -1409,7 +1409,7 @@ if (isset($__slots)) unset($__slots);
                 setTimeout(() => {
                     window.removeEventListener('resize', resizeCanvas);
                     canvas.remove();
-                }, 2000);
+                }, 5000);
             };
 
             // Function to trigger XP popup
@@ -1423,7 +1423,7 @@ if (isset($__slots)) unset($__slots);
                 // Remove popup after 2 seconds
                 setTimeout(() => {
                     popup.remove();
-                }, 2000);
+                }, 5000);
             };
 
             // Add keyboard shortcut to trigger animations
