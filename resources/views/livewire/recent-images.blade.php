@@ -8,7 +8,7 @@ state(['showModal' => false, 'selectedImage' => '']);
 $posts = computed(function () {
     return Post::where('image', '!=', null)
         ->latest()
-        ->take(6)
+        ->take(10)
         ->get();
 });
 

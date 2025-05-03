@@ -10,20 +10,29 @@ use Illuminate\Support\Facades\Auth;
 
 state([
     'limit' => 5,
-    'newComment' => [], // Change to an array to store comments per post
+    'newComment' => [],
     'posts' => fn() => Post::with([
         'user.userPhotos' => function($query) {
             $query->latest()->take(1);
-        }, 
-        'likedByUsers', 
+        },
+        'likedByUsers',
         'comments.user.userPhotos' => function($query) {
             $query->latest()->take(1);
         }
     ])
+        ->when(request()->route('username'), function($query) {
+            // Filtra posts do usuário correspondente ao 'username' da rota
+            $username = request()->route('username');
+            $user = User::where('username', $username)->first();
+            if ($user) {
+                return $query->where('user_id', $user->id);
+            }
+        })
         ->latest()
         ->take($this->limit)
         ->get()
 ]);
+
 
 $loadMore = action(function () {
     $this->limit += 5;

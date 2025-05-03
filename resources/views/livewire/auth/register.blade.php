@@ -14,6 +14,8 @@ new #[Layout('components.layouts.auth')] class extends Component
     public string $email = '';
     public string $password = '';
     public string $password_confirmation = '';
+    public string $username = '';
+    public string $role = '';
 
     /**
      * Handle an incoming registration request.
@@ -24,6 +26,8 @@ new #[Layout('components.layouts.auth')] class extends Component
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'string', 'confirmed', Rules\Password::defaults()],
+            'username' => ['required', 'string', 'max:255', 'unique:' . User::class],
+            'role' => ['required', 'string', 'in:admin,visitante,vip'],
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -53,6 +57,15 @@ new #[Layout('components.layouts.auth')] class extends Component
             autocomplete="name"
             :placeholder="__('Nome Completo')"
         />
+        <!-- Username -->
+        <flux:input
+            wire:model="username"
+            :label="__('Nome de Usuário')"
+            type="text"
+            required
+            autocomplete="username"
+            :placeholder="__('Nome de Usuário')"
+        />
 
         <!-- Email Address -->
         <flux:input
@@ -72,6 +85,7 @@ new #[Layout('components.layouts.auth')] class extends Component
             required
             autocomplete="new-password"
             :placeholder="__('Senha')"
+            viewable
         />
 
         <!-- Confirm Password -->
@@ -82,7 +96,10 @@ new #[Layout('components.layouts.auth')] class extends Component
             required
             autocomplete="new-password"
             :placeholder="__('Confirmar Senha')"
+            viewable
         />
+
+        <flux:input wire:model="role" value="visitante" type="hidden" />
 
         <div class="flex items-center justify-end">
             <flux:button type="submit" variant="primary" class="w-full">

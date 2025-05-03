@@ -66,6 +66,22 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
+                <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('recent-videos', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-3', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
             </div>
         </div>
         <!-- Container para Feed de Postagens -->
@@ -76,7 +92,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('create-post', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-3', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-4', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -92,7 +108,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('postfeed', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-4', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-5', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 

@@ -12,8 +12,8 @@ class Hobby extends Model
 
     protected $fillable = ['nome'];
 
-    public function users(): BelongsToMany
+    public function users()
     {
-        return $this->belongsToMany(User::class);
+         return $this->belongsToMany(User::class, 'hobby_user');
     }
 }

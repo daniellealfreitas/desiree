@@ -12,6 +12,7 @@
             <div class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
                 <livewire:recent-users />
                 <livewire:recent-images />
+                <livewire:recent-videos />
             </div>
         </div>
         <!-- Container para Feed de Postagens -->

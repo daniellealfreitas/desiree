@@ -1,37 +1,26 @@
 <div>
     <!-- Category Filter -->
     <div class="mb-6">
-        <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Filtrar por categoria</label>
-        <select wire:model.live="selectedCategory" id="category" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md dark:bg-zinc-800 dark:border-zinc-700">
-            <option value="">Todas as categorias</option>
-            <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <option value="<?php echo e($category->id); ?>"><?php echo e($category->name); ?></option>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-        </select>
-    </div>
-
-    <!-- category substitute !!!@@@ -->
-    <?php if (isset($component)) { $__componentOriginale5140a44d7461450cb1378cd5b47dfc8 = $component; } ?>
+        <?php if (isset($component)) { $__componentOriginale5140a44d7461450cb1378cd5b47dfc8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginale5140a44d7461450cb1378cd5b47dfc8 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.group.index','data' => ['wire:model' => 'role','label' => 'Role','variant' => 'segmented']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.group.index','data' => ['wire:model.live' => 'selectedCategory','label' => 'Filtrar por categoria','variant' => 'segmented']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::radio.group'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model' => 'role','label' => 'Role','variant' => 'segmented']); ?>
-        <?php if (isset($component)) { $__componentOriginal63a6e9bef56b25b50cfa996fe1154357 = $component; } ?>
+<?php $component->withAttributes(['wire:model.live' => 'selectedCategory','label' => 'Filtrar por categoria','variant' => 'segmented']); ?>
+            <?php if (isset($component)) { $__componentOriginal63a6e9bef56b25b50cfa996fe1154357 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.index','data' => ['label' => 'Admin']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.index','data' => ['value' => '']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::radio'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['label' => 'Admin']); ?>
-<?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['value' => '']); ?>Todas as categorias <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
 <?php $attributes = $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
@@ -41,17 +30,17 @@
 <?php $component = $__componentOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
 <?php unset($__componentOriginal63a6e9bef56b25b50cfa996fe1154357); ?>
 <?php endif; ?>
-        <?php if (isset($component)) { $__componentOriginal63a6e9bef56b25b50cfa996fe1154357 = $component; } ?>
+            <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <?php if (isset($component)) { $__componentOriginal63a6e9bef56b25b50cfa996fe1154357 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.index','data' => ['label' => 'Editor']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.index','data' => ['value' => ''.e($category->id).'']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::radio'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['label' => 'Editor']); ?>
-<?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['value' => ''.e($category->id).'']); ?><?php echo e($category->name); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
 <?php $attributes = $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
@@ -61,27 +50,8 @@
 <?php $component = $__componentOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
 <?php unset($__componentOriginal63a6e9bef56b25b50cfa996fe1154357); ?>
 <?php endif; ?>
-        <?php if (isset($component)) { $__componentOriginal63a6e9bef56b25b50cfa996fe1154357 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::radio.index','data' => ['label' => 'Viewer']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('flux::radio'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['label' => 'Viewer']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
-<?php $attributes = $__attributesOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
-<?php unset($__attributesOriginal63a6e9bef56b25b50cfa996fe1154357); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal63a6e9bef56b25b50cfa996fe1154357)): ?>
-<?php $component = $__componentOriginal63a6e9bef56b25b50cfa996fe1154357; ?>
-<?php unset($__componentOriginal63a6e9bef56b25b50cfa996fe1154357); ?>
-<?php endif; ?>
-     <?php echo $__env->renderComponent(); ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+         <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginale5140a44d7461450cb1378cd5b47dfc8)): ?>
 <?php $attributes = $__attributesOriginale5140a44d7461450cb1378cd5b47dfc8; ?>
@@ -91,6 +61,9 @@
 <?php $component = $__componentOriginale5140a44d7461450cb1378cd5b47dfc8; ?>
 <?php unset($__componentOriginale5140a44d7461450cb1378cd5b47dfc8); ?>
 <?php endif; ?>
+    </div>
+
+
 
     <!-- Contos Grid -->
     <div class="md:columns-2 lg:columns-3 gap-6 p-4 sm:p-1">

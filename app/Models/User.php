@@ -18,6 +18,8 @@ use App\Models\UserPhoto;
 use App\Models\UserCoverPhoto;
 use App\Models\Post;
 use App\Models\Payment;
+use App\Models\Hobby;
+use App\Models\Procura;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -44,7 +46,10 @@ class User extends Authenticatable
         'sexo',
         'aniversario',
         'privado',
-        'bio'
+        'bio',
+        'role', // Adicionado role
+        'last_seen',
+        'status'
     ];
 
     // Relação com posts
@@ -195,14 +200,14 @@ class User extends Authenticatable
         return $this->hasMany(UserPoint::class);
     }
 
-    public function hobbies(): BelongsToMany
+    public function hobbies()
     {
-        return $this->belongsToMany(Hobby::class);
+       return $this->belongsToMany(Hobby::class, 'hobby_user');
     }
 
-    public function procuras(): BelongsToMany
+    public function procuras()
     {
-        return $this->belongsToMany(Procura::class);
+        return $this->belongsToMany(Procura::class, 'procura_user');
     }
 
     /**
@@ -227,13 +232,38 @@ class User extends Authenticatable
             'password' => 'hashed',
             'aniversario' => 'date',
             'privado' => 'boolean',
+            'role' => 'string', // Adicionado cast para role
+            'last_seen' => 'datetime',
+            'status' => 'string',
         ];
+    }
+
+    /**
+     * Accessor inteligente de status do usuário
+     */
+    public function getPresenceStatusAttribute()
+    {
+        if ($this->status === 'away') {
+            return 'away';
+        }
+        if ($this->last_seen && $this->last_seen->diffInMinutes(now()) < 3) {
+            return 'online';
+        }
+        return 'offline';
+    }
+
+    /**
+     * Verifica se o usuário possui determinado papel
+     */
+    public function hasRole($role)
+    {
+        return $this->role === $role;
     }
 
     /**
      * Get the user's initials
      */
-    public function initials(): string
+    public function initials()
     {
         return Str::of($this->name)
             ->explode(' ')

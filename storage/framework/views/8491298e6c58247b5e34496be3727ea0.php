@@ -11,8 +11,23 @@ use Illuminate\Support\Facades\Auth;
     <ul class="p-3 space-y-2">
         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $recentUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <li class="flex items-center justify-between space-x-3">
-                <div class="flex items-center space-x-3">
-                    <img src="<?php echo e(asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg')); ?>" class="w-10 h-10 rounded-full object-cover">
+                <div class="relative flex items-center space-x-3 ">
+                    <img src="<?php echo e(asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg')); ?>" class="w-10 h-10 rounded-full object-cover"> <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-status-indicator', ['userId' => $user['id']]);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-587097305-0', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
                     <span>
                         <a href="/<?php echo e($user['username']); ?>" class="text-blue-500 hover:underline">
                             <?php echo e($user['name']); ?>

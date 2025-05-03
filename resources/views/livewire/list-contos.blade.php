@@ -1,21 +1,15 @@
 <div>
     <!-- Category Filter -->
     <div class="mb-6">
-        <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Filtrar por categoria</label>
-        <select wire:model.live="selectedCategory" id="category" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md dark:bg-zinc-800 dark:border-zinc-700">
-            <option value="">Todas as categorias</option>
+        <flux:radio.group wire:model.live="selectedCategory" label="Filtrar por categoria" variant="segmented">
+            <flux:radio value="">Todas as categorias</flux:radio>
             @foreach($categories as $category)
-                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                <flux:radio value="{{ $category->id }}">{{ $category->name }}</flux:radio>
             @endforeach
-        </select>
+        </flux:radio.group>
     </div>
 
-    <!-- category substitute !!!@@@ -->
-    <flux:radio.group wire:model="role" label="Role" variant="segmented">
-        <flux:radio label="Admin" />
-        <flux:radio label="Editor" />
-        <flux:radio label="Viewer" />
-    </flux:radio.group>
+
 
     <!-- Contos Grid -->
     <div class="md:columns-2 lg:columns-3 gap-6 p-4 sm:p-1">

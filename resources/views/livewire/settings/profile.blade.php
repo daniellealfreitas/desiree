@@ -11,15 +11,18 @@ use Livewire\Volt\Component;
 new class extends Component {
     public string $name = '';
     public string $email = '';
-    public ?string $username = '';
-    public ?string $bio = '';
-    public ?string $aniversario = '';
-    public ?string $sexo = '';
+    public string $username = '';
+    public string $bio = '';
+    public string $aniversario = '';
+    public string $sexo = '';
+    public string $role = ''; 
     public bool $privado = false;
     public $states = [];
     public $cities = [];
     public $selectedState = null;
     public $selectedCity = null;
+    public string $latitude = "";
+    public string $longitude = "";
 
     /**
      * Mount the component.
@@ -36,6 +39,9 @@ new class extends Component {
         $this->privado = $user->privado ?? false;
         $this->selectedState = $user->state_id;
         $this->selectedCity = $user->city_id;
+        $this->role = $user->role ?? null;
+        $this->latitude = $user->latitude ?? '';
+        $this->longitude = $user->longitude ?? '';
         $this->states = State::orderBy('name', 'asc')->get();
         if ($this->selectedState) {
             $this->cities = City::where('state_id', $this->selectedState)->orderBy('name', 'asc')->get();
@@ -86,9 +92,18 @@ new class extends Component {
             'privado' => ['boolean'],
             'selectedState' => ['nullable', 'exists:states,id'],
             'selectedCity' => ['nullable', 'exists:cities,id'],
+            'latitude' => ['nullable', 'string'],
+            'longitude' => ['nullable', 'string'],
+            // Adiciona validação para role apenas se for admin
+            'role' => [Auth::user()->role === 'admin' ? 'required' : 'nullable', 'in:admin,vip,visitante'],
         ]);
 
         $user->fill($validated);
+
+        // Permite alterar o role apenas se for admin
+        if (Auth::user()->role === 'admin' && isset($validated['role'])) {
+            $user->role = $validated['role'];
+        }
 
         if ($user->isDirty('email')) {
             $user->email_verified_at = null;
@@ -180,11 +195,35 @@ new class extends Component {
                 </div>
             </div>
 
+            @if(auth()->user() && auth()->user()->role === 'admin')
+                <flux:select wire:model="role" :label="__('Papel do usuário')">
+                    <option value="admin">Administrador</option>
+                    <option value="vip">VIP</option>
+                    <option value="visitante">Visitante</option>
+                </flux:select>
+            @else
+                <div class="mb-4">
+                    <flux:label>{{ __('Tipo de usuário') }}</flux:label>
+                    
+                    <flux:input wire:model="role" readonly variant="filled" value="{{ auth()->user()->role }}"   />
+                </div>
+            @endif
+
             <flux:field variant="inline">
                 <flux:label>{{ __('Perfil Privado') }}</flux:label>
                 <flux:switch wire:model="privado" />
                 <flux:error name="privado" />
             </flux:field>
+
+            <flux:input type="text"  wire:model="latitude"  />
+            <flux:input type="text" wire:model="longitude" />
+
+            <div class="flex items-center gap-2 mb-4">
+                <button type="button" id="get-location-btn" class="px-3 py-1 bg-blue-500 text-white rounded">
+                    {{ __('Usar minha localização') }}
+                </button>
+                <span id="location-status" class="text-sm text-gray-500"></span>
+            </div>
 
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">

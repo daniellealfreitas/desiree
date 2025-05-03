@@ -61,8 +61,8 @@ mount(function () {
     <ul class="p-3 space-y-2">
         @foreach ($recentUsers as $user)
             <li class="flex items-center justify-between space-x-3">
-                <div class="flex items-center space-x-3">
-                    <img src="{{ asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg') }}" class="w-10 h-10 rounded-full object-cover">
+                <div class="relative flex items-center space-x-3 ">
+                    <img src="{{ asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg') }}" class="w-10 h-10 rounded-full object-cover"> <livewire:user-status-indicator :userId="$user['id']" />
                     <span>
                         <a href="/{{ $user['username'] }}" class="text-blue-500 hover:underline">
                             {{ $user['name'] }}

@@ -50,4 +50,10 @@ class UserController extends Controller
         $cities = City::where('state_id', $stateId)->orderBy('name', 'asc')->get();
         return view('cities.index', ['cities' => $cities]);
     }
+
+    public function index()
+    {
+        $users = User::orderBy('name')->paginate(20);
+        return view('users.index', compact('users'));
+    }
 }

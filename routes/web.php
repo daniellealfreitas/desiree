@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\LikeController;
-use App\Http\Controllers\FollowController;
 use App\Http\Controllers\UserLevelController;
 use App\Http\Controllers\UserController;
 use App\Http\Livewire\UserProfileForm;
@@ -16,7 +15,6 @@ use App\Livewire\FollowRequestNotifications;
 use App\Http\Livewire\ContosForm;
 use App\Http\Controllers\GroupController;
 use App\Http\Livewire\NearbyUsers;
-use App\Http\Controllers\LocationController;
 use App\Models\Post;
 use App\Livewire\CreateConto;
 use App\Livewire\EditConto;
@@ -136,24 +134,18 @@ Route::middleware(['auth'])->group(function () {
 // Rota para alternar curtidas (Livewire pode ser usado, mas aqui um POST simples)
 Route::post('likes/toggle/{post}', [LikeController::class, 'toggle'])->name('likes.toggle')->middleware('auth');
 
-// Recursos de Seguidores
-Route::post('follows/toggle/{user}', [FollowController::class, 'toggle'])->name('follows.toggle')->middleware('auth');
-
-
 
 
 // Rota para processar o upload da foto
 Route::post('/user/upload-photo', [UserController::class, 'uploadPhoto'])->name('user.uploadPhoto');
 
+// Rota para listar usuários (deve vir antes da rota dinâmica de perfil)
+Route::get('/users', [UserController::class, 'index'])->name('users.index');
+
 // Rota para exibir perfil do usuário pelo username
 Route::get('/{username}', function($username) {
     return view('profile-page', ['username' => $username]);
 })->name('user.profile');
-
-
-// Rotas para buscar estados e cidades
-Route::get('/estados', [LocationController::class, 'getStates'])->name('get.states');
-Route::get('/cidades/{state}', [LocationController::class, 'getCities'])->name('get.cities');
 
 Route::get('post/{post}', function (Post $post) {
     return view('post.show', compact('post'));

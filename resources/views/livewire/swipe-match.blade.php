@@ -87,9 +87,13 @@
             <li class="flex flex-col items-center justify-between p-4 rounded-lg shadow-md border border-zinc-600">
                 <div class="flex flex-col items-center space-y-3">
                     @if($user->photos && $user->photos->count())
-                        <img src="{{ asset('storage/' . $user->photos->first()->photo_path) }}"
+                        <div class="relative">  
+                            <img src="{{ asset('storage/' . $user->photos->first()->photo_path) }}"
                              alt="Foto de {{ $user->name }}"
                              class="h-12 w-12 rounded-full object-cover border-2 border-pink-300">
+                            <livewire:user-status-indicator :userId="$user->id" />
+                        </div>
+                            
                     @elseif($user->userPhoto)
                         <img src="{{ Storage::url($user->userPhoto) }}"
                              alt="Foto de {{ $user->name }}"

@@ -16,6 +16,7 @@ class ProfileForm extends Component
     public $aniversario;
     public $privado;
     public $bio;
+    public $role;
 
     public function mount()
     {
@@ -27,6 +28,7 @@ class ProfileForm extends Component
         $this->aniversario = $user->aniversario;
         $this->privado = $user->privado;
         $this->bio = $user->bio;
+        $this->role = $user->role;
     }
 
     public function updateProfile()
@@ -41,6 +43,7 @@ class ProfileForm extends Component
             'aniversario' => ['nullable', 'date'],
             'privado' => ['boolean'],
             'bio' => ['nullable', 'string', 'max:500'],
+            'role' => ['nullable', 'string', 'in:admin,visitante,vip'],
         ]);
 
         $user->update($validated);

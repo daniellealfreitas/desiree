@@ -1,4 +1,4 @@
-<div>
+<div wire:poll.30s="refreshStatus"> 
     
     <div
         x-data="{ show: false }"
@@ -14,8 +14,23 @@
             <div class="w-full h-80 bg-cover bg-center" style="background-image: url('<?php echo e($this->cover() ?? asset('images/default-banner.jpg')); ?>');"></div>
             
             <div class="absolute left-8 top-1/2 -translate-y-1/2 flex items-center gap-6">
-                <div class="w-48 h-48 rounded-full border-4 border-white overflow-hidden shadow-xl">
-                    <img src="<?php echo e($this->avatar() ?? asset('images/default-avatar.jpg')); ?>" class="w-full h-full object-cover" />
+                <div class="relative w-48 h-48 rounded-full border-4 border-white overflow-hidden shadow-xl">
+                    <img src="<?php echo e($this->avatar() ?? asset('images/default-avatar.jpg')); ?>" class="w-full h-full object-cover" /> <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-status-indicator', ['userId' => $user->id]);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-0', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
                 </div>
                 <div class="bg-zinc-800 opacity-50 p-4 rounded-lg shadow-lg">
                     <h2 class="text-3xl font-bold text-white drop-shadow-lg"><?php echo e($user->name); ?></h2>
@@ -23,6 +38,36 @@
                         <?php echo e('@'. $user->username); ?>
 
                     </a>
+                    
+                    <div class="mt-2">
+                        <!--[if BLOCK]><![endif]--><?php switch($userStatus):
+                            case ('online'): ?>
+                                <span class="text-green-400 font-semibold">● Online</span>
+                                <?php break; ?>
+                            <?php case ('away'): ?>
+                                <span class="text-yellow-400 font-semibold">● Ausente</span>
+                                <?php break; ?>
+                            <?php default: ?>
+                                <span class="text-gray-400 font-semibold">● Offline</span>
+                                <!--[if BLOCK]><![endif]--><?php if($user->last_seen): ?>
+                                    <span class="small block text-xs text-slate-200 opacity-80">Visto <?php echo e($user->last_seen->diffForHumans()); ?></span>
+                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                        <?php endswitch; ?><!--[if ENDBLOCK]><![endif]-->
+                    </div>
+                    
+                    <!--[if BLOCK]><![endif]--><?php if($user->id === Auth::id()): ?>
+                        <div class="mt-2">
+                            <label for="statusSelect" class="font-semibold text-sm text-slate-100 mr-2">Status:</label>
+                            <select id="statusSelect"
+                                    wire:model.defer="userStatus"
+                                    wire:change="updateStatus"
+                                    class="rounded border-gray-300 px-2 py-1 text-xs dark:bg-gray-700 dark:text-white">
+                                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $statusOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($key); ?>"><?php echo e($label); ?></option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                            </select>
+                        </div>
+                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                 </div>
             </div>
         </div>
@@ -193,8 +238,27 @@
     </div>
     <div class="flex gap-6 mt-6">
         <div class="w-1/3">
-            <section id="progress-bar">
-                <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
+           <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('profile-progress-bar', ['username' => $user->username]);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-1', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+            <section id="additional-info" class="mt-6"></section>
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Informações Adicionais</h3>
+                <div class="flex flex-col gap-4">
+                    <div>
+                        <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::text','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::text'); ?>
@@ -203,7 +267,10 @@
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes([]); ?>Preenchimento de perfil <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes([]); ?>
+                            <strong>Sexo:</strong> <?php echo e($user->sexo ?? 'Não especificado'); ?>
+
+                         <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
 <?php $attributes = $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
@@ -213,28 +280,162 @@
 <?php $component = $__componentOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
 <?php unset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
 <?php endif; ?>
-                <div class="relative mx-5 my-10">
-                    <div class="mb-4 flex h-5 overflow-hidden rounded text-xs border border-gray-500">
-                        <div style="width: 10%" class="bg-green-500 transition-all duration-500 ease-out"></div>
+                        <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::text','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::text'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+                            <strong>Aniversário:</strong> <?php echo e($user->aniversario ? $user->aniversario->format('d/m/Y') : 'Não especificado'); ?>
+
+
+                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
+<?php $attributes = $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
+<?php unset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
+<?php $component = $__componentOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
+<?php unset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
+<?php endif; ?>
+                        <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::text','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::text'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+                            <strong>Localização:</strong> <?php echo e($user->city->name ?? 'Não especificado'); ?>
+
+                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
+<?php $attributes = $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
+<?php unset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
+<?php $component = $__componentOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
+<?php unset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
+<?php endif; ?>
+                        <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::text','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::text'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+                            <strong>Sobre mim:</strong> <?php echo e($user->bio ?? 'Não especificado'); ?>
+
+                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
+<?php $attributes = $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
+<?php unset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
+<?php $component = $__componentOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
+<?php unset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
+<?php endif; ?>
                     </div>
-                    <div class="mb-2 flex items-center justify-between text-xs">
-                        <div class="text-gray-600">Progresso</div>
-                        <div class="text-gray-600">20%</div>
+                     
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Interesses:</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $user->hobbies; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hobby): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php if (isset($component)) { $__componentOriginal4cc377eda9b63b796b6668ee7832d023 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal4cc377eda9b63b796b6668ee7832d023 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::badge.index','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::badge'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?><?php echo e($hobby->nome); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal4cc377eda9b63b796b6668ee7832d023)): ?>
+<?php $attributes = $__attributesOriginal4cc377eda9b63b796b6668ee7832d023; ?>
+<?php unset($__attributesOriginal4cc377eda9b63b796b6668ee7832d023); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal4cc377eda9b63b796b6668ee7832d023)): ?>
+<?php $component = $__componentOriginal4cc377eda9b63b796b6668ee7832d023; ?>
+<?php unset($__componentOriginal4cc377eda9b63b796b6668ee7832d023); ?>
+<?php endif; ?>
+                                    
+                                
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold mb-2">Procuro por:</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $user->procuras; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $procura): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <?php if (isset($component)) { $__componentOriginal4cc377eda9b63b796b6668ee7832d023 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal4cc377eda9b63b796b6668ee7832d023 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::badge.index','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::badge'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?><?php echo e($procura->nome); ?> <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal4cc377eda9b63b796b6668ee7832d023)): ?>
+<?php $attributes = $__attributesOriginal4cc377eda9b63b796b6668ee7832d023; ?>
+<?php unset($__attributesOriginal4cc377eda9b63b796b6668ee7832d023); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal4cc377eda9b63b796b6668ee7832d023)): ?>
+<?php $component = $__componentOriginal4cc377eda9b63b796b6668ee7832d023; ?>
+<?php unset($__componentOriginal4cc377eda9b63b796b6668ee7832d023); ?>
+<?php endif; ?>
+                                
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
+                        </div>
                     </div>
                 </div>
             </section>
+            
+                
+            
             <section id="ranking" class="mt-6">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Ranking</h3>
                 <div class="flex flex-col gap-4">
                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $topUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rank): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow">
                             <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 rounded-full overflow-hidden">
-                                    <img src="<?php echo e($rank->avatar ?? asset('images/default-avatar.jpg')); ?>" class="w-full h-full object-cover" />
+                                <div class="relative w-12 h-12 rounded-full overflow-hidden">
+                                    <img src="<?php echo e($rank->avatar ?? asset('images/default-avatar.jpg')); ?>" class="w-full h-full object-cover" /><?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-status-indicator', ['userId' => $rank->id]);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-2', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
                                 </div>
                                 <div>
                                     <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200"><?php echo e($rank->name); ?></h4>
-                                    <p class="text-xs text-gray-600 dark:text-gray-400"><?php echo e('@' . $rank->username); ?></p>
+                                    <a href="/<?php echo e($rank->username); ?>" class="text-xs text-gray-600 dark:text-gray-400"><?php echo e('@' . $rank->username); ?></a>
                                     <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::text','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -263,30 +464,7 @@
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                 </div>
             </section>
-            <section id="procurando" class="mt-6">
-                <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::text','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('flux::text'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes([]); ?>
-                    <h2>Procurando</h2>
-                    <p>Procurando por um amor verdadeiro, alguém que me faça feliz e que me faça rir. Se você é essa pessoa, entre em contato!</p>
-                 <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
-<?php $attributes = $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
-<?php unset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
-<?php $component = $__componentOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
-<?php unset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
-<?php endif; ?>
-            </section>
+            
             <section id="skills" class="mt-6">
                 <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e = $attributes; } ?>
@@ -321,7 +499,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('create-post', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-0', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-3', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -337,7 +515,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('postfeed', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-1', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-4', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -351,4 +529,5 @@ if (isset($__slots)) unset($__slots);
             
         </div>
     </div>
-</div><?php /**PATH C:\xampp\htdocs\desiree2\resources\views/livewire/profile.blade.php ENDPATH**/ ?>
+</div>
+<?php /**PATH C:\xampp\htdocs\desiree2\resources\views/livewire/profile.blade.php ENDPATH**/ ?>

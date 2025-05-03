@@ -87,9 +87,28 @@
             <li class="flex flex-col items-center justify-between p-4 rounded-lg shadow-md border border-zinc-600">
                 <div class="flex flex-col items-center space-y-3">
                     <!--[if BLOCK]><![endif]--><?php if($user->photos && $user->photos->count()): ?>
-                        <img src="<?php echo e(asset('storage/' . $user->photos->first()->photo_path)); ?>"
+                        <div class="relative">  
+                            <img src="<?php echo e(asset('storage/' . $user->photos->first()->photo_path)); ?>"
                              alt="Foto de <?php echo e($user->name); ?>"
                              class="h-12 w-12 rounded-full object-cover border-2 border-pink-300">
+                            <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-status-indicator', ['userId' => $user->id]);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-434255698-0', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+                        </div>
+                            
                     <?php elseif($user->userPhoto): ?>
                         <img src="<?php echo e(Storage::url($user->userPhoto)); ?>"
                              alt="Foto de <?php echo e($user->name); ?>"

@@ -49,8 +49,11 @@ new class extends Component {
         style="background:url({{ $this->cover() ?? asset('images/users/capa.jpg') }}); background-size: cover; background-position: center;">
     </div>
     <div class="relative z-10 -mt-12 flex flex-col items-center">
-        <img src="{{ $this->avatar() ?? asset('images/users/avatar.jpg') }}" 
+         <div class="relative">
+                <img src="{{ $this->avatar() ?? asset('images/users/avatar.jpg') }}" 
             alt="Foto de Perfil" class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
+            <livewire:user-status-indicator :userId="$user->id" />
+        </div>
         <h2 class="text-xl font-semibold mt-2">{{ $user->name }}</h2>
         <p class="text-gray-600">
             <a href="{{ route('user.profile', ['username' => $user->username]) }}" class="hover:underline">

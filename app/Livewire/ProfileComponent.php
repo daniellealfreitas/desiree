@@ -15,6 +15,12 @@ class ProfileComponent extends Component
     public User $user;
     public array $followStatus = [];
     public $topUsers; // Add this property to store top users
+    public $userStatus; // Status for the select (real-time editing)
+    public $statusOptions = [
+        'online' => 'Online',
+        'away'   => 'Away',
+        'offline'=> 'Offline'
+    ];
 
     public function mount(string $username)
     {
@@ -31,6 +37,9 @@ class ProfileComponent extends Component
         $this->topUsers->each(function ($user) {
             $user->avatar = $this->getAvatar($user->id);
         });
+        
+        // Set the current user status
+        $this->userStatus = $this->user->status;
     }
     
     public function avatar()
@@ -87,11 +96,42 @@ class ProfileComponent extends Component
     {
         return $this->user->followers()->count();
     }
+    
+    // Automatic polling to update status (and last_seen for user viewing their own profile)
+    public function refreshStatus()
+    {
+        // Reload user for updated status/last_seen from database
+        $this->user->refresh(); // Ensures getting the latest value
+        $this->userStatus = $this->user->status;
+
+        // If the authenticated user is the profile owner, update last_seen/status
+        if (Auth::id() === $this->user->id) {
+            $this->user->update([
+                'last_seen' => now(),
+                'status'    => $this->userStatus // Maintains current status (avoids overwriting select)
+            ]);
+        }
+    }
+
+    // Quick status update via select in the view
+    public function updateStatus()
+    {
+        // Only the user themselves can change their status!
+        if (Auth::id() === $this->user->id) {
+            $this->user->status = $this->userStatus;
+            if ($this->userStatus === 'online') {
+                $this->user->last_seen = now(); // updated when coming back online
+            }
+            $this->user->save();
+        }
+    }
 
     public function render()
     {
         return view('livewire.profile', [
             'topUsers' => $this->topUsers, // Pass top users to the view
+            'userStatus' => $this->user->presence_status ?? $this->user->status,
+            'statusOptions' => $this->statusOptions
         ]);
     }
 }
