@@ -61,7 +61,7 @@ new class extends Component {
     <x-settings.layout :heading="__('Avatar')" :subheading="__('Atualizar sua foto de perfil')">
         <form wire:submit.prevent="updateAvatar" class="my-6 w-full space-y-6">
             <div>
-                <flux:input wire:model="avatar" :label="__('Avatar')" type="file" accept="image/png, image/jpeg" />
+                <x-file-upload wire:model="avatar" :label="__('Avatar')" accept="image/png, image/jpeg" icon="user" :iconVariant="$avatar ? 'solid' : 'outline'" />
                 @if (auth()->user() && auth()->user()->userPhotos()->latest()->first())
                     <img src="{{ Storage::url(auth()->user()->userPhotos()->latest()->first()->photo_path) }}" alt="Avatar" class="mt-4 w-20 h-20 rounded-full">
                 @endif

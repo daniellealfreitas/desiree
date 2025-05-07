@@ -2846,17 +2846,17 @@
         },
         {
             "name": "livewire/flux",
-            "version": "v2.0.6",
-            "version_normalized": "2.0.6.0",
+            "version": "v2.1.6",
+            "version_normalized": "2.1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/livewire/flux.git",
-                "reference": "afd046a72c7a10e6ff56f3e9c16eb390c3db0cc5"
+                "reference": "142429b12718f87dbd1763c4cb2966b532bc8942"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/livewire/flux/zipball/afd046a72c7a10e6ff56f3e9c16eb390c3db0cc5",
-                "reference": "afd046a72c7a10e6ff56f3e9c16eb390c3db0cc5",
+                "url": "https://api.github.com/repos/livewire/flux/zipball/142429b12718f87dbd1763c4cb2966b532bc8942",
+                "reference": "142429b12718f87dbd1763c4cb2966b532bc8942",
                 "shasum": ""
             },
             "require": {
@@ -2868,7 +2868,7 @@
                 "php": "^8.1",
                 "symfony/console": "^6.0|^7.0"
             },
-            "time": "2025-03-12T20:53:07+00:00",
+            "time": "2025-05-01T20:27:37+00:00",
             "type": "library",
             "extra": {
                 "laravel": {
@@ -2906,7 +2906,7 @@
             ],
             "support": {
                 "issues": "https://github.com/livewire/flux/issues",
-                "source": "https://github.com/livewire/flux/tree/v2.0.6"
+                "source": "https://github.com/livewire/flux/tree/v2.1.6"
             },
             "install-path": "../livewire/flux"
         },

@@ -99,8 +99,33 @@ Route::view('pesquisas', 'pesquisas')
     ->name('pesquisas');
 
 Route::view('loja-virtual', 'loja-virtual')
-    ->middleware(['auth', 'verified'])
     ->name('loja.virtual');
+
+// Rotas da loja
+Route::get('/loja', App\Livewire\Shop\ProductList::class)->name('shop.index');
+Route::get('/loja/categoria/{slug}', App\Livewire\Shop\ProductList::class)->name('shop.category');
+Route::get('/loja/produto/{slug}', App\Livewire\Shop\ProductDetail::class)->name('shop.product');
+
+// Rotas da loja que requerem autenticação
+Route::middleware(['auth'])->group(function () {
+    Route::get('/loja/carrinho', App\Livewire\Shop\ShoppingCart::class)->name('shop.cart');
+    Route::get('/loja/checkout', App\Livewire\Shop\Checkout::class)->name('shop.checkout');
+    Route::get('/loja/pedido/{id}/sucesso', App\Livewire\Shop\OrderSuccess::class)->name('shop.order.success');
+    Route::get('/loja/meus-pedidos', App\Livewire\Shop\UserOrders::class)->name('shop.user.orders');
+    Route::get('/loja/pedido/{id}', App\Livewire\Shop\OrderDetail::class)->name('shop.order.detail');
+    Route::get('/loja/lista-desejos', App\Livewire\Shop\Wishlist::class)->name('shop.wishlist');
+});
+
+// Rotas de administração
+Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
+    Route::get('/', App\Livewire\Admin\Dashboard::class)->name('admin.dashboard');
+    Route::get('/produtos', App\Livewire\Admin\ProductManager::class)->name('admin.products');
+    Route::get('/categorias', App\Livewire\Admin\CategoryManager::class)->name('admin.categories');
+    Route::get('/pedidos', App\Livewire\Admin\OrderManager::class)->name('admin.orders');
+    Route::get('/cupons', App\Livewire\Admin\CouponManager::class)->name('admin.coupons');
+    Route::get('/usuarios', App\Livewire\Admin\UserManager::class)->name('admin.users');
+    Route::get('/configuracoes', App\Livewire\Admin\Settings::class)->name('admin.settings');
+});
 
 
 Route::get('/meus-pagamentos', [PaymentController::class, 'index'])->name('meus-pagamentos');

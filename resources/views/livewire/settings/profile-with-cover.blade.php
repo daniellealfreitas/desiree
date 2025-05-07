@@ -61,7 +61,7 @@ new class extends Component {
     <x-settings.layout :heading="__('Capa')" :subheading="__('Atualizar sua foto de capa')">
         <form wire:submit.prevent="updateCover" class="my-6 w-full space-y-6">
             <div>
-                <flux:input wire:model="cover" :label="__('Capa')" type="file" accept="image/png, image/jpeg" />
+                <x-file-upload wire:model="cover" :label="__('Capa')" accept="image/png, image/jpeg" icon="photo" :iconVariant="$cover ? 'solid' : 'outline'" />
                 @if (auth()->user() && auth()->user()->userCoverPhotos()->latest()->first())
                     <img src="{{ Storage::url(auth()->user()->userCoverPhotos()->latest()->first()->photo_path) }}" alt="Capa" class="mt-4 w-full h-40 rounded">
                 @endif

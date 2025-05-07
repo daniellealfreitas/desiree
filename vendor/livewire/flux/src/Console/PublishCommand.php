@@ -24,7 +24,9 @@ class PublishCommand extends Command
     protected array $fluxComponents = [
         'free' => [
             'Accent' => ['accent'],
+            'Avatar' => ['avatar'],
             'Badge' => ['badge'],
+            'Brand' => ['brand'],
             'Breadcrumbs' => ['breadcrumbs'],
             'Button' => ['button'],
             'Checkbox' => ['checkbox'],
@@ -49,6 +51,7 @@ class PublishCommand extends Command
             'Autocomplete' => ['autocomplete'],
             'Calendar' => ['calendar'],
             'Card' => ['card'],
+            'Callout' => ['callout'],
             'Chart' => ['chart'],
             'Checkbox' => ['checkbox'],
             'Command' => ['command'],
@@ -58,7 +61,7 @@ class PublishCommand extends Command
             'Radio' => ['radio'],
             'Select' => ['select'],
             'Tabs' => ['tabs','tab'],
-            'Table' => ['table', 'pagination', 'avatar'],
+            'Table' => ['table', 'pagination'],
             'Toast' => ['toast'],
         ],
     ];

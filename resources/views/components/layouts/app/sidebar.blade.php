@@ -72,9 +72,40 @@
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Principal') }}
                     </flux:navlist.item>
-                    <flux:navlist.item icon="shopping-bag" :href="route('loja.virtual')" :current="request()->routeIs('loja.virtual')" wire:navigate>
-                        {{ __('Loja') }}
-                    </flux:navlist.item>
+                    <flux:navlist.group expandable heading="Loja" class="lg:grid" :expanded="request()->routeIs('shop.*')">
+                        <flux:navlist.item icon="shopping-bag" :href="route('shop.index')" :current="request()->routeIs('shop.index')">
+                            {{ __('Produtos') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item icon="shopping-cart" :href="route('shop.cart')" :current="request()->routeIs('shop.cart')">
+                            {{ __('Carrinho') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item icon="clipboard-document-list" :href="route('shop.user.orders')" :current="request()->routeIs('shop.user.orders')">
+                            {{ __('Meus Pedidos') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item icon="heart" :href="route('shop.wishlist')" :current="request()->routeIs('shop.wishlist')">
+                            {{ __('Lista de Desejos') }}
+                        </flux:navlist.item>
+                    </flux:navlist.group>
+
+                    @if(auth()->user()->role === 'admin')
+                    <flux:navlist.group expandable heading="Administração" class="lg:grid" :expanded="request()->routeIs('admin.*')">
+                        <flux:navlist.item icon="chart-bar" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')">
+                            {{ __('Dashboard') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item icon="cube" :href="route('admin.products')" :current="request()->routeIs('admin.products')">
+                            {{ __('Produtos') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item icon="folder" :href="route('admin.categories')" :current="request()->routeIs('admin.categories')">
+                            {{ __('Categorias') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item icon="clipboard-document-list" :href="route('admin.orders')" :current="request()->routeIs('admin.orders')">
+                            {{ __('Pedidos') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item icon="ticket" :href="route('admin.coupons')" :current="request()->routeIs('admin.coupons')">
+                            {{ __('Cupons') }}
+                        </flux:navlist.item>
+                    </flux:navlist.group>
+                    @endif
                     <flux:navlist.item icon="trophy" :href="route('points.history')" :current="request()->routeIs('points.history')" wire:navigate>
                         {{ __('Pontuação') }}
                     </flux:navlist.item>

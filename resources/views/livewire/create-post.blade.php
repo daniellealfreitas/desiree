@@ -39,7 +39,13 @@
                     <input wire:model="image" id="image" type="file" accept="image/*" class="hidden">
                 </label>
                 @if ($image)
-                    <span class="text-sm text-gray-500">{{ $image->getClientOriginalName() }}</span>
+                    <span class="text-sm text-gray-500">
+                        @if(is_object($image) && method_exists($image, 'getClientOriginalName'))
+                            {{ $image->getClientOriginalName() }}
+                        @else
+                            Imagem selecionada
+                        @endif
+                    </span>
                 @endif
 
                 <label for="video" class="cursor-pointer flex items-center text-gray-500">
@@ -47,7 +53,13 @@
                     <input wire:model="video" id="video" type="file" accept="video/*" class="hidden">
                 </label>
                 @if ($video)
-                    <span class="text-sm text-gray-500">{{ $video->getClientOriginalName() }}</span>
+                    <span class="text-sm text-gray-500">
+                        @if(is_object($video) && method_exists($video, 'getClientOriginalName'))
+                            {{ $video->getClientOriginalName() }}
+                        @else
+                            Vídeo selecionado
+                        @endif
+                    </span>
                 @endif
             </div>
             <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg disabled:opacity-50"

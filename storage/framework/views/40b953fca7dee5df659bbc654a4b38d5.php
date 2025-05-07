@@ -50,10 +50,9 @@ $classes = Flux::classes()
         default => 'p-6 [:where(&)]:max-w-xl shadow-lg rounded-xl',
         'flyout' => match($position) {
             'bottom' => 'fixed m-0 p-8 min-w-[100vw] overflow-y-auto mt-auto [--fx-flyout-translate:translateY(50px)] border-t',
-            'left' => 'fixed m-0 p-8 max-h-dvh min-h-dvh md:[:where(&)]:min-w-[25rem] overflow-y-auto mr-auto [--fx-flyout-translate:translateX(-50px)] border-r',
-            default => 'fixed m-0 p-8 max-h-dvh min-h-dvh md:[:where(&)]:min-w-[25rem] overflow-y-auto ml-auto [--fx-flyout-translate:translateX(50px)] border-l',
+            'left' => 'fixed m-0 p-8 max-h-dvh min-h-dvh md:[:where(&)]:min-w-[25rem] overflow-y-auto mr-auto [--fx-flyout-translate:translateX(-50px)] border-e rtl:mr-0 rtl:ml-auto rtl:[--fx-flyout-translate:translateX(50px)]',
+            default => 'fixed m-0 p-8 max-h-dvh min-h-dvh md:[:where(&)]:min-w-[25rem] overflow-y-auto ml-auto [--fx-flyout-translate:translateX(50px)] border-s rtl:ml-0 rtl:mr-auto rtl:[--fx-flyout-translate:translateX(-50px)]',
         },
-        'flyout' => 'fixed m-0 p-8 max-h-dvh min-h-dvh md:[:where(&)]:min-w-[25rem] overflow-y-auto ml-auto',
         'bare' => '',
     })
     ->add(match ($variant) {
@@ -89,7 +88,7 @@ if ($dismissible === false) {
     $attributes = $attributes->merge(['disable-click-outside' => '']);
 }
 
-[ $styleAttributes, $attributes ] = Flux::splitAttributes($attributes, ['class', 'style', 'wire:close', 'x-on:close', 'wire:cancel', 'x-on:cancel']);
+[ $styleAttributes, $attributes ] = Flux::splitAttributes($attributes, ['autofocus', 'class', 'style', 'wire:close', 'x-on:close', 'wire:cancel', 'x-on:cancel']);
 ?>
 
 <ui-modal <?php echo e($attributes); ?> data-flux-modal>
@@ -123,7 +122,7 @@ if ($dismissible === false) {
 
 
         <?php if ($closable): ?>
-            <div class="absolute top-0 right-0 mt-4 mr-4">
+            <div class="absolute top-0 end-0 mt-4 me-4">
                 <?php if (isset($component)) { $__componentOriginalda55eef372798476d918d03158796935 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalda55eef372798476d918d03158796935 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::modal.close','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
