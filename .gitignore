@@ -3,37 +3,62 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
-# Laravel 4 specific
-bootstrap/compiled.php
-app/storage/
+# Laravel 12 specific
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+storage/logs/*.log
 
-# Laravel 5 & Lumen specific
-public/storage
-public/hot
-
-# Laravel 5 & Lumen specific with changed public path
-public_html/storage
-public_html/hot
-
-storage/*.key
+# Ignore arquivos de configuração do Laravel
 .env
-Homestead.yaml
-Homestead.json
-/.vagrant
-.phpunit.result.cache
+.env.example
 
-/public/build
-/storage/pail
-.env.backup
-.env.production
-.phpactor.json
-auth.json
+# Ignore arquivos de banco de dados
+database/*.sqlite
+database/*.sql
 
-# Log files
-/storage/logs/*.log
-/storage/logs/*-*/*.log
-*.log
+# Ignore arquivos de configuração do Git
+.gitattributes
 
-# Ignore SQLite files
-*.sqlite*
-.qodo
+# Ignore arquivos de dependências do Composer
+vendor/
+
+# Ignore arquivos de node_modules
+node_modules/
+
+# Ignore arquivos de build do Livewire
+livewire/build/
+
+# Ignore arquivos de build do Flux UI
+flux-ui/build/
+
+# Ignore arquivos de build do Tailwind
+tailwind/build/
+
+# Ignore arquivos de configuração do Tailwind
+tailwind.config.js
+
+# Ignore arquivos de teste
+tests/*.php
+
+# Ignore arquivos de seeds do banco de dados
+database/seeders/*.php
+
+# Ignore arquivos de configuração do KingHost
+kinghost.config.js
+
+# Ignore arquivos de migração do banco de dados
+!database/migrations/*.php
+
+# Ignore arquivos de publicação do Laravel
+public/build
+public/hot
+public/storage
+
+# Ignore arquivos de cache do Laravel
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+
+# Ignore arquivos de logs do Laravel
+storage/logs/*.log
