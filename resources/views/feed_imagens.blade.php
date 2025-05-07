@@ -1,5 +1,5 @@
 <x-layouts.app :title="__('Ultimas Imagens')">
-    <div class="bg-white dark:bg-gray-800 h-screen h-full py-6 sm:py-8 lg:py-12">
+    <div class="bg-white dark:bg-zinc-700 h-screen h-full py-6 sm:py-8 lg:py-12">
         <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
     
             <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:gap-6 xl:gap-8">

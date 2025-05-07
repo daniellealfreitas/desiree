@@ -57,7 +57,7 @@ mount(function () {
 ?>
 
 <div id="ultimos_acessos">
-    <h3 class="text-white bg-gray-800 p-3 rounded-t-lg font-semibold">Últimos Acessos</h3>
+    <h3 class="text-white bg-zinc-700 p-3 rounded-t-lg font-semibold">Últimos Acessos</h3>
     <ul class="p-3 space-y-2">
         @foreach ($recentUsers as $user)
             <li class="flex items-center justify-between space-x-3">

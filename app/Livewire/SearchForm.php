@@ -13,6 +13,7 @@ class SearchForm extends Component
     public $cities = [];
     public $selectedState = null;
     public $selectedCity = null;
+
     public $filters = [
         'id' => null,
         'username' => null,
@@ -22,7 +23,10 @@ class SearchForm extends Component
         'ordenar' => null,
         'cadastrados' => null,
     ];
-    
+
+    public $results = [];
+    public $hasSearched = false;
+
     public function rules()
     {
         return [
@@ -33,8 +37,6 @@ class SearchForm extends Component
             'selectedCity' => ['nullable'],
         ];
     }
-    public $results = [];
-    public $hasSearched = false;
 
     public function mount()
     {
@@ -52,8 +54,8 @@ class SearchForm extends Component
     {
         $this->resetErrorBag();
         $this->validate();
-        
-        // Validação extra: pelo menos um campo preenchido
+
+        // Verifica se pelo menos um filtro foi preenchido
         if (
             empty($this->filters['id']) &&
             empty($this->filters['username']) &&
@@ -70,7 +72,7 @@ class SearchForm extends Component
             $this->results = [];
             return;
         }
-        
+
         $this->hasSearched = true;
         $query = User::query();
 

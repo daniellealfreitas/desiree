@@ -309,7 +309,7 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginal48a7a6275c4dbe43f3b08c99bf9c2ce1; ?>
 <?php unset($__componentOriginal48a7a6275c4dbe43f3b08c99bf9c2ce1); ?>
 <?php endif; ?>
-                    
+
                     <?php if (isset($component)) { $__componentOriginald5e1eb3ae521062f8474178ba08933ca = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginald5e1eb3ae521062f8474178ba08933ca = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::menu.separator','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -611,6 +611,50 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'shopping-bag','href' => route('loja.virtual'),'current' => request()->routeIs('loja.virtual'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::navlist.item'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'shopping-bag','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('loja.virtual')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('loja.virtual')),'wire:navigate' => true]); ?>
+                        <?php echo e(__('Loja')); ?>
+
+                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $attributes = $__attributesOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'trophy','href' => route('points.history'),'current' => request()->routeIs('points.history'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::navlist.item'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'trophy','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('points.history')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('points.history')),'wire:navigate' => true]); ?>
+                        <?php echo e(__('Pontuação')); ?>
+
+                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $attributes = $__attributesOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'magnifying-glass-circle','href' => route('busca'),'current' => request()->routeIs('busca'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::navlist.item'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -701,7 +745,7 @@ if (isset($__slots)) unset($__slots);
 <?php if (isset($__componentOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
 <?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
 <?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
-<?php endif; ?>                        
+<?php endif; ?>
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4)): ?>
@@ -711,7 +755,7 @@ if (isset($__slots)) unset($__slots);
 <?php if (isset($__componentOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4)): ?>
 <?php $component = $__componentOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4; ?>
 <?php unset($__componentOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4); ?>
-<?php endif; ?> 
+<?php endif; ?>
 
                     <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
@@ -735,6 +779,7 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
 <?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
 <?php endif; ?>
+
                     <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'map-pin','href' => route('radar'),'current' => request()->routeIs('radar'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -823,6 +868,7 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
 <?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
 <?php endif; ?>
+
                  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4)): ?>
@@ -832,7 +878,7 @@ if (isset($__slots)) unset($__slots);
 <?php if (isset($__componentOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4)): ?>
 <?php $component = $__componentOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4; ?>
 <?php unset($__componentOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4); ?>
-<?php endif; ?>                
+<?php endif; ?>
              <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalacac6a48a34186ea0abd369a00e5e2d4)): ?>
@@ -862,8 +908,8 @@ if (isset($__slots)) unset($__slots);
 <?php if (isset($__componentOriginal4a4f7aa062a095c651c2f80bb685a42a)): ?>
 <?php $component = $__componentOriginal4a4f7aa062a095c651c2f80bb685a42a; ?>
 <?php unset($__componentOriginal4a4f7aa062a095c651c2f80bb685a42a); ?>
-<?php endif; ?>    
-        
+<?php endif; ?>
+
             <!-- Desktop User Menu -->
             <?php if (isset($component)) { $__componentOriginal2b4bb2cd4b8f1a3c08bae49ea918b888 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal2b4bb2cd4b8f1a3c08bae49ea918b888 = $attributes; } ?>
@@ -919,8 +965,8 @@ if (isset($__slots)) unset($__slots);
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="<?php echo e($avatarUrl); ?>" 
-                                         class="h-full w-full object-cover" 
+                                    <img src="<?php echo e($avatarUrl); ?>"
+                                         class="h-full w-full object-cover"
                                          alt="<?php echo e(auth()->user()->name); ?>">
                                 </span>
 
@@ -1186,8 +1232,8 @@ if (isset($__slots)) unset($__slots);
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="<?php echo e($avatarUrl); ?>" 
-                                         class="h-full w-full object-cover" 
+                                    <img src="<?php echo e($avatarUrl); ?>"
+                                         class="h-full w-full object-cover"
                                          alt="<?php echo e(auth()->user()->name); ?>">
                                 </span>
 
@@ -1409,7 +1455,7 @@ if (isset($__slots)) unset($__slots);
                 setTimeout(() => {
                     window.removeEventListener('resize', resizeCanvas);
                     canvas.remove();
-                }, 5000);
+                }, 2000);
             };
 
             // Function to trigger XP popup
@@ -1423,7 +1469,7 @@ if (isset($__slots)) unset($__slots);
                 // Remove popup after 2 seconds
                 setTimeout(() => {
                     popup.remove();
-                }, 5000);
+                }, 2000);
             };
 
             // Add keyboard shortcut to trigger animations
@@ -1433,6 +1479,14 @@ if (isset($__slots)) unset($__slots);
                     window.triggerConfetti();
                     window.triggerXpPopup(50); // Example: 50 XP
                 }
+            });
+
+            // Listener para o evento reward-earned
+            document.addEventListener('livewire:initialized', () => {
+                Livewire.on('reward-earned', (data) => {
+                    window.triggerConfetti();
+                    window.triggerXpPopup(data.points);
+                });
             });
         </script>
     </body>

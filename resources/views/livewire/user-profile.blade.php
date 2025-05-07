@@ -44,13 +44,13 @@ new class extends Component {
     }
 }; ?>
 
-<div class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
-    <div class="relative h-32 bg-cover bg-center rounded-t-lg" 
+<div id="Container" class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
+    <div id="capa" class="relative h-32 bg-cover bg-center rounded-t-lg" 
         style="background:url({{ $this->cover() ?? asset('images/users/capa.jpg') }}); background-size: cover; background-position: center;">
     </div>
-    <div class="relative z-10 -mt-12 flex flex-col items-center">
-         <div class="relative">
-                <img src="{{ $this->avatar() ?? asset('images/users/avatar.jpg') }}" 
+    <div id="container_user"  class="relative z-10 -mt-12 flex flex-col items-center">
+        <div id="avatar"   class="relative">
+            <img src="{{ $this->avatar() ?? asset('images/users/avatar.jpg') }}" 
             alt="Foto de Perfil" class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
             <livewire:user-status-indicator :userId="$user->id" />
         </div>
@@ -60,7 +60,7 @@ new class extends Component {
                 {{ '@' . $user->username }}
             </a>
         </p>
-        <div class="mt-4 flex justify-around w-full">
+        <div id="info_user" class="mt-4 flex justify-around w-full">
             <div class="text-center">
                 <p class="text-lg font-semibold">{{ $this->postsCount() }}</p>
                 <p class="text-gray-500">Posts</p>

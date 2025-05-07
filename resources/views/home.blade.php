@@ -75,7 +75,9 @@
                     </li>
                     @if (Route::has('login'))                
                         @auth
-                            <a href="{{ url('/dashboard') }}" class="btn custom-btn d-lg-block d-none">Area VIP</a>                        
+                            <li class="nav-item">
+                            <a href="{{ url('/dashboard') }}" class="btn custom-btn d-lg-block d-none mt-2">Area VIP</a>    
+                            </li>                    
                         @else
                             <li class="nav-item">
                                 <a href="{{ route('login') }}" class="nav-link"><i class="bi bi-person"></i>Entrar</a>

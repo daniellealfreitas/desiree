@@ -14,14 +14,14 @@
     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
     <form wire:submit.prevent="store" enctype="multipart/form-data">
-        <textarea wire:model.defer="content" rows="3" 
-            class="w-full p-3 border border-gray-300 rounded-lg" 
+        <textarea wire:model.defer="content" rows="3"
+            class="w-full p-3 border border-gray-300 rounded-lg"
             placeholder="Compartilhe o que você pensa com fotos ou vídeos..."></textarea>
-        
+
         <!--[if BLOCK]><![endif]--><?php if($image): ?>
             <div class="mt-2">
-                <img src="<?php echo e($image->temporaryUrl()); ?>" 
-                     class="max-w-xs h-auto rounded-lg shadow-sm" 
+                <img src="<?php echo e($image->temporaryUrl()); ?>"
+                     class="max-w-xs h-auto rounded-lg shadow-sm"
                      alt="Preview">
             </div>
         <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
@@ -37,20 +37,60 @@
         <div class="flex justify-between mt-3">
             <div class="flex space-x-4">
                 <label for="image" class="cursor-pointer flex items-center text-gray-500">
-                    📷 <input wire:model="image" id="image" type="file" accept="image/*" class="hidden">
+                    <?php if (isset($component)) { $__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::icon.index','data' => ['icon' => 'photo','variant' => ''.e($image ? 'solid' : 'outline').'','class' => 'w-5 h-5 mr-1']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'photo','variant' => ''.e($image ? 'solid' : 'outline').'','class' => 'w-5 h-5 mr-1']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2)): ?>
+<?php $attributes = $__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2; ?>
+<?php unset($__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2)): ?>
+<?php $component = $__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2; ?>
+<?php unset($__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2); ?>
+<?php endif; ?>
+                    <input wire:model="image" id="image" type="file" accept="image/*" class="hidden">
                 </label>
                 <!--[if BLOCK]><![endif]--><?php if($image): ?>
                     <span class="text-sm text-gray-500"><?php echo e($image->getClientOriginalName()); ?></span>
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
                 <label for="video" class="cursor-pointer flex items-center text-gray-500">
-                    🎥 <input wire:model="video" id="video" type="file" accept="video/*" class="hidden">
+                    <?php if (isset($component)) { $__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::icon.index','data' => ['icon' => 'video-camera','variant' => ''.e($video ? 'solid' : 'outline').'','class' => 'w-5 h-5 mr-1']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'video-camera','variant' => ''.e($video ? 'solid' : 'outline').'','class' => 'w-5 h-5 mr-1']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2)): ?>
+<?php $attributes = $__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2; ?>
+<?php unset($__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2)): ?>
+<?php $component = $__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2; ?>
+<?php unset($__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2); ?>
+<?php endif; ?>
+                    <input wire:model="video" id="video" type="file" accept="video/*" class="hidden">
                 </label>
                 <!--[if BLOCK]><![endif]--><?php if($video): ?>
                     <span class="text-sm text-gray-500"><?php echo e($video->getClientOriginalName()); ?></span>
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
-            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg disabled:opacity-50" 
+            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg disabled:opacity-50"
                 wire:loading.attr="disabled"
                 wire:loading.class="opacity-50">
                 <span wire:loading.remove>Postar</span>

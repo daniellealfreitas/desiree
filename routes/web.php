@@ -21,6 +21,7 @@ use App\Livewire\EditConto;
 use App\Livewire\Timeline;
 use App\Http\Controllers\PaymentController;
 use App\Livewire\Messages;
+use App\Livewire\UserPointsHistory;
 use App\Models\Message;
 use App\Http\Controllers\MessageController;
 
@@ -42,7 +43,7 @@ Route::view('busca', 'busca')
     ->middleware(['auth', 'verified'])
     ->name('busca');
 
-    
+
 Route::get('/contos', function () {
     return view('contos');
 })->middleware(['auth', 'verified'])->name('contos');
@@ -89,6 +90,19 @@ Route::view('renovar-vip', 'renovar-vip')
     ->middleware(['auth', 'verified'])
     ->name('renovar-vip');
 
+Route::view('mindmap', 'mindmap')
+    ->middleware(['auth', 'verified'])
+    ->name('mindmap');
+
+Route::view('pesquisas', 'pesquisas')
+    ->middleware(['auth', 'verified'])
+    ->name('pesquisas');
+
+Route::view('loja-virtual', 'loja-virtual')
+    ->middleware(['auth', 'verified'])
+    ->name('loja.virtual');
+
+
 Route::get('/meus-pagamentos', [PaymentController::class, 'index'])->name('meus-pagamentos');
 
 
@@ -127,7 +141,15 @@ Route::middleware(['auth'])->group(function () {
     })->name('contos.destroy');
     Route::get('/timeline', Timeline::class)->name('timeline');
     Route::resource('messages', MessageController::class)->only(['index', 'store', 'destroy']);
-    
+
+    // Rotas para o histórico de pontos
+    Route::get('/pontos', function () {
+        return view('points-history');
+    })->name('points.history');
+
+    Route::get('/pontos/{userId}', function ($userId) {
+        return view('points-history', ['userId' => $userId]);
+    })->name('points.history.user');
 });
 
 
@@ -150,6 +172,7 @@ Route::get('/{username}', function($username) {
 Route::get('post/{post}', function (Post $post) {
     return view('post.show', compact('post'));
 })->name('post.show');
+
 
 
 require __DIR__.'/auth.php';

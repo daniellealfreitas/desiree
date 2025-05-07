@@ -15,6 +15,10 @@ new class extends Component implements Livewire\Volt\Contracts\FunctionalCompone
 
     public $newComment;
 
+    public $showDeleteModal;
+
+    public $postToDelete;
+
     public $posts;
 
     public function mount()
@@ -43,6 +47,27 @@ new class extends Component implements Livewire\Volt\Contracts\FunctionalCompone
         $arguments = [static::$__context, $this, func_get_args()];
 
         return (new Actions\CallMethod('addComment'))->execute(...$arguments);
+    }
+
+    public function openDeleteModal($postId)
+    {
+        $arguments = [static::$__context, $this, func_get_args()];
+
+        return (new Actions\CallMethod('openDeleteModal'))->execute(...$arguments);
+    }
+
+    public function closeDeleteModal()
+    {
+        $arguments = [static::$__context, $this, func_get_args()];
+
+        return (new Actions\CallMethod('closeDeleteModal'))->execute(...$arguments);
+    }
+
+    public function deletePost($postId)
+    {
+        $arguments = [static::$__context, $this, func_get_args()];
+
+        return (new Actions\CallMethod('deletePost'))->execute(...$arguments);
     }
 
 };

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Notification;
+use App\Models\UserPoint;
 
 class Like extends Model {
     use HasFactory;
@@ -31,19 +33,51 @@ class Like extends Model {
                     'type' => 'like',
                     'post_id' => $like->post_id
                 ]);
+
+                // Adiciona pontos ao autor do post (se não for o mesmo usuário)
+                UserPoint::addPoints(
+                    $like->post->user_id,
+                    'like_received',
+                    5,
+                    "Recebeu curtida de " . $like->user->name,
+                    $like->post_id,
+                    Post::class
+                );
             }
 
-            $userPoint = UserPoint::firstOrCreate(['user_id' => $like->post->user_id]);
-            $userPoint->increment('points', 2);
-            $like->post->user->updateLevel();
+            // Adiciona pontos ao usuário que curtiu
+            UserPoint::addPoints(
+                $like->user_id,
+                'like',
+                2,
+                "Curtiu uma postagem" . ($like->post->user_id === $like->user_id ? " própria" : ""),
+                $like->post_id,
+                Post::class
+            );
         });
 
         static::deleted(function ($like) {
-            $userPoint = UserPoint::where('user_id', $like->post->user_id)->first();
-            if ($userPoint) {
-                $userPoint->decrement('points', 2);
-                $like->post->user->updateLevel();
+            // Remove pontos do autor do post (se não for o mesmo usuário)
+            if ($like->post->user_id !== $like->user_id) {
+                UserPoint::removePoints(
+                    $like->post->user_id,
+                    'like_removed',
+                    5,
+                    "Perdeu curtida de " . $like->user->name,
+                    $like->post_id,
+                    Post::class
+                );
             }
+
+            // Remove pontos do usuário que descurtiu
+            UserPoint::removePoints(
+                $like->user_id,
+                'unlike',
+                2,
+                "Removeu curtida de uma postagem",
+                $like->post_id,
+                Post::class
+            );
         });
     }
 }

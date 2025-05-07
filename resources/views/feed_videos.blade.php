@@ -1,5 +1,5 @@
 <x-layouts.app :title="__('Ultimos Videos')">
-    <div class="bg-white dark:bg-gray-800 h-screen h-full py-6 sm:py-8 lg:py-12">
+    <div class="bg-white dark:bg-zinc-800 h-screen h-full py-6 sm:py-8 lg:py-12">
         <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
             @php
                 $posts = \App\Models\Post::whereNotNull('video')->latest()->get();

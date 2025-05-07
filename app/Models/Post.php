@@ -56,17 +56,39 @@ class Post extends Model {
         parent::boot();
 
         static::created(function ($post) {
-            $userPoint = UserPoint::firstOrCreate(['user_id' => $post->user_id]);
-            $userPoint->increment('points', 10);
-            $post->user->updateLevel();
+            // Calcular pontos base e bônus
+            $pointsToAdd = 10; // Pontos base
+
+            // Bônus por conteúdo multimídia
+            if ($post->image) $pointsToAdd += 5;
+            if ($post->video) $pointsToAdd += 10;
+
+            // Bônus por tamanho do conteúdo
+            if ($post->content && strlen($post->content) > 100) $pointsToAdd += 5;
+
+            // Usar o novo sistema de pontos
+            \App\Models\UserPoint::addPoints(
+                $post->user_id,
+                'post',
+                $pointsToAdd,
+                "Criou uma nova postagem" .
+                ($post->image ? " com imagem" : "") .
+                ($post->video ? " com vídeo" : ""),
+                $post->id,
+                \App\Models\Post::class
+            );
         });
 
         static::deleted(function ($post) {
-            $userPoint = UserPoint::where('user_id', $post->user_id)->first();
-            if ($userPoint) {
-                $userPoint->decrement('points', 10);
-                $post->user->updateLevel();
-            }
+            // Usar o novo sistema para remover pontos
+            \App\Models\UserPoint::removePoints(
+                $post->user_id,
+                'post_deleted',
+                10,
+                "Postagem excluída",
+                null,
+                null
+            );
         });
     }
 }

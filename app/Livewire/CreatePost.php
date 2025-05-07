@@ -5,6 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\Post;
+use App\Models\UserPoint;
+use App\Models\UserPointLog;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,11 +19,14 @@ class CreatePost extends Component
     public $video = null;
     public $uploading = false;
 
-    protected $rules = [
-        'content' => 'required|min:3',
-        'image' => 'nullable|image|max:10240', // 10MB
-        'video' => 'nullable|file|mimetypes:video/mp4,video/quicktime|max:102400' // 100MB
-    ];
+    protected function rules()
+    {
+        return [
+            'content' => $this->image || $this->video ? 'nullable' : 'required|min:3',
+            'image' => 'nullable|image|max:10240', // 10MB
+            'video' => 'nullable|file|mimetypes:video/mp4,video/quicktime|max:102400' // 100MB
+        ];
+    }
 
     protected $messages = [
         'video.max' => 'O vídeo não pode ser maior que 100MB.',
@@ -33,6 +38,13 @@ class CreatePost extends Component
         $this->uploading = true;
         try {
             $this->validate();
+
+            // Ensure at least one of content, image, or video is present
+            if (empty($this->content) && !$this->image && !$this->video) {
+                session()->flash('error', 'É necessário fornecer pelo menos um conteúdo, imagem ou vídeo.');
+                $this->uploading = false;
+                return;
+            }
 
             $imagePath = null;
             if ($this->image) {
@@ -74,6 +86,32 @@ class CreatePost extends Component
 
             if ($post) {
                 Log::info('Post created successfully', ['post' => $post->toArray()]);
+
+                $user = auth()->user();
+                $pointsToAdd = 10; // Base points
+
+                // Bônus por conteúdo multimídia
+                if ($imagePath) $pointsToAdd += 5;
+                if ($videoPath) $pointsToAdd += 10;
+
+                // Bônus por tamanho do conteúdo
+                if (strlen($this->content) > 100) $pointsToAdd += 5;
+
+                // Adiciona pontos ao usuário
+                \App\Models\UserPoint::addPoints(
+                    $user->id,
+                    'post',
+                    $pointsToAdd,
+                    "Criou uma nova postagem" .
+                    ($imagePath ? " com imagem" : "") .
+                    ($videoPath ? " com vídeo" : ""),
+                    $post->id,
+                    \App\Models\Post::class
+                );
+
+                // Dispara evento para animação de recompensa
+                $this->dispatch('reward-earned', points: $pointsToAdd);
+
                 $this->reset(['content', 'image', 'video']);
                 session()->flash('message', 'Post criado com sucesso!');
                 return redirect()->route('dashboard');

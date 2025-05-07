@@ -65,7 +65,9 @@
                     </li>
                     <?php if(Route::has('login')): ?>                
                         <?php if(auth()->guard()->check()): ?>
-                            <a href="<?php echo e(url('/dashboard')); ?>" class="btn custom-btn d-lg-block d-none">Area VIP</a>                        
+                            <li class="nav-item">
+                            <a href="<?php echo e(url('/dashboard')); ?>" class="btn custom-btn d-lg-block d-none mt-2">Area VIP</a>    
+                            </li>                    
                         <?php else: ?>
                             <li class="nav-item">
                                 <a href="<?php echo e(route('login')); ?>" class="nav-link"><i class="bi bi-person"></i>Entrar</a>

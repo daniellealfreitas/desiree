@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Cashier\Billable;
 use App\Models\Conto;
 use App\Models\City;
 use App\Models\State;
@@ -20,6 +20,7 @@ use App\Models\Post;
 use App\Models\Payment;
 use App\Models\Hobby;
 use App\Models\Procura;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -30,8 +31,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    
+    use HasFactory, Notifiable, Billable;
 
 
     protected $fillable = [
@@ -208,6 +209,14 @@ class User extends Authenticatable
     public function procuras()
     {
         return $this->belongsToMany(Procura::class, 'procura_user');
+    }
+
+    /**
+     * Produtos na wishlist do usuário (many-to-many).
+     */
+    public function wishlistedProducts()
+    {
+        return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
     }
 
     /**

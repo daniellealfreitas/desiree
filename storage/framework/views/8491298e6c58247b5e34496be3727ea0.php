@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Auth;
 ?>
 
 <div id="ultimos_acessos">
-    <h3 class="text-white bg-gray-800 p-3 rounded-t-lg font-semibold">Últimos Acessos</h3>
+    <h3 class="text-white bg-zinc-700 p-3 rounded-t-lg font-semibold">Últimos Acessos</h3>
     <ul class="p-3 space-y-2">
         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $recentUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <li class="flex items-center justify-between space-x-3">

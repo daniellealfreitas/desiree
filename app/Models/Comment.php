@@ -20,8 +20,15 @@ class Comment extends Model
         parent::boot();
 
         static::created(function ($comment) {
-            $userPoint = UserPoint::firstOrCreate(['user_id' => $comment->user_id]);
-            $userPoint->increment('points', 5);
+            // Usar o novo sistema de pontos
+            \App\Models\UserPoint::addPoints(
+                $comment->user_id,
+                'comment',
+                5,
+                "Comentou em uma postagem",
+                $comment->id,
+                \App\Models\Comment::class
+            );
         });
     }
 

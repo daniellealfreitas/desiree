@@ -30,7 +30,7 @@
                     <flux:menu.radio.group>
                         <flux:menu.radio checked>{{ auth()->user()->name }}</flux:menu.radio>
                     </flux:menu.radio.group>
-                    
+
                     <flux:menu.separator />
                     <flux:menu.item icon="arrow-right-start-on-rectangle" :href="'/' . auth()->user()->username">Meu Perfil</flux:menu.item>
                     <flux:menu.item icon="user-plus" :href="route('follow.requests')" wire:navigate>
@@ -72,6 +72,12 @@
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Principal') }}
                     </flux:navlist.item>
+                    <flux:navlist.item icon="shopping-bag" :href="route('loja.virtual')" :current="request()->routeIs('loja.virtual')" wire:navigate>
+                        {{ __('Loja') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="trophy" :href="route('points.history')" :current="request()->routeIs('points.history')" wire:navigate>
+                        {{ __('Pontuação') }}
+                    </flux:navlist.item>
                     <flux:navlist.item icon="magnifying-glass-circle" :href="route('busca')" :current="request()->routeIs('busca')" wire:navigate>
                         {{ __('Busca') }}
                     </flux:navlist.item>
@@ -81,12 +87,13 @@
 
                     <flux:navlist.group expandable heading="Feed" class=" lg:grid">
                         <flux:navlist.item icon="photo" :href="route('feed_imagens')">Imagens</flux:navlist.item>
-                        <flux:navlist.item icon="video-camera" :href="route('feed_videos')"> Vídeos</flux:navlist.item>                        
-                    </flux:navlist.group> 
+                        <flux:navlist.item icon="video-camera" :href="route('feed_videos')"> Vídeos</flux:navlist.item>
+                    </flux:navlist.group>
 
                     <flux:navlist.item icon="calendar-days" :href="route('programacao')" :current="request()->routeIs('programacao')" wire:navigate>
                         {{ __('Programação') }}
                     </flux:navlist.item>
+
                     <flux:navlist.item icon="map-pin" :href="route('radar')" :current="request()->routeIs('radar')" wire:navigate>
                         {{ __('Radar') }}
                     </flux:navlist.item>
@@ -99,10 +106,11 @@
                     <flux:navlist.item icon="inbox" badge="12" :href="route('caixa_de_mensagens')" :current="request()->routeIs('caixa_de_mensagens')" wire:navigate>
                         {{ __('Caixa de Mensagens') }}
                     </flux:navlist.item>
-                </flux:navlist.group>                
+
+                </flux:navlist.group>
             </flux:navlist>
-            <flux:spacer />    
-        
+            <flux:spacer />
+
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
                 <flux:profile :name="auth()->user()->name"
@@ -115,8 +123,8 @@
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="{{ $avatarUrl }}" 
-                                         class="h-full w-full object-cover" 
+                                    <img src="{{ $avatarUrl }}"
+                                         class="h-full w-full object-cover"
                                          alt="{{ auth()->user()->name }}">
                                 </span>
 
@@ -164,8 +172,8 @@
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="{{ $avatarUrl }}" 
-                                         class="h-full w-full object-cover" 
+                                    <img src="{{ $avatarUrl }}"
+                                         class="h-full w-full object-cover"
                                          alt="{{ auth()->user()->name }}">
                                 </span>
 
@@ -255,7 +263,7 @@
                 setTimeout(() => {
                     window.removeEventListener('resize', resizeCanvas);
                     canvas.remove();
-                }, 5000);
+                }, 2000);
             };
 
             // Function to trigger XP popup
@@ -269,7 +277,7 @@
                 // Remove popup after 2 seconds
                 setTimeout(() => {
                     popup.remove();
-                }, 5000);
+                }, 2000);
             };
 
             // Add keyboard shortcut to trigger animations
@@ -279,6 +287,14 @@
                     window.triggerConfetti();
                     window.triggerXpPopup(50); // Example: 50 XP
                 }
+            });
+
+            // Listener para o evento reward-earned
+            document.addEventListener('livewire:initialized', () => {
+                Livewire.on('reward-earned', (data) => {
+                    window.triggerConfetti();
+                    window.triggerXpPopup(data.points);
+                });
             });
         </script>
     </body>

@@ -4,8 +4,8 @@ use App\Models\Post;
 
 ?>
 
-<div>
-    <h3 class="text-white bg-gray-800 p-3 mt-4 rounded-t-lg font-semibold">Últimas Imagens</h3>
+<div class="mt-5">
+    <h3 class="text-white bg-zinc-700 p-3 mt-4 rounded-t-lg font-semibold">Últimas Imagens</h3>
     
     <div class="grid grid-cols-2 gap-2 p-3">
         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $this->posts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $post): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -19,7 +19,7 @@ use App\Models\Post;
 
     <!-- Modal -->
     <!--[if BLOCK]><![endif]--><?php if($showModal): ?>
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="fixed inset-0 bg-zinc-800 bg-opacity-50 flex items-center justify-center z-50">
             <div class="relative">
                 <button wire:click="closeModal" 
                         class="absolute -top-8 right-0 text-white hover:text-gray-300">
