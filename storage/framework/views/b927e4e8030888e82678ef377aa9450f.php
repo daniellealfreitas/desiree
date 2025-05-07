@@ -1,3 +1,6 @@
+<?php $iconTrailing = $iconTrailing ??= $attributes->pluck('icon:trailing'); ?>
+<?php $iconVariant = $iconVariant ??= $attributes->pluck('icon:variant'); ?>
+
 <?php foreach (([ 'variant' ]) as $__key => $__value) {
     $__consumeVariable = is_string($__key) ? $__key : $__value;
     $$__consumeVariable = is_string($__key) ? $__env->getConsumableComponentData($__key, $__value) : $__env->getConsumableComponentData($__value);
@@ -63,7 +66,7 @@ $iconClasses = Flux::classes($square ? 'size-6' : 'size-5');
 $classes = Flux::classes()
     ->add('px-3 h-8 flex items-center rounded-lg')
     ->add('relative') // This is here for the "active" bar at the bottom to be positioned correctly...
-    ->add($square ? 'px-2.5!' : '')
+    ->add($square ? '' : 'px-2.5!')
     ->add('text-zinc-500 dark:text-white/80 ')
     // Styles for when this link is the "current" one...
     ->add('data-current:after:absolute data-current:after:-bottom-3 data-current:after:inset-x-0 data-current:after:h-[2px]')
@@ -125,7 +128,7 @@ $classes = Flux::classes()
             <?php endif; ?>
 
             <?php if ($iconDot): ?>
-                <div class="absolute top-[-2px] right-[-2px]">
+                <div class="absolute top-[-2px] end-[-2px]">
                     <div class="size-[6px] rounded-full bg-zinc-500 dark:bg-zinc-400"></div>
                 </div>
             <?php endif; ?>
@@ -133,20 +136,20 @@ $classes = Flux::classes()
     <?php endif; ?>
 
     <?php if ($slot->isNotEmpty()): ?>
-        <div class="<?php echo e($icon ? 'ml-3' : ''); ?> flex-1 text-sm font-medium leading-none whitespace-nowrap [[data-nav-footer]_&]:hidden [[data-nav-sidebar]_[data-nav-footer]_&]:block" data-content><?php echo e($slot); ?></div>
+        <div class="<?php echo e($icon ? 'ms-3' : ''); ?> flex-1 text-sm font-medium leading-none whitespace-nowrap [[data-nav-footer]_&]:hidden [[data-nav-sidebar]_[data-nav-footer]_&]:block" data-content><?php echo e($slot); ?></div>
     <?php endif; ?>
 
     <?php if (is_string($iconTrailing) && $iconTrailing !== ''): ?>
         <?php if (isset($component)) { $__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::icon.index','data' => ['icon' => $iconTrailing,'variant' => 'micro','class' => 'size-4 ml-1']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::icon.index','data' => ['icon' => $iconTrailing,'variant' => 'micro','class' => 'size-4 ms-1']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::icon'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['icon' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($iconTrailing),'variant' => 'micro','class' => 'size-4 ml-1']); ?>
+<?php $component->withAttributes(['icon' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($iconTrailing),'variant' => 'micro','class' => 'size-4 ms-1']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2)): ?>
@@ -165,14 +168,14 @@ $classes = Flux::classes()
     <?php if ($badge): ?>
         <?php if (isset($component)) { $__componentOriginal61789228b347c260738e0b8eb99e910b = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal61789228b347c260738e0b8eb99e910b = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.badge','data' => ['color' => $badgeColor,'class' => 'ml-2']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.badge','data' => ['color' => $badgeColor,'class' => 'ms-2']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::navbar.badge'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['color' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($badgeColor),'class' => 'ml-2']); ?><?php echo e($badge); ?> <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['color' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($badgeColor),'class' => 'ms-2']); ?><?php echo e($badge); ?> <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal61789228b347c260738e0b8eb99e910b)): ?>
 <?php $attributes = $__attributesOriginal61789228b347c260738e0b8eb99e910b; ?>

@@ -121,14 +121,14 @@
                         <flux:navlist.item icon="video-camera" :href="route('feed_videos')"> Vídeos</flux:navlist.item>
                     </flux:navlist.group>
 
-                    <flux:navlist.item icon="calendar-days" :href="route('programacao')" :current="request()->routeIs('programacao')" wire:navigate>
-                        {{ __('Programação') }}
+                    <flux:navlist.item icon="calendar-days" :href="route('events.index')" :current="request()->routeIs('events.*')" wire:navigate>
+                        {{ __('Eventos') }}
                     </flux:navlist.item>
 
                     <flux:navlist.item icon="map-pin" :href="route('radar')" :current="request()->routeIs('radar')" wire:navigate>
                         {{ __('Radar') }}
                     </flux:navlist.item>
-                    <flux:navlist.item icon="user-group" :href="route('grupos')" :current="request()->routeIs('grupos')" wire:navigate>
+                    <flux:navlist.item icon="user-group" :href="route('grupos.index')" :current="request()->routeIs('grupos.*')" wire:navigate>
                         {{ __('Grupos') }}
                     </flux:navlist.item>
                     <flux:navlist.item icon="chat-bubble-left-right" :href="route('bate_papo')" :current="request()->routeIs('bate_papo')" wire:navigate>

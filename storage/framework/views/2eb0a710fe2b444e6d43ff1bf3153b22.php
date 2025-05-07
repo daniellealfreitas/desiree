@@ -2,7 +2,7 @@
 
 $__newAttributes = [];
 $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([
-    'name' => $attributes->whereStartsWith('wire:model')->first(),
+    'name' => null,
     'variant' => null,
     'size' => null,
 ]));
@@ -21,7 +21,7 @@ unset($__propNames);
 unset($__newAttributes);
 
 foreach (array_filter(([
-    'name' => $attributes->whereStartsWith('wire:model')->first(),
+    'name' => null,
     'variant' => null,
     'size' => null,
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
@@ -37,6 +37,14 @@ foreach ($attributes->all() as $__key => $__value) {
 unset($__defined_vars); ?>
 
 <?php
+// We only want to show the name attribute on the checkbox if it has been set
+// manually, but not if it has been set from the wire:model attribute...
+$showName = isset($name);
+
+if (! isset($name)) {
+    $name = $attributes->whereStartsWith('wire:model')->first();
+}
+
 $classes = Flux::classes()
     ->add('block flex p-1')
     ->add('rounded-lg bg-zinc-800/5 dark:bg-white/10')
@@ -55,7 +63,7 @@ $classes = Flux::classes()
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['attributes' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($attributes)]); ?>
-    <ui-radio-group <?php echo e($attributes->class($classes)); ?> data-flux-radio-group-segmented>
+    <ui-radio-group <?php echo e($attributes->class($classes)); ?> <?php if($showName): ?> name="<?php echo e($name); ?>" <?php endif; ?> data-flux-radio-group-segmented>
         <?php echo e($slot); ?>
 
     </ui-radio-group>

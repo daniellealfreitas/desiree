@@ -1,3 +1,6 @@
+<?php $iconTrailing = $iconTrailing ??= $attributes->pluck('icon:trailing'); ?>
+<?php $iconVariant = $iconVariant ??= $attributes->pluck('icon:variant'); ?>
+
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
 $__newAttributes = [];
@@ -53,7 +56,7 @@ $iconClasses = Flux::classes()
     ;
 
 $iconTrailingClasses = Flux::classes()
-    ->add('ml-auto')
+    ->add('ms-auto')
     // When using the outline icon variant, we need to size it down to match the default icon sizes...
     ->add($iconVariant === 'outline' ? 'size-5' : null)
     ;
@@ -61,7 +64,7 @@ $iconTrailingClasses = Flux::classes()
 $classes = Flux::classes()
     ->add('group/menu-radio flex items-center px-2 py-1.5 w-full focus:outline-hidden')
     ->add('rounded-md')
-    ->add('text-left text-sm font-medium')
+    ->add('text-start text-sm font-medium')
     ->add('[[disabled]_&]:opacity-50 [&[disabled]]:opacity-50')
     ->add([
         'text-zinc-800 data-active:bg-zinc-50 dark:text-white dark:data-active:bg-zinc-600',
@@ -100,7 +103,7 @@ $classes = Flux::classes()
 
 
     <?php if ($suffix): ?>
-        <div class="ml-auto opacity-50 text-xs">
+        <div class="ms-auto opacity-50 text-xs">
             <?php echo e($suffix); ?>
 
         </div>

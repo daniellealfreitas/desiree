@@ -27,7 +27,7 @@
                 <flux:navbar.item icon="layout-grid" :href="route('radar')" :current="request()->routeIs('radar')" wire:navigate>
                     {{ __('Radar') }}
                 </flux:navbar.item>
-                <flux:navbar.item icon="layout-grid" :href="route('grupos')" :current="request()->routeIs('grupos')" wire:navigate>
+                <flux:navbar.item icon="layout-grid" :href="route('grupos.index')" :current="request()->routeIs('grupos.*')" wire:navigate>
                     {{ __('Grupos') }}
                 </flux:navbar.item>
                 <flux:navbar.item icon="layout-grid" :href="route('Bate-Papo')" :current="request()->routeIs('Bate-Papo')" wire:navigate>
@@ -35,7 +35,7 @@
                 </flux:navbar.item>
                 <flux:navbar.item icon="layout-grid" :href="route('caixa_de_mensagens')" :current="request('caixa_de_mensagens')->routeIs('caixa_de_mensagens')" wire:navigate>
                     {{ __('Caixa de Mensagens') }}
-                </flux:navbar.item> 
+                </flux:navbar.item>
 
             </flux:navbar>
 
@@ -77,8 +77,8 @@
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="{{ auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}" 
-                                         class="h-full w-full object-cover" 
+                                    <img src="{{ auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
+                                         class="h-full w-full object-cover"
                                          alt="{{ auth()->user()->name }}">
                                 </span>
 

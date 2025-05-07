@@ -1,5 +1,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <title>{{ $title ?? 'Desiree Swing Club - Curitiba' }}</title>
 
@@ -8,3 +9,8 @@
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @fluxAppearance
+
+<!-- Script de geolocalização automática -->
+@auth
+<script src="{{ asset('js/auto-geolocation.js') }}"></script>
+@endauth

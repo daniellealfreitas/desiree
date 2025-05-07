@@ -21,6 +21,9 @@ use App\Models\Payment;
 use App\Models\Hobby;
 use App\Models\Procura;
 use App\Models\Product;
+use App\Models\Group;
+use App\Models\GroupInvitation;
+use App\Models\Event;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -291,6 +294,165 @@ class User extends Authenticatable
     public function hasRole($role)
     {
         return $this->role === $role;
+    }
+
+    /**
+     * Grupos que o usuário criou
+     */
+    public function createdGroups()
+    {
+        return $this->hasMany(Group::class, 'creator_id');
+    }
+
+    /**
+     * Grupos dos quais o usuário é membro
+     */
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'group_user')
+                    ->withPivot('role', 'is_approved', 'joined_at')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Grupos dos quais o usuário é administrador
+     */
+    public function adminGroups()
+    {
+        return $this->belongsToMany(Group::class, 'group_user')
+                    ->wherePivot('role', 'admin')
+                    ->withPivot('joined_at')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Grupos dos quais o usuário é moderador
+     */
+    public function moderatedGroups()
+    {
+        return $this->belongsToMany(Group::class, 'group_user')
+                    ->wherePivot('role', 'moderator')
+                    ->withPivot('joined_at')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Convites de grupo recebidos pelo usuário
+     */
+    public function groupInvitations()
+    {
+        return $this->hasMany(GroupInvitation::class, 'user_id');
+    }
+
+    /**
+     * Convites de grupo enviados pelo usuário
+     */
+    public function sentGroupInvitations()
+    {
+        return $this->hasMany(GroupInvitation::class, 'invited_by');
+    }
+
+    /**
+     * Verifica se o usuário é membro de um grupo
+     */
+    public function isMemberOf(Group $group)
+    {
+        return $this->groups()
+                    ->where('group_id', $group->id)
+                    ->where('is_approved', true)
+                    ->exists();
+    }
+
+    /**
+     * Verifica se o usuário é administrador de um grupo
+     */
+    public function isAdminOf(Group $group)
+    {
+        return $this->adminGroups()
+                    ->where('group_id', $group->id)
+                    ->exists();
+    }
+
+    /**
+     * Verifica se o usuário é moderador de um grupo
+     */
+    public function isModeratorOf(Group $group)
+    {
+        return $this->moderatedGroups()
+                    ->where('group_id', $group->id)
+                    ->exists();
+    }
+
+    /**
+     * Verifica se o usuário pode gerenciar um grupo
+     */
+    public function canManageGroup(Group $group)
+    {
+        return $this->isAdminOf($group) || $this->isModeratorOf($group);
+    }
+
+    /**
+     * Eventos criados pelo usuário
+     */
+    public function createdEvents()
+    {
+        return $this->hasMany(Event::class, 'created_by');
+    }
+
+    /**
+     * Eventos que o usuário está participando
+     */
+    public function attendingEvents()
+    {
+        return $this->belongsToMany(Event::class, 'event_attendees')
+                    ->withPivot('status', 'ticket_code', 'payment_status', 'payment_method', 'payment_id', 'amount_paid', 'paid_at', 'checked_in_at')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Verifica se o usuário é administrador
+     */
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    /**
+     * Matches que o usuário iniciou (deu like ou pass)
+     */
+    public function initiatedMatches()
+    {
+        return $this->hasMany(UserMatch::class, 'user_id');
+    }
+
+    /**
+     * Matches em que o usuário é o alvo
+     */
+    public function receivedMatches()
+    {
+        return $this->hasMany(UserMatch::class, 'target_user_id');
+    }
+
+    /**
+     * Usuários que deram match com este usuário
+     */
+    public function matchedUsers()
+    {
+        return $this->belongsToMany(User::class, 'user_matches', 'user_id', 'target_user_id')
+                    ->wherePivot('matched', true)
+                    ->withPivot('matched_at')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Verifica se o usuário deu match com outro usuário
+     */
+    public function hasMatchWith(User $user)
+    {
+        return $this->initiatedMatches()
+                    ->where('target_user_id', $user->id)
+                    ->where('matched', true)
+                    ->exists();
     }
 
     /**

@@ -1,3 +1,6 @@
+<?php $iconVariant = $iconVariant ??= $attributes->pluck('icon:variant'); ?>
+<?php $iconTrailing = $iconTrailing ??= $attributes->pluck('icon:trailing'); ?>
+
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
 $__newAttributes = [];
@@ -6,6 +9,7 @@ $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([
     'iconTrailing' => null,
     'initials' => null,
     'chevron' => true,
+    'circle' => null,
     'avatar' => null,
     'name' => null,
 ]));
@@ -28,6 +32,7 @@ foreach (array_filter(([
     'iconTrailing' => null,
     'initials' => null,
     'chevron' => true,
+    'circle' => null,
     'avatar' => null,
     'name' => null,
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
@@ -43,6 +48,8 @@ foreach ($attributes->all() as $__key => $__value) {
 unset($__defined_vars); ?>
 
 <?php
+$iconTrailing = $iconTrailing ?? ($chevron ? 'chevron-down' : null);
+
 // If no initials are provided, we'll try to generate them from the name by taking the first letter of the first and last name...
 $initials ??= collect(explode(' ', $name ?? ''))
     ->map(fn($part) => Str::substr($part, 0, 1))
@@ -55,36 +62,51 @@ $iconClasses = Flux::classes('text-zinc-400 dark:text-white/80 group-hover:text-
     ->add($iconVariant === 'outline' ? 'size-4' : '');
 
 $classes = Flux::classes()
-    ->add('group flex items-center rounded-lg')
+    ->add('group flex items-center')
+    ->add('rounded-lg has-data-[circle=true]:rounded-full')
     ->add('[ui-dropdown>&]:w-full') // Without this, the "name" won't get truncated in a sidebar dropdown...
     ->add('p-1 hover:bg-zinc-800/5 dark:hover:bg-white/10')
     ;
 ?>
 
 <button type="button" <?php echo e($attributes->class($classes)); ?> data-flux-profile>
-    <div class="shrink-0 size-8 bg-zinc-200 rounded-sm overflow-hidden dark:bg-zinc-700">
-        <?php if (is_string($avatar)): ?>
-            <img src="<?php echo e($avatar); ?>" />
-        <?php elseif ($avatar): ?>
+    <div class="shrink-0">
+        <?php if ($avatar instanceof \Illuminate\View\ComponentSlot): ?>
             <?php echo e($avatar); ?>
 
         <?php else: ?>
-            <div class="w-full h-full flex items-center justify-center text-sm">
-                <?php echo e($initials); ?>
-
-            </div>
+            <?php if (isset($component)) { $__componentOriginal4dcb6e757bd07b9aa3bf7ee84cfc8690 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal4dcb6e757bd07b9aa3bf7ee84cfc8690 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::avatar.index','data' => ['attributes' => Flux::attributesAfter('avatar:', $attributes, ['src' => $avatar, 'size' => 'sm', 'circle' => $circle, 'name' => $name, 'initials' => $initials])]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::avatar'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['attributes' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(Flux::attributesAfter('avatar:', $attributes, ['src' => $avatar, 'size' => 'sm', 'circle' => $circle, 'name' => $name, 'initials' => $initials]))]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal4dcb6e757bd07b9aa3bf7ee84cfc8690)): ?>
+<?php $attributes = $__attributesOriginal4dcb6e757bd07b9aa3bf7ee84cfc8690; ?>
+<?php unset($__attributesOriginal4dcb6e757bd07b9aa3bf7ee84cfc8690); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal4dcb6e757bd07b9aa3bf7ee84cfc8690)): ?>
+<?php $component = $__componentOriginal4dcb6e757bd07b9aa3bf7ee84cfc8690; ?>
+<?php unset($__componentOriginal4dcb6e757bd07b9aa3bf7ee84cfc8690); ?>
+<?php endif; ?>
         <?php endif; ?>
     </div>
 
     <?php if ($name): ?>
-        <span class="ml-2 text-sm text-zinc-500 dark:text-white/80 group-hover:text-zinc-800 dark:group-hover:text-white font-medium truncate">
+        <span class="mx-2 text-sm text-zinc-500 dark:text-white/80 group-hover:text-zinc-800 dark:group-hover:text-white font-medium truncate">
             <?php echo e($name); ?>
 
         </span>
     <?php endif; ?>
 
     <?php if (is_string($iconTrailing) && $iconTrailing !== ''): ?>
-        <div class="shrink-0 ml-auto size-8 flex justify-center items-center">
+        <div class="shrink-0 ms-auto size-8 flex justify-center items-center">
             <?php if (isset($component)) { $__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::icon.index','data' => ['icon' => $iconTrailing,'variant' => $iconVariant,'class' => $iconClasses]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -109,29 +131,6 @@ $classes = Flux::classes()
     <?php elseif ($iconTrailing): ?>
         <?php echo e($iconTrailing); ?>
 
-    <?php elseif ($chevron): ?>
-        <div class="shrink-0 ml-auto size-8 flex justify-center items-center">
-            <?php if (isset($component)) { $__componentOriginal298ff21bbc41cebb188cbb18c6c11bc0 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal298ff21bbc41cebb188cbb18c6c11bc0 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::icon.chevron-down','data' => ['variant' => $iconVariant,'class' => $iconClasses]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('flux::icon.chevron-down'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['variant' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($iconVariant),'class' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($iconClasses)]); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal298ff21bbc41cebb188cbb18c6c11bc0)): ?>
-<?php $attributes = $__attributesOriginal298ff21bbc41cebb188cbb18c6c11bc0; ?>
-<?php unset($__attributesOriginal298ff21bbc41cebb188cbb18c6c11bc0); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal298ff21bbc41cebb188cbb18c6c11bc0)): ?>
-<?php $component = $__componentOriginal298ff21bbc41cebb188cbb18c6c11bc0; ?>
-<?php unset($__componentOriginal298ff21bbc41cebb188cbb18c6c11bc0); ?>
-<?php endif; ?>
-        </div>
     <?php endif; ?>
 </button>
 <?php /**PATH C:\xampp\htdocs\desiree2\vendor\livewire\flux\src/../stubs/resources/views/flux/profile.blade.php ENDPATH**/ ?>

@@ -1,3 +1,6 @@
+<?php $iconTrailing = $iconTrailing ??= $attributes->pluck('icon:trailing'); ?>
+<?php $iconVariant = $iconVariant ??= $attributes->pluck('icon:variant'); ?>
+
 <?php foreach (([ 'size' ]) as $__key => $__value) {
     $__consumeVariable = is_string($__key) ? $__key : $__value;
     $$__consumeVariable = is_string($__key) ? $__env->getConsumableComponentData($__key, $__value) : $__env->getConsumableComponentData($__value);

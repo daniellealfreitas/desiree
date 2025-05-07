@@ -2,7 +2,7 @@
 
 $__newAttributes = [];
 $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([
-    'name' => $attributes->whereStartsWith('wire:model')->first(),
+    'name' => null,
 ]));
 
 foreach ($attributes->all() as $__key => $__value) {
@@ -19,7 +19,7 @@ unset($__propNames);
 unset($__newAttributes);
 
 foreach (array_filter(([
-    'name' => $attributes->whereStartsWith('wire:model')->first(),
+    'name' => null,
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }
@@ -33,6 +33,14 @@ foreach ($attributes->all() as $__key => $__value) {
 unset($__defined_vars); ?>
 
 <?php
+// We only want to show the name attribute on the checkbox if it has been set
+// manually, but not if it has been set from the wire:model attribute...
+$showName = isset($name);
+
+if (! isset($name)) {
+    $name = $attributes->whereStartsWith('wire:model')->first();
+}
+
 $classes = Flux::classes()
     ->add('flex size-[1.125rem] rounded-[.3rem] mt-px outline-offset-2')
     ;
@@ -48,7 +56,7 @@ $classes = Flux::classes()
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['attributes' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($attributes)]); ?>
-    <ui-checkbox <?php echo e($attributes->class($classes)); ?> data-flux-control data-flux-checkbox>
+    <ui-checkbox <?php echo e($attributes->class($classes)); ?> <?php if($showName): ?> name="<?php echo e($name); ?>" <?php endif; ?> data-flux-control data-flux-checkbox>
         <?php if (isset($component)) { $__componentOriginal132809635db4ae0903491272a3f385e8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal132809635db4ae0903491272a3f385e8 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::checkbox.indicator','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

@@ -48,6 +48,7 @@ foreach ($attributes->all() as $__key => $__value) {
 unset($__defined_vars); ?>
 
 <?php
+
 $hrefForCurrentDetection = str($href)->startsWith(trim(config('app.url')))
     ? (string) str($href)->after(trim(config('app.url'), '/'))
     : $href;
@@ -66,7 +67,7 @@ $current = $current === null ? ($hrefForCurrentDetection
     : false) : $current;
 ?>
 
-<?php if ($as === 'div'): ?>
+<?php if ($as === 'div' && ! $href): ?>
     <div <?php echo e($attributes); ?>>
         <?php echo e($slot); ?>
 

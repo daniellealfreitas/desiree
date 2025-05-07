@@ -6,6 +6,10 @@ extract(Flux::forwardedAttributes($attributes, [
 ]));
 ?>
 
+<?php $tooltipPosition = $tooltipPosition ??= $attributes->pluck('tooltip:position'); ?>
+<?php $tooltipKbd = $tooltipKbd ??= $attributes->pluck('tooltip:kbd'); ?>
+<?php $tooltip = $tooltip ??= $attributes->pluck('tooltip'); ?>
+
 <?php $attributes ??= new \Illuminate\View\ComponentAttributeBag;
 
 $__newAttributes = [];

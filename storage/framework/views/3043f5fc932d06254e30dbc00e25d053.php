@@ -50,11 +50,11 @@ if ($stashable) {
     $attributes = $attributes->merge([
         'x-bind:data-stashed' => '! screenLg',
         'x-resize.document' => 'screenLg = window.innerWidth >= 1024',
-        'x-init' => '$el.classList.add(\'-translate-x-full\'); $el.removeAttribute(\'data-mobile-cloak\'); $el.classList.add(\'transition-transform\')',
+        'x-init' => '$el.classList.add(\'-translate-x-full\', \'rtl:translate-x-full\'); $el.removeAttribute(\'data-mobile-cloak\'); $el.classList.add(\'transition-transform\')',
     ])->class([
         'max-lg:data-mobile-cloak:hidden',
         '[[data-show-stashed-sidebar]_&]:translate-x-0! lg:translate-x-0!',
-        'z-20! data-stashed:left-0! data-stashed:fixed! data-stashed:top-0! data-stashed:min-h-dvh! data-stashed:max-h-dvh!'
+        'z-20! data-stashed:start-0! data-stashed:fixed! data-stashed:top-0! data-stashed:min-h-dvh! data-stashed:max-h-dvh!'
     ]);
 }
 ?>
@@ -86,5 +86,4 @@ if ($stashable) {
     <?php echo e($slot); ?>
 
 </div>
-
 <?php /**PATH C:\xampp\htdocs\desiree2\vendor\livewire\flux\src/../stubs/resources/views/flux/sidebar/index.blade.php ENDPATH**/ ?>

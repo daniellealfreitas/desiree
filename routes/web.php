@@ -24,6 +24,7 @@ use App\Livewire\Messages;
 use App\Livewire\UserPointsHistory;
 use App\Models\Message;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\LocationController;
 
 Route::get('/', function () {
     return view('home');
@@ -64,6 +65,26 @@ Route::view('feed_videos', 'feed_videos')
     ->name('feed_videos');
 
 
+// Rotas de eventos
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/eventos', [App\Http\Controllers\EventController::class, 'index'])->name('events.index');
+    Route::get('/eventos/{slug}', [App\Http\Controllers\EventController::class, 'show'])->name('events.show');
+    Route::post('/eventos/{event}/registrar', [App\Http\Controllers\EventAttendeeController::class, 'register'])->name('events.register');
+    Route::get('/eventos/{event}/pagamento/sucesso', [App\Http\Controllers\EventAttendeeController::class, 'paymentSuccess'])->name('events.payment.success');
+    Route::get('/eventos/{event}/pagamento/cancelar', [App\Http\Controllers\EventAttendeeController::class, 'paymentCancel'])->name('events.payment.cancel');
+    Route::post('/eventos/{event}/cancelar', [App\Http\Controllers\EventAttendeeController::class, 'cancel'])->name('events.cancel');
+});
+
+// Rotas de administração de eventos
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/eventos/criar', [App\Http\Controllers\EventController::class, 'create'])->name('events.create');
+    Route::post('/eventos', [App\Http\Controllers\EventController::class, 'store'])->name('events.store');
+    Route::get('/eventos/{event}/editar', [App\Http\Controllers\EventController::class, 'edit'])->name('events.edit');
+    Route::put('/eventos/{event}', [App\Http\Controllers\EventController::class, 'update'])->name('events.update');
+    Route::delete('/eventos/{event}', [App\Http\Controllers\EventController::class, 'destroy'])->name('events.destroy');
+    Route::post('/eventos/{event}/participantes/{attendee}/check-in', [App\Http\Controllers\EventAttendeeController::class, 'checkIn'])->name('events.attendee.check-in');
+});
+
 Route::view('programacao', 'programacao')
     ->middleware(['auth', 'verified'])
     ->name('programacao');
@@ -71,10 +92,38 @@ Route::view('programacao', 'programacao')
 
 // Radar routes
 Route::view('/radar', 'radar')->name('radar')->middleware('auth');
+Route::post('/update-user-location', [LocationController::class, 'updateLocation'])->middleware('auth');
 
-Route::view('grupos', 'grupos')
-    ->middleware(['auth', 'verified'])
-    ->name('grupos');
+// Rotas de grupos
+Route::prefix('grupos')->name('grupos.')->middleware(['auth', 'verified'])->group(function () {
+    Route::get('/', [App\Http\Controllers\GroupController::class, 'index'])->name('index');
+    Route::get('/criar', function () {
+        return view('groups.create');
+    })->name('create');
+    Route::post('/', [App\Http\Controllers\GroupController::class, 'store'])->name('store');
+    Route::get('/{group:slug}', [App\Http\Controllers\GroupController::class, 'show'])->name('show');
+    Route::get('/{group:slug}/editar', [App\Http\Controllers\GroupController::class, 'edit'])->name('edit');
+    Route::put('/{group}', [App\Http\Controllers\GroupController::class, 'update'])->name('update');
+    Route::delete('/{group}', [App\Http\Controllers\GroupController::class, 'destroy'])->name('destroy');
+
+    // Rotas de membros
+    Route::get('/{group:slug}/membros', [App\Http\Controllers\GroupMemberController::class, 'index'])->name('members.index');
+    Route::post('/{group}/membros/{user}/aprovar', [App\Http\Controllers\GroupMemberController::class, 'approve'])->name('members.approve');
+    Route::post('/{group}/membros/{user}/rejeitar', [App\Http\Controllers\GroupMemberController::class, 'reject'])->name('members.reject');
+    Route::post('/{group}/membros/{user}/remover', [App\Http\Controllers\GroupMemberController::class, 'remove'])->name('members.remove');
+    Route::post('/{group}/membros/{user}/alterar-funcao', [App\Http\Controllers\GroupMemberController::class, 'changeRole'])->name('members.change-role');
+
+    // Rotas de convites
+    Route::get('/convites', [App\Http\Controllers\GroupInvitationController::class, 'index'])->name('invitations.index');
+    Route::post('/{group}/convidar', [App\Http\Controllers\GroupInvitationController::class, 'store'])->name('invitations.store');
+    Route::put('/convites/{invitation}/aceitar', [App\Http\Controllers\GroupInvitationController::class, 'accept'])->name('invitations.accept');
+    Route::put('/convites/{invitation}/recusar', [App\Http\Controllers\GroupInvitationController::class, 'decline'])->name('invitations.decline');
+    Route::delete('/convites/{invitation}/cancelar', [App\Http\Controllers\GroupInvitationController::class, 'cancel'])->name('invitations.cancel');
+
+    // Rotas de ações
+    Route::post('/{group}/entrar', [App\Http\Controllers\GroupController::class, 'join'])->name('join');
+    Route::post('/{group}/sair', [App\Http\Controllers\GroupController::class, 'leave'])->name('leave');
+});
 
 
 Route::view('bate_papo', 'bate_papo')
@@ -127,6 +176,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/cupons', App\Livewire\Admin\CouponManager::class)->name('admin.coupons');
     Route::get('/usuarios', App\Livewire\Admin\UserManager::class)->name('admin.users');
     Route::get('/configuracoes', App\Livewire\Admin\Settings::class)->name('admin.settings');
+    Route::get('/eventos', App\Livewire\Admin\EventManager::class)->name('admin.events');
 });
 
 

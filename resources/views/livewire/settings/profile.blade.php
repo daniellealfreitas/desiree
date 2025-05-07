@@ -15,7 +15,7 @@ new class extends Component {
     public string $bio = '';
     public string $aniversario = '';
     public string $sexo = '';
-    public string $role = ''; 
+    public string $role = '';
     public bool $privado = false;
     public $states = [];
     public $cities = [];
@@ -52,7 +52,7 @@ new class extends Component {
     {
         $this->cities = $stateId ? City::where('state_id', $stateId)->orderBy('name', 'asc')->get() : [];
         $this->selectedCity = null;
-        
+
         // Atualiza o state_id do usuário
         $user = Auth::user();
         $user->state_id = $stateId;
@@ -92,11 +92,20 @@ new class extends Component {
             'privado' => ['boolean'],
             'selectedState' => ['nullable', 'exists:states,id'],
             'selectedCity' => ['nullable', 'exists:cities,id'],
-            'latitude' => ['nullable', 'string'],
-            'longitude' => ['nullable', 'string'],
+            'latitude' => ['nullable', 'numeric', 'min:-90', 'max:90'],
+            'longitude' => ['nullable', 'numeric', 'min:-180', 'max:180'],
             // Adiciona validação para role apenas se for admin
             'role' => [Auth::user()->role === 'admin' ? 'required' : 'nullable', 'in:admin,vip,visitante'],
         ]);
+
+        // Converter latitude e longitude para float
+        if (isset($validated['latitude']) && $validated['latitude'] !== null) {
+            $validated['latitude'] = (float) $validated['latitude'];
+        }
+
+        if (isset($validated['longitude']) && $validated['longitude'] !== null) {
+            $validated['longitude'] = (float) $validated['longitude'];
+        }
 
         $user->fill($validated);
 
@@ -139,7 +148,7 @@ new class extends Component {
     <x-settings.layout :heading="__('Perfil')" :subheading="__('Editar suas informações pessoais')">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
             <flux:input wire:model="name" :label="__('Nome')" type="text" required autofocus autocomplete="name" />
-            
+
             <flux:input wire:model="username" :label="__('Nome de usuário')" type="text" required autocomplete="username" />
 
             <div>
@@ -204,7 +213,7 @@ new class extends Component {
             @else
                 <div class="mb-4">
                     <flux:label>{{ __('Tipo de usuário') }}</flux:label>
-                    
+
                     <flux:input wire:model="role" readonly variant="filled" value="{{ auth()->user()->role }}"   />
                 </div>
             @endif
@@ -215,15 +224,114 @@ new class extends Component {
                 <flux:error name="privado" />
             </flux:field>
 
-            <flux:input type="text"  wire:model="latitude"  />
-            <flux:input type="text" wire:model="longitude" />
+            <flux:field :label="__('Localização')" help="Sua localização é atualizada automaticamente quando você permite o acesso no navegador.">
+                <div class="grid grid-cols-2 gap-4">
+                    <flux:input type="text" wire:model="latitude" :label="__('Latitude')" />
+                    <flux:input type="text" wire:model="longitude" :label="__('Longitude')" />
+                </div>
 
-            <div class="flex items-center gap-2 mb-4">
-                <button type="button" id="get-location-btn" class="px-3 py-1 bg-blue-500 text-white rounded">
-                    {{ __('Usar minha localização') }}
-                </button>
-                <span id="location-status" class="text-sm text-gray-500"></span>
-            </div>
+                <div class="flex items-center gap-2 mt-2">
+                    <button type="button" id="get-location-btn" class="px-3 py-1 bg-blue-500 text-white rounded flex items-center">
+                        <x-flux::icon icon="map-pin" class="w-4 h-4 mr-1" />
+                        {{ __('Atualizar agora') }}
+                    </button>
+                    <span id="location-status" class="text-sm text-gray-500"></span>
+                </div>
+
+                <div class="mt-2 text-xs text-gray-500">
+                    <p>Sua localização é usada para encontrar pessoas próximas no radar.</p>
+                    <p>A localização é atualizada automaticamente quando você usa o aplicativo.</p>
+                </div>
+            </flux:field>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const getLocationBtn = document.getElementById('get-location-btn');
+                    const locationStatus = document.getElementById('location-status');
+
+                    // Função para obter a localização
+                    function getLocation() {
+                        if (!navigator.geolocation) {
+                            locationStatus.textContent = 'Geolocalização não é suportada pelo seu navegador';
+                            return;
+                        }
+
+                        locationStatus.textContent = 'Obtendo sua localização...';
+                        locationStatus.className = 'text-sm text-blue-500';
+
+                        navigator.geolocation.getCurrentPosition(
+                            // Success callback
+                            function(position) {
+                                // Garantir que os valores são numéricos
+                                const latitude = parseFloat(position.coords.latitude);
+                                const longitude = parseFloat(position.coords.longitude);
+
+                                // Validar se os valores são válidos
+                                if (isNaN(latitude) || isNaN(longitude)) {
+                                    locationStatus.textContent = 'Coordenadas inválidas recebidas do navegador';
+                                    locationStatus.className = 'text-sm text-red-500';
+                                    return;
+                                }
+
+                                // Validar se os valores estão dentro de limites razoáveis
+                                if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+                                    locationStatus.textContent = 'Coordenadas fora dos limites válidos';
+                                    locationStatus.className = 'text-sm text-red-500';
+                                    return;
+                                }
+
+                                // Use Livewire to update the component properties
+                                @this.set('latitude', latitude.toFixed(7));
+                                @this.set('longitude', longitude.toFixed(7));
+
+                                locationStatus.textContent = 'Localização obtida com sucesso!';
+                                locationStatus.className = 'text-sm text-green-500';
+
+                                // Salvar as coordenadas no localStorage para uso pelo script de geolocalização automática
+                                localStorage.setItem('userCoords', JSON.stringify({
+                                    latitude: parseFloat(latitude),
+                                    longitude: parseFloat(longitude),
+                                    timestamp: Date.now()
+                                }));
+                            },
+                            // Error callback
+                            function(error) {
+                                let errorMessage = 'Erro ao obter localização';
+
+                                switch(error.code) {
+                                    case error.PERMISSION_DENIED:
+                                        errorMessage = 'Permissão de localização negada';
+                                        break;
+                                    case error.POSITION_UNAVAILABLE:
+                                        errorMessage = 'Informação de localização indisponível';
+                                        break;
+                                    case error.TIMEOUT:
+                                        errorMessage = 'Tempo esgotado ao obter localização';
+                                        break;
+                                }
+
+                                locationStatus.textContent = errorMessage;
+                                locationStatus.className = 'text-sm text-red-500';
+                            },
+                            // Options
+                            {
+                                enableHighAccuracy: true,
+                                timeout: 10000,
+                                maximumAge: 0
+                            }
+                        );
+                    }
+
+                    // Adicionar evento de clique ao botão
+                    getLocationBtn.addEventListener('click', getLocation);
+
+                    // Verificar se já temos coordenadas salvas
+                    if (!@this.latitude || !@this.longitude) {
+                        // Se não temos coordenadas, tentar obter automaticamente
+                        getLocation();
+                    }
+                });
+            </script>
 
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-end">
