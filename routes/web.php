@@ -141,6 +141,16 @@ Route::view('renovar-vip', 'renovar-vip')
     ->middleware(['auth', 'verified'])
     ->name('renovar-vip');
 
+// Rotas de assinatura VIP
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::post('/vip/checkout', [App\Http\Controllers\VipSubscriptionController::class, 'createCheckoutSession'])->name('vip.checkout');
+    Route::get('/vip/pagamento/sucesso/{subscription}', [App\Http\Controllers\VipSubscriptionController::class, 'paymentSuccess'])->name('vip.payment.success');
+    Route::get('/vip/pagamento/cancelar/{subscription}', [App\Http\Controllers\VipSubscriptionController::class, 'paymentCancel'])->name('vip.payment.cancel');
+});
+
+// Rota de webhook do Stripe
+Route::post('/stripe/webhook', [App\Http\Controllers\StripeWebhookController::class, 'handleWebhook']);
+
 Route::view('mindmap', 'mindmap')
     ->middleware(['auth', 'verified'])
     ->name('mindmap');

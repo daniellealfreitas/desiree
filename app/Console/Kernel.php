@@ -14,12 +14,15 @@ class Kernel extends ConsoleKernel
     {
         // Reset pontos diários à meia-noite
         $schedule->command('points:reset daily')->dailyAt('00:00');
-        
+
         // Reset pontos semanais toda segunda-feira à meia-noite
         $schedule->command('points:reset weekly')->weeklyOn(1, '00:00');
-        
+
         // Reset pontos mensais no primeiro dia do mês à meia-noite
         $schedule->command('points:reset monthly')->monthlyOn(1, '00:00');
+
+        // Verificar assinaturas VIP expiradas diariamente à 1h da manhã
+        $schedule->command('vip:check-subscriptions')->dailyAt('01:00');
     }
 
     /**

@@ -119,7 +119,16 @@ class SearchForm extends Component
             }
         }
 
-        $this->results = $query->get();
+        // Eager load relationships needed for the user cards
+        $this->results = $query->with([
+            'userPhotos',
+            'userCoverPhotos',
+            'posts',
+            'followers',
+            'following',
+            'city',
+            'state'
+        ])->get();
     }
 
     public function render()
