@@ -60,7 +60,14 @@
                     <input wire:model="image" id="image" type="file" accept="image/*" class="hidden">
                 </label>
                 <!--[if BLOCK]><![endif]--><?php if($image): ?>
-                    <span class="text-sm text-gray-500"><?php echo e($image->getClientOriginalName()); ?></span>
+                    <span class="text-sm text-gray-500">
+                        <!--[if BLOCK]><![endif]--><?php if(is_object($image) && method_exists($image, 'getClientOriginalName')): ?>
+                            <?php echo e($image->getClientOriginalName()); ?>
+
+                        <?php else: ?>
+                            Imagem selecionada
+                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                    </span>
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
 
                 <label for="video" class="cursor-pointer flex items-center text-gray-500">
@@ -87,7 +94,14 @@
                     <input wire:model="video" id="video" type="file" accept="video/*" class="hidden">
                 </label>
                 <!--[if BLOCK]><![endif]--><?php if($video): ?>
-                    <span class="text-sm text-gray-500"><?php echo e($video->getClientOriginalName()); ?></span>
+                    <span class="text-sm text-gray-500">
+                        <!--[if BLOCK]><![endif]--><?php if(is_object($video) && method_exists($video, 'getClientOriginalName')): ?>
+                            <?php echo e($video->getClientOriginalName()); ?>
+
+                        <?php else: ?>
+                            Vídeo selecionado
+                        <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                    </span>
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
             <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg disabled:opacity-50"

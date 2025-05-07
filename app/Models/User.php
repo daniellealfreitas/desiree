@@ -31,18 +31,18 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class User extends Authenticatable
 {
-    
+
     use HasFactory, Notifiable, Billable;
 
 
     protected $fillable = [
-        'name', 
-        'username', 
-        'email', 
+        'name',
+        'username',
+        'email',
         'password',
-        'city_id', 
-        'state_id', 
-        'latitude', 
+        'city_id',
+        'state_id',
+        'latitude',
         'longitude',
         'sexo',
         'aniversario',
@@ -74,7 +74,7 @@ class User extends Authenticatable
         return $this->hasMany(Conto::class);
     }
 
-  
+
     // Método para atualizar o nível do usuário com base nos pontos
     public function updateLevel() {
         $points = $this->points ? $this->points->points : 0;
@@ -217,6 +217,30 @@ class User extends Authenticatable
     public function wishlistedProducts()
     {
         return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
+    }
+
+    /**
+     * Mensagens enviadas pelo usuário
+     */
+    public function sentMessages()
+    {
+        return $this->hasMany(Message::class, 'sender_id');
+    }
+
+    /**
+     * Mensagens recebidas pelo usuário
+     */
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class, 'receiver_id');
+    }
+
+    /**
+     * Retorna o número de mensagens não lidas
+     */
+    public function unreadMessagesCount()
+    {
+        return $this->receivedMessages()->whereNull('read_at')->count();
     }
 
     /**

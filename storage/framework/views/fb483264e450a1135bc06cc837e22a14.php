@@ -54,11 +54,24 @@
 <?php $component->withAttributes(['wire:click' => 'markAsRead('.e($notification->id).')','class' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($notification->read ? 'opacity-75' : ''),'href' => '#']); ?>
                     <!--[if BLOCK]><![endif]--><?php if($notification->type === 'like'): ?>
                         <div class="flex items-center gap-2">
-                            <img src="<?php echo e($notification->sender->userPhotos->first() ? asset($notification->sender->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')); ?>" 
+                            <img src="<?php echo e($notification->sender->userPhotos->first() ? asset($notification->sender->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')); ?>"
                                  class="w-8 h-8 rounded-full">
                             <div class="text-sm">
                                 <span class="font-semibold"><?php echo e($notification->sender->name); ?></span>
                                 curtiu sua postagem
+                                <div class="text-xs text-gray-500">
+                                    <?php echo e($notification->created_at->diffForHumans()); ?>
+
+                                </div>
+                            </div>
+                        </div>
+                    <?php elseif($notification->type === 'message'): ?>
+                        <div class="flex items-center gap-2">
+                            <img src="<?php echo e($notification->sender->userPhotos->first() ? asset($notification->sender->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')); ?>"
+                                 class="w-8 h-8 rounded-full">
+                            <div class="text-sm">
+                                <span class="font-semibold"><?php echo e($notification->sender->name); ?></span>
+                                enviou uma mensagem para você
                                 <div class="text-xs text-gray-500">
                                     <?php echo e($notification->created_at->diffForHumans()); ?>
 

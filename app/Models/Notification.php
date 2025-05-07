@@ -11,6 +11,7 @@ class Notification extends Model
         'sender_id',
         'type',
         'post_id',
+        'message',
         'read'
     ];
 

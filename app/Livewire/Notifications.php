@@ -35,6 +35,11 @@ class Notifications extends Component
         if ($notification && !$notification->read) {
             $notification->update(['read' => true]);
             $this->loadNotifications();
+
+            // If it's a message notification, redirect to messages page
+            if ($notification->type === 'message') {
+                return redirect()->route('caixa_de_mensagens');
+            }
         }
     }
 

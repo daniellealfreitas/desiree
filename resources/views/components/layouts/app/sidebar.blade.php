@@ -14,7 +14,7 @@
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" />
             <flux:navbar class="-mb-px max-lg:hidden">
                 <flux:navbar.item icon="map-pin" :href="route('radar')" >Radar</flux:navbar.item>
-                <flux:navbar.item icon="inbox" badge="12" :href="route('messages.index')">Mensagens</flux:navbar.item>
+                <flux:navbar.item icon="inbox" badge="{{ auth()->user()->unreadMessagesCount() }}" :href="route('caixa_de_mensagens')">Mensagens</flux:navbar.item>
                 <livewire:follow-request-notifications />
                 <livewire:notifications />
             </flux:navbar>
@@ -134,7 +134,7 @@
                     <flux:navlist.item icon="chat-bubble-left-right" :href="route('bate_papo')" :current="request()->routeIs('bate_papo')" wire:navigate>
                         {{ __('Bate Papo') }}
                     </flux:navlist.item>
-                    <flux:navlist.item icon="inbox" badge="12" :href="route('caixa_de_mensagens')" :current="request()->routeIs('caixa_de_mensagens')" wire:navigate>
+                    <flux:navlist.item icon="inbox" badge="{{ auth()->user()->unreadMessagesCount() }}" :href="route('caixa_de_mensagens')" :current="request()->routeIs('caixa_de_mensagens')" wire:navigate>
                         {{ __('Caixa de Mensagens') }}
                     </flux:navlist.item>
 

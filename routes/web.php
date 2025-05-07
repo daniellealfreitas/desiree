@@ -82,7 +82,9 @@ Route::view('bate_papo', 'bate_papo')
     ->name('bate_papo');
 
 
-Route::view('caixa_de_mensagens', 'caixa_de_mensagens')
+Route::get('caixa_de_mensagens', function() {
+    return view('caixa_de_mensagens');
+})
     ->middleware(['auth', 'verified'])
     ->name('caixa_de_mensagens');
 

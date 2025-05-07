@@ -71,14 +71,14 @@
 <?php endif; ?>
                 <?php if (isset($component)) { $__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.item','data' => ['icon' => 'inbox','badge' => '12','href' => route('messages.index')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.item','data' => ['icon' => 'inbox','badge' => ''.e(auth()->user()->unreadMessagesCount()).'','href' => route('caixa_de_mensagens')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::navbar.item'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['icon' => 'inbox','badge' => '12','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('messages.index'))]); ?>Mensagens <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['icon' => 'inbox','badge' => ''.e(auth()->user()->unreadMessagesCount()).'','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('caixa_de_mensagens'))]); ?>Mensagens <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48)): ?>
 <?php $attributes = $__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48; ?>
@@ -1067,14 +1067,14 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'inbox','badge' => '12','href' => route('caixa_de_mensagens'),'current' => request()->routeIs('caixa_de_mensagens'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'inbox','badge' => ''.e(auth()->user()->unreadMessagesCount()).'','href' => route('caixa_de_mensagens'),'current' => request()->routeIs('caixa_de_mensagens'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::navlist.item'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['icon' => 'inbox','badge' => '12','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('caixa_de_mensagens')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('caixa_de_mensagens')),'wire:navigate' => true]); ?>
+<?php $component->withAttributes(['icon' => 'inbox','badge' => ''.e(auth()->user()->unreadMessagesCount()).'','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('caixa_de_mensagens')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('caixa_de_mensagens')),'wire:navigate' => true]); ?>
                         <?php echo e(__('Caixa de Mensagens')); ?>
 
                      <?php echo $__env->renderComponent(); ?>
