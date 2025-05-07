@@ -238,6 +238,9 @@
 
         @fluxScripts
 
+        <!-- Componente de notificação de status de amigos -->
+        <livewire:friend-status-notifier />
+
         <script>
             // Function to trigger confetti animation
             window.triggerConfetti = function() {

@@ -136,25 +136,39 @@ class Messages extends Component
             return;
         }
 
+        // Verificar se o destinatário está em modo "Não Perturbe"
+        $receiver = User::find($this->selectedConversation);
+        $isDnd = $receiver && $receiver->presence_status === 'dnd';
+
         $message = Message::create([
             'sender_id' => Auth::id(),
             'receiver_id' => $this->selectedConversation,
             'body' => $this->messageBody,
         ]);
 
-        // Create notification for the recipient
-        Notification::create([
-            'user_id' => $this->selectedConversation,
-            'sender_id' => Auth::id(),
-            'type' => 'message',
-            'message' => 'Você recebeu uma nova mensagem'
-        ]);
+        // Create notification for the recipient apenas se não estiver em modo "Não Perturbe"
+        if (!$isDnd) {
+            Notification::create([
+                'user_id' => $this->selectedConversation,
+                'sender_id' => Auth::id(),
+                'type' => 'message',
+                'message' => 'Você recebeu uma nova mensagem'
+            ]);
+        }
 
         $this->messageBody = '';
         $this->loadConversations();
 
         // Dispatch event for real-time updates
         $this->dispatch('messageReceived');
+
+        // Mostrar aviso se o usuário estiver em modo "Não Perturbe"
+        if ($isDnd) {
+            $this->dispatch('notify', [
+                'message' => $receiver->name . ' está em modo "Não Perturbe" e pode não responder imediatamente.',
+                'type' => 'warning'
+            ]);
+        }
     }
 
     public function startNewConversation($userId)

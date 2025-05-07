@@ -14,10 +14,13 @@ class UserFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
+            'username' => $this->faker->unique()->userName(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => bcrypt('password'), // Default password
             'remember_token' => Str::random(10),
+            'status' => $this->faker->randomElement(['online', 'away', 'dnd', 'offline']),
+            'last_seen' => now(),
         ];
     }
 }

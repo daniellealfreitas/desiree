@@ -12,7 +12,7 @@
         <div id="profile_header" class="relative w-full">
             
             <div class="w-full h-80 bg-cover bg-center" style="background-image: url('<?php echo e($this->cover() ?? asset('images/default-banner.jpg')); ?>');"></div>
-            
+
             <div class="absolute left-8 top-1/2 -translate-y-1/2 flex items-center gap-6">
                 <div class="relative w-48 h-48 rounded-full border-4 border-white overflow-hidden shadow-xl">
                     <img src="<?php echo e($this->avatar() ?? asset('images/default-avatar.jpg')); ?>" class="w-full h-full object-cover" /> <?php
@@ -39,35 +39,22 @@ if (isset($__slots)) unset($__slots);
 
                     </a>
                     
-                    <div class="mt-2">
-                        <!--[if BLOCK]><![endif]--><?php switch($userStatus):
-                            case ('online'): ?>
-                                <span class="text-green-400 font-semibold">● Online</span>
-                                <?php break; ?>
-                            <?php case ('away'): ?>
-                                <span class="text-yellow-400 font-semibold">● Ausente</span>
-                                <?php break; ?>
-                            <?php default: ?>
-                                <span class="text-gray-400 font-semibold">● Offline</span>
-                                <!--[if BLOCK]><![endif]--><?php if($user->last_seen): ?>
-                                    <span class="small block text-xs text-slate-200 opacity-80">Visto <?php echo e($user->last_seen->diffForHumans()); ?></span>
-                                <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
-                        <?php endswitch; ?><!--[if ENDBLOCK]><![endif]-->
-                    </div>
-                    
-                    <!--[if BLOCK]><![endif]--><?php if($user->id === Auth::id()): ?>
-                        <div class="mt-2">
-                            <label for="statusSelect" class="font-semibold text-sm text-slate-100 mr-2">Status:</label>
-                            <select id="statusSelect"
-                                    wire:model.defer="userStatus"
-                                    wire:change="updateStatus"
-                                    class="rounded border-gray-300 px-2 py-1 text-xs dark:bg-gray-700 dark:text-white">
-                                <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $statusOptions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $label): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($key); ?>"><?php echo e($label); ?></option>
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
-                            </select>
-                        </div>
-                    <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
+                    <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-status-manager', ['user' => $user]);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-1', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
                 </div>
             </div>
         </div>
@@ -231,7 +218,7 @@ if (isset($__slots)) unset($__slots);
                         <?php echo e($followStatus[$user->id] ? 'Deixar de Seguir' : 'Seguir'); ?>
 
                     </button>
-                    
+
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
         </div>
@@ -244,7 +231,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('profile-progress-bar', ['username' => $user->username]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-1', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-2', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -348,7 +335,7 @@ if (isset($__slots)) unset($__slots);
 <?php unset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
 <?php endif; ?>
                     </div>
-                     
+
                     <div>
                         <h3 class="text-lg font-semibold mb-2">Interesses:</h3>
                         <div class="flex flex-wrap gap-2">
@@ -372,8 +359,8 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginal4cc377eda9b63b796b6668ee7832d023; ?>
 <?php unset($__componentOriginal4cc377eda9b63b796b6668ee7832d023); ?>
 <?php endif; ?>
-                                    
-                                
+
+
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                     </div>
@@ -400,15 +387,15 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginal4cc377eda9b63b796b6668ee7832d023; ?>
 <?php unset($__componentOriginal4cc377eda9b63b796b6668ee7832d023); ?>
 <?php endif; ?>
-                                
+
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                     </div>
                 </div>
             </section>
-            
-                
-            
+
+
+
             <section id="ranking" class="mt-6">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Ranking</h3>
                 <div class="flex flex-col gap-4">
@@ -422,7 +409,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('user-status-indicator', ['userId' => $rank->id]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-2', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-3', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -464,31 +451,24 @@ if (isset($__slots)) unset($__slots);
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                 </div>
             </section>
-            
-            <section id="skills" class="mt-6">
-                <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::text','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('flux::text'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes([]); ?>
-                    <ul>
-                        <li>17 cm de pica </li> Comprovado. por zilandaxxx, delilah, 
-                    </ul>
-                 <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
-<?php $attributes = $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
-<?php unset($__attributesOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e)): ?>
-<?php $component = $__componentOriginal0638ebfbd490c7a414275d493e14cb4e; ?>
-<?php unset($__componentOriginal0638ebfbd490c7a414275d493e14cb4e); ?>
-<?php endif; ?>
+
+            <section id="online-stats" class="mt-6">
+                <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-online-stats', ['user' => $user]);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-4', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
             </section>
         </div>
         <div class="w-2/3">
@@ -499,7 +479,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('create-post', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-3', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-5', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -515,7 +495,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('postfeed', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-4', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-6', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -526,7 +506,7 @@ unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
             </section>
-            
+
         </div>
     </div>
 </div>

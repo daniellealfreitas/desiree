@@ -12,7 +12,7 @@
         <div id="profile_header" class="relative w-full">
             {{-- Foto de capa Backgrond cover --}}
             <div class="w-full h-80 bg-cover bg-center" style="background-image: url('{{ $this->cover() ?? asset('images/default-banner.jpg') }}');"></div>
-            
+
             <div class="absolute left-8 top-1/2 -translate-y-1/2 flex items-center gap-6">
                 <div class="relative w-48 h-48 rounded-full border-4 border-white overflow-hidden shadow-xl">
                     <img src="{{ $this->avatar() ?? asset('images/default-avatar.jpg') }}" class="w-full h-full object-cover" /> <livewire:user-status-indicator :userId="$user->id" />
@@ -22,36 +22,8 @@
                     <a href="/{{ $user->username }}" class="text-lg text-gray-200 drop-shadow-md hover:underline">
                         {{ '@'. $user->username }}
                     </a>
-                    {{-- STATUS VISUAL --}}
-                    <div class="mt-2">
-                        @switch($userStatus)
-                            @case('online')
-                                <span class="text-green-400 font-semibold">● Online</span>
-                                @break
-                            @case('away')
-                                <span class="text-yellow-400 font-semibold">● Ausente</span>
-                                @break
-                            @default
-                                <span class="text-gray-400 font-semibold">● Offline</span>
-                                @if($user->last_seen)
-                                    <span class="small block text-xs text-slate-200 opacity-80">Visto {{ $user->last_seen->diffForHumans() }}</span>
-                                @endif
-                        @endswitch
-                    </div>
-                    {{-- SELECT PARA EDIÇÃO DINÂMICA (Só se for o próprio perfil) --}}
-                    @if($user->id === Auth::id())
-                        <div class="mt-2">
-                            <label for="statusSelect" class="font-semibold text-sm text-slate-100 mr-2">Status:</label>
-                            <select id="statusSelect"
-                                    wire:model.defer="userStatus"
-                                    wire:change="updateStatus"
-                                    class="rounded border-gray-300 px-2 py-1 text-xs dark:bg-gray-700 dark:text-white">
-                                @foreach($statusOptions as $key => $label)
-                                    <option value="{{ $key }}">{{ $label }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    @endif
+                    {{-- Novo componente de status do usuário --}}
+                    <livewire:user-status-manager :user="$user" />
                 </div>
             </div>
         </div>
@@ -85,7 +57,7 @@
                     <button wire:click="toggleFollow({{ $user->id }})" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs transition">
                         {{ $followStatus[$user->id] ? 'Deixar de Seguir' : 'Seguir' }}
                     </button>
-                    
+
                 @endif
             </div>
         </div>
@@ -111,14 +83,14 @@
                             <strong>Sobre mim:</strong> {{ $user->bio ?? 'Não especificado' }}
                         </flux:text>
                     </div>
-                     
+
                     <div>
                         <h3 class="text-lg font-semibold mb-2">Interesses:</h3>
                         <div class="flex flex-wrap gap-2">
                             @foreach($user->hobbies as $hobby)
                                 <flux:badge>{{ $hobby->nome }}</flux:badge>
-                                    
-                                
+
+
                             @endforeach
                         </div>
                     </div>
@@ -127,15 +99,15 @@
                         <div class="flex flex-wrap gap-2">
                             @foreach($user->procuras as $procura)
                                 <flux:badge>{{ $procura->nome }}</flux:badge>
-                                
+
                             @endforeach
                         </div>
                     </div>
                 </div>
             </section>
-            
-                
-            
+
+
+
             <section id="ranking" class="mt-6">
                 <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Ranking</h3>
                 <div class="flex flex-col gap-4">
@@ -158,13 +130,9 @@
                     @endforeach
                 </div>
             </section>
-            
-            <section id="skills" class="mt-6">
-                <flux:text>
-                    <ul>
-                        <li>17 cm de pica </li> Comprovado. por zilandaxxx, delilah, 
-                    </ul>
-                </flux:text>
+
+            <section id="online-stats" class="mt-6">
+                <livewire:user-online-stats :user="$user" />
             </section>
         </div>
         <div class="w-2/3">
@@ -172,7 +140,7 @@
                 <livewire:create-post />
                 <livewire:postfeed />
             </section>
-            
+
         </div>
     </div>
 </div>

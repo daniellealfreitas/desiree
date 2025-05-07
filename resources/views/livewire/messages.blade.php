@@ -29,7 +29,10 @@
                                         src="{{ $user->userPhotos->first() ? asset($user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
                                         class="w-10 h-10 rounded-full object-cover"
                                     >
-                                    <div class="absolute bottom-0 right-0 w-3 h-3 rounded-full {{ $user->presence_status === 'online' ? 'bg-green-500' : ($user->presence_status === 'away' ? 'bg-yellow-500' : 'bg-gray-500') }}"></div>
+                                    <div class="absolute bottom-0 right-0 w-3 h-3 rounded-full
+                                {{ $user->presence_status === 'online' ? 'bg-green-500 animate-pulse' :
+                                   ($user->presence_status === 'away' ? 'bg-yellow-500' :
+                                    ($user->presence_status === 'dnd' ? 'bg-red-600' : 'bg-gray-500')) }}"></div>
                                 </div>
                                 <div class="ml-3">
                                     <p class="font-medium">{{ $user->name }}</p>
@@ -97,12 +100,26 @@
                                 src="{{ $selectedUser->userPhotos->first() ? asset($selectedUser->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
                                 class="w-10 h-10 rounded-full object-cover"
                             >
-                            <div class="absolute bottom-0 right-0 w-3 h-3 rounded-full {{ $selectedUser->presence_status === 'online' ? 'bg-green-500' : ($selectedUser->presence_status === 'away' ? 'bg-yellow-500' : 'bg-gray-500') }}"></div>
+                            <div class="absolute bottom-0 right-0 w-3 h-3 rounded-full
+                                {{ $selectedUser->presence_status === 'online' ? 'bg-green-500 animate-pulse' :
+                                   ($selectedUser->presence_status === 'away' ? 'bg-yellow-500' :
+                                    ($selectedUser->presence_status === 'dnd' ? 'bg-red-600' : 'bg-gray-500')) }}"></div>
                         </div>
                         <div class="ml-3">
                             <p class="font-medium">{{ $selectedUser->name }}</p>
                             <p class="text-xs text-gray-500 dark:text-gray-400">
-                                {{ $selectedUser->presence_status === 'online' ? 'Online' : ($selectedUser->presence_status === 'away' ? 'Ausente' : 'Offline') }}
+                                @if($selectedUser->presence_status === 'online')
+                                    <span class="text-green-500">Online</span>
+                                @elseif($selectedUser->presence_status === 'away')
+                                    <span class="text-yellow-500">Ausente</span>
+                                @elseif($selectedUser->presence_status === 'dnd')
+                                    <span class="text-red-500">Não Perturbe</span>
+                                @else
+                                    <span class="text-gray-500">Offline</span>
+                                    @if($selectedUser->last_seen)
+                                        · Visto por último {{ $selectedUser->last_seen->diffForHumans() }}
+                                    @endif
+                                @endif
                             </p>
                         </div>
                     </div>

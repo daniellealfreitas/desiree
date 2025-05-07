@@ -276,16 +276,82 @@ class User extends Authenticatable
 
     /**
      * Accessor inteligente de status do usuário
+     * Determina o status real do usuário com base em seu status definido e última atividade
      */
     public function getPresenceStatusAttribute()
     {
+        // Se o status for definido manualmente como "dnd" (não perturbe), respeite isso
+        if ($this->status === 'dnd') {
+            return 'dnd';
+        }
+
+        // Se o status for definido manualmente como "away", respeite isso
         if ($this->status === 'away') {
             return 'away';
         }
-        if ($this->last_seen && $this->last_seen->diffInMinutes(now()) < 3) {
+
+        // Se o status for definido como "offline", respeite isso
+        if ($this->status === 'offline') {
+            return 'offline';
+        }
+
+        // Se o usuário estiver online mas não tiver atividade recente, considere-o offline
+        if (!$this->last_seen) {
+            return 'offline';
+        }
+
+        // Verifica se o usuário esteve ativo nos últimos 5 minutos
+        if ($this->last_seen->diffInMinutes(now()) < 5) {
             return 'online';
         }
+
+        // Se o usuário esteve ativo nos últimos 15 minutos, considere-o away
+        if ($this->last_seen->diffInMinutes(now()) < 15) {
+            return 'away';
+        }
+
+        // Caso contrário, considere-o offline
         return 'offline';
+    }
+
+    /**
+     * Verifica se o usuário está em modo "não perturbe"
+     */
+    public function isDoNotDisturb()
+    {
+        return $this->status === 'dnd';
+    }
+
+    /**
+     * Relacionamento com estatísticas de tempo online
+     */
+    public function onlineStats()
+    {
+        return $this->hasMany(UserOnlineStat::class);
+    }
+
+    /**
+     * Obter estatísticas de tempo online para hoje
+     */
+    public function getTodayOnlineStatsAttribute()
+    {
+        return UserOnlineStat::getOrCreateForToday($this->id);
+    }
+
+    /**
+     * Obter estatísticas de tempo online para a semana atual
+     */
+    public function getCurrentWeekOnlineStatsAttribute()
+    {
+        return UserOnlineStat::getCurrentWeekStats($this->id);
+    }
+
+    /**
+     * Obter estatísticas de tempo online para o mês atual
+     */
+    public function getCurrentMonthOnlineStatsAttribute()
+    {
+        return UserOnlineStat::getCurrentMonthStats($this->id);
     }
 
     /**

@@ -1618,6 +1618,24 @@ if (isset($__slots)) unset($__slots);
 <?php echo app('flux')->scripts(); ?>
 
 
+        <!-- Componente de notificação de status de amigos -->
+        <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('friend-status-notifier', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-2', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+
         <script>
             // Function to trigger confetti animation
             window.triggerConfetti = function() {

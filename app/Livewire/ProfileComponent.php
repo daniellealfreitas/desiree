@@ -15,19 +15,14 @@ class ProfileComponent extends Component
     public User $user;
     public array $followStatus = [];
     public $topUsers; // Add this property to store top users
-    public $userStatus; // Status for the select (real-time editing)
-    public $statusOptions = [
-        'online' => 'Online',
-        'away'   => 'Away',
-        'offline'=> 'Offline'
-    ];
+    // Removido o gerenciamento de status, agora feito pelo componente UserStatusManager
 
     public function mount(string $username)
     {
         $this->user = User::with(['followers', 'posts'])
             ->where('username', $username)
             ->firstOrFail();
-            
+
         $this->followStatus[$this->user->id] = $this->user->followers->contains(Auth::id());
 
         // Fetch top users ordered by ranking points
@@ -37,11 +32,11 @@ class ProfileComponent extends Component
         $this->topUsers->each(function ($user) {
             $user->avatar = $this->getAvatar($user->id);
         });
-        
+
         // Set the current user status
         $this->userStatus = $this->user->status;
     }
-    
+
     public function avatar()
     {
         $path = UserPhoto::where('user_id', $this->user->id)->latest()->value('photo_path');
@@ -56,13 +51,13 @@ class ProfileComponent extends Component
             ->value('photo_path');
         return $path ? Storage::url($path) : asset('images/default-avatar.jpg');
     }
-    
+
     public function cover()
     {
         $path = UserCoverPhoto::where('user_id', $this->user->id)->latest()->value('photo_path');
         return $path ? Storage::url($path) : null;
     }
-    
+
     public function toggleFollow($userId)
     {
         $user = User::find($userId);
@@ -75,63 +70,39 @@ class ProfileComponent extends Component
         }
     }
 
-    public function imagesCount(): int 
+    public function imagesCount(): int
     {
         return Post::where('user_id', $this->user->id)
             ->whereNotNull('image')
             ->count();
     }
 
-    public function postsCount(): int 
+    public function postsCount(): int
     {
         return Post::where('user_id', $this->user->id)->count();
     }
 
-    public function followingCount(): int 
+    public function followingCount(): int
     {
         return $this->user->following()->count();
     }
 
-    public function followersCount(): int 
+    public function followersCount(): int
     {
         return $this->user->followers()->count();
     }
-    
-    // Automatic polling to update status (and last_seen for user viewing their own profile)
+
+    // Função simplificada para atualizar dados do perfil
     public function refreshStatus()
     {
-        // Reload user for updated status/last_seen from database
-        $this->user->refresh(); // Ensures getting the latest value
-        $this->userStatus = $this->user->status;
-
-        // If the authenticated user is the profile owner, update last_seen/status
-        if (Auth::id() === $this->user->id) {
-            $this->user->update([
-                'last_seen' => now(),
-                'status'    => $this->userStatus // Maintains current status (avoids overwriting select)
-            ]);
-        }
-    }
-
-    // Quick status update via select in the view
-    public function updateStatus()
-    {
-        // Only the user themselves can change their status!
-        if (Auth::id() === $this->user->id) {
-            $this->user->status = $this->userStatus;
-            if ($this->userStatus === 'online') {
-                $this->user->last_seen = now(); // updated when coming back online
-            }
-            $this->user->save();
-        }
+        // Recarregar usuário para obter dados atualizados
+        $this->user->refresh();
     }
 
     public function render()
     {
         return view('livewire.profile', [
             'topUsers' => $this->topUsers, // Pass top users to the view
-            'userStatus' => $this->user->presence_status ?? $this->user->status,
-            'statusOptions' => $this->statusOptions
         ]);
     }
 }
