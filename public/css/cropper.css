@@ -289,3 +289,8 @@
 .cropper-disabled .cropper-point {
   cursor: not-allowed;
 }
+
+.cropper-canvas {
+  width: 800px !important;
+  height: 500px !important;
+}

@@ -44,8 +44,5 @@ class AppServiceProvider extends ServiceProvider
 
         // Componentes de loja
         Livewire::component('shop.mini-cart', \App\Livewire\Shop\MiniCart::class);
-
-        // Componentes de utilidades
-        Livewire::component('image-cropper-modal', \App\Livewire\ImageCropperModal::class);
     }
 }

@@ -88,7 +88,7 @@
 <?php $component = $__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48; ?>
 <?php unset($__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48); ?>
 <?php endif; ?>
-                
+
                 <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
@@ -1175,7 +1175,7 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
 <?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
 <?php endif; ?>
-            
+
                     <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'inbox','badge' => ''.e(auth()->user()->unreadMessagesCount()).'','href' => route('caixa_de_mensagens'),'current' => request()->routeIs('caixa_de_mensagens'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -1845,15 +1845,6 @@ if (isset($__slots)) unset($__slots);
                 }, 2000);
             };
 
-            // Add keyboard shortcut to trigger animations
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'F10') {
-                    // Trigger both animations when F10 is pressed
-                    window.triggerConfetti();
-                    window.triggerXpPopup(50); // Example: 50 XP
-                }
-            });
-
             // Listener para o evento reward-earned (usando a sintaxe do Livewire 3)
             document.addEventListener('livewire:initialized', () => {
                 // No Livewire 3, usamos Livewire.on em vez de Livewire.addEventListener
@@ -1861,54 +1852,11 @@ if (isset($__slots)) unset($__slots);
                     window.triggerConfetti();
                     window.triggerXpPopup(data.points);
                 });
-
-                // Adicionar listeners para eventos do carrinho
-                console.log('[Cart Fix] Adicionando listeners para eventos do carrinho');
-
-                // Listener para o evento add-to-cart
-                Livewire.on('add-to-cart', (data) => {
-                    console.log('[Cart Fix] Evento add-to-cart recebido:', data);
-                });
-
-                // Listener para o evento cart-updated
-                Livewire.on('cart-updated', () => {
-                    console.log('[Cart Fix] Evento cart-updated recebido');
-                });
             });
         </script>
-
-        <!-- Scripts de correção para o carrinho (temporariamente desativados para depuração) -->
-        <!-- <script src="<?php echo e(asset('js/cart-events-fix.js')); ?>"></script> -->
-        <!-- <script src="<?php echo e(asset('js/direct-cart-handler.js')); ?>"></script> -->
 
         <!-- CSRF Token para requisições AJAX -->
         <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-
-        <!-- Debug para o carrinho -->
-        <script>
-            console.log('[Cart Debug] Scripts de correção para o carrinho desativados para depuração');
-
-            // Adicionar listener para eventos do Livewire
-            document.addEventListener('livewire:initialized', () => {
-                console.log('[Cart Debug] Livewire inicializado, adicionando listeners para depuração');
-
-                // Listener para o evento add-to-cart
-                Livewire.on('add-to-cart', (data) => {
-                    console.log('[Cart Debug] Evento add-to-cart recebido:', data);
-                });
-
-                // Listener para o evento cart-updated
-                Livewire.on('cart-updated', () => {
-                    console.log('[Cart Debug] Evento cart-updated recebido');
-
-                    // Forçar atualização da página após 1 segundo
-                    setTimeout(() => {
-                        console.log('[Cart Debug] Atualizando a página para refletir as mudanças no carrinho');
-                        window.location.reload();
-                    }, 1000);
-                });
-            });
-        </script>
     </body>
 </html>
 <?php /**PATH C:\xampp\htdocs\desiree2\resources\views/components/layouts/app/sidebar.blade.php ENDPATH**/ ?>

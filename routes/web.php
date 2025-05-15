@@ -208,9 +208,7 @@ Route::middleware(['auth'])->prefix('carteira')->group(function () {
 
 // Rotas de exemplos
 Route::middleware(['auth'])->prefix('examples')->group(function () {
-    Route::get('/image-cropper', function () {
-        return view('examples.image-cropper-example');
-    })->name('examples.image-cropper');
+    // Exemplos removidos
 });
 
 // Rotas de administração

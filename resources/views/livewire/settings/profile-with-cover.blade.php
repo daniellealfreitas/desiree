@@ -6,218 +6,171 @@ use Illuminate\Support\Facades\Log;
 use Livewire\Volt\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Laravel\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 new class extends Component {
     use WithFileUploads;
 
-    public $cover = null;
-    public $showCropperModal = false;
-    public $tempImagePath = null;
+    public $cover;
+    public $showCropper = false;
     public $cropData = [
         'x' => 0,
         'y' => 0,
         'width' => 0,
         'height' => 0
     ];
-
-    // Garantir que o modal não seja aberto automaticamente ao carregar a página
-    public function mount()
-    {
-        $this->showCropperModal = false;
-        $this->tempImagePath = null;
-        $this->cropData = [
-            'x' => 0,
-            'y' => 0,
-            'width' => 0,
-            'height' => 0
-        ];
-    }
-
-    // Observador para abrir o modal automaticamente quando uma imagem for selecionada
-    public function updatedCover()
-    {
-        // Só executa o upload para recorte se uma imagem foi realmente selecionada
-        if ($this->cover && !$this->showCropperModal) {
-            $this->uploadForCropping();
-        }
-    }
-
-    /**
-     * Upload da imagem para recorte
-     */
-    public function uploadForCropping(): void
-    {
-        try {
-            $validated = $this->validate([
-                'cover' => ['required', 'image', 'mimes:jpg,png', 'max:5120'], // Permite JPG/PNG até 5MB
-            ]);
-
-            if ($this->cover) {
-                // Armazena o arquivo temporariamente e obtém o caminho
-                $this->tempImagePath = $this->cover->store('temp', 'public');
-
-                if (!$this->tempImagePath) {
-                    throw new \Exception('Falha ao armazenar a imagem temporária.');
-                }
-
-                // Mostra o modal com o cropper
-                $this->showCropperModal = true;
-            }
-        } catch (\Throwable $e) {
-            Log::error('Erro ao fazer upload da imagem para recorte: ' . $e->getMessage(), [
-                'user_id' => Auth::id(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            session()->flash('error', 'Ocorreu um erro ao fazer upload da imagem. Tente novamente.');
-        }
-    }
-
-    /**
-     * Salva a imagem recortada
-     */
-    public function saveCroppedImage(): void
-    {
-        try {
-            $user = Auth::user();
-
-            if (!$user) {
-                throw new \Exception('Usuário autenticado não encontrado.');
-            }
-
-            // Validar dados de recorte
-            if (!$this->tempImagePath) {
-                throw new \Exception('Imagem temporária não encontrada.');
-            }
-
-            // Se os dados de recorte não estiverem definidos, use valores padrão
-            if (!$this->cropData['width'] || !$this->cropData['height']) {
-                Log::warning('Dados de recorte não definidos, usando valores padrão', [
-                    'user_id' => Auth::id(),
-                    'cropData' => $this->cropData,
-                ]);
-
-                // Obter dimensões da imagem original
-                $tempFullPath = Storage::disk('public')->path($this->tempImagePath);
-                $imageSize = getimagesize($tempFullPath);
-
-                if ($imageSize) {
-                    $this->cropData = [
-                        'x' => 0,
-                        'y' => 0,
-                        'width' => $imageSize[0],
-                        'height' => $imageSize[1]
-                    ];
-                } else {
-                    throw new \Exception('Não foi possível obter as dimensões da imagem.');
-                }
-            }
-
-            // Obter o caminho completo para a imagem temporária
-            $tempFullPath = Storage::disk('public')->path($this->tempImagePath);
-
-            // Criar o caminho final para a imagem original
-            $coverPath = 'covers/' . basename($this->tempImagePath);
-            Storage::disk('public')->copy($this->tempImagePath, $coverPath);
-
-            // Criar a versão recortada
-            $croppedPath = 'covers/cropped_' . basename($this->tempImagePath);
-
-            // Carregar a imagem com Intervention Image
-            $image = Image::read($tempFullPath);
-
-            // Recortar a imagem
-            $croppedImage = $image->crop(
-                $this->cropData['width'],
-                $this->cropData['height'],
-                $this->cropData['x'],
-                $this->cropData['y']
-            );
-
-            // Salvar a imagem recortada
-            $croppedImage->save(Storage::disk('public')->path($croppedPath));
-
-            // Salvar na tabela user_cover_photos
-            UserCoverPhoto::create([
-                'user_id' => $user->id,
-                'photo_path' => $coverPath,
-                'crop_x' => $this->cropData['x'],
-                'crop_y' => $this->cropData['y'],
-                'crop_width' => $this->cropData['width'],
-                'crop_height' => $this->cropData['height'],
-                'cropped_photo_path' => $croppedPath,
-            ]);
-
-            // Limpar o arquivo temporário
-            Storage::disk('public')->delete($this->tempImagePath);
-
-            // Resetar o estado do componente
-            $this->reset(['cover', 'showCropperModal', 'tempImagePath', 'cropData']);
-
-            // Disparar evento de atualização
-            $this->dispatch('cover-updated');
-
-            // Adicionar mensagem de sucesso
-            session()->flash('success', 'Capa atualizada com sucesso!');
-        } catch (\Throwable $e) {
-            Log::error('Erro ao salvar imagem recortada: ' . $e->getMessage(), [
-                'user_id' => Auth::id(),
-                'trace' => $e->getTraceAsString(),
-            ]);
-
-            session()->flash('error', 'Ocorreu um erro ao salvar a imagem. Tente novamente.');
-        }
-    }
-
-    /**
-     * Cancela o processo de recorte
-     */
-    public function cancelCropping(): void
-    {
-        // Limpar o arquivo temporário se existir
-        if ($this->tempImagePath) {
-            Storage::disk('public')->delete($this->tempImagePath);
-        }
-
-        // Resetar o estado do componente
-        $this->reset(['cover', 'showCropperModal', 'tempImagePath', 'cropData']);
-    }
+    public $tempImageUrl = null;
 
     /**
      * Update the user's cover photo.
      */
     public function updateCover(): void
     {
-        // Validar se há uma imagem selecionada
-        $this->validate([
-            'cover' => ['required', 'image', 'mimes:jpg,png', 'max:5120'],
-        ]);
+        try {
+            $user = Auth::user();
 
-        // Se chegou até aqui, temos uma imagem válida, então podemos iniciar o processo de recorte
-        $this->uploadForCropping();
+            if (!$user) {
+                throw new \Exception('Authenticated user not found.');
+            }
+
+            $validated = $this->validate([
+                'cover' => ['required', 'image', 'mimes:jpg,png', 'max:5120'], // Allow JPG/PNG and increase size limit to 5MB
+            ]);
+
+            if ($this->cover) {
+                // Store the file and get the path
+                $coverPath = $this->cover->store('covers', 'public');
+
+                if (!$coverPath) {
+                    throw new \Exception('Failed to store the cover photo.');
+                }
+
+                // Create the cover photo record with crop data
+                UserCoverPhoto::create([
+                    'user_id' => $user->id,
+                    'photo_path' => $coverPath,
+                    'crop_x' => $this->cropData['x'],
+                    'crop_y' => $this->cropData['y'],
+                    'crop_width' => $this->cropData['width'],
+                    'crop_height' => $this->cropData['height'],
+                    'cropped_photo_path' => $this->processCroppedImage($coverPath)
+                ]);
+            }
+
+            $this->reset(['cover', 'showCropper', 'tempImageUrl', 'cropData']);
+            $this->dispatch('cover-updated');
+        } catch (\Throwable $e) {
+            Log::error('Error updating cover photo: ' . $e->getMessage(), [
+                'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            session()->flash('error', 'Ocorreu um erro ao atualizar a capa. Tente novamente.');
+        }
     }
 
     /**
-     * Observador para quando o modal é fechado
+     * Process the cropped image and save it
      */
-    public function updatedShowCropperModal($value)
+    protected function processCroppedImage($originalPath): ?string
     {
-        if (!$value) {
-            // Se o modal foi fechado sem salvar, limpar o arquivo temporário
-            if ($this->tempImagePath) {
-                Storage::disk('public')->delete($this->tempImagePath);
-                $this->tempImagePath = null;
+        try {
+            // Log para debug
+            Log::info('Processando imagem recortada', [
+                'originalPath' => $originalPath,
+                'cropData' => $this->cropData
+            ]);
+
+            if (empty($this->cropData['width']) || empty($this->cropData['height'])) {
+                Log::warning('Dados de recorte inválidos ou vazios');
+                return null;
             }
 
-            // Resetar os dados de recorte
-            $this->cropData = [
-                'x' => 0,
-                'y' => 0,
-                'width' => 0,
-                'height' => 0
-            ];
+            $originalImage = Storage::disk('public')->path($originalPath);
+            $croppedPath = 'covers/cropped_' . basename($originalPath);
+            $croppedFullPath = Storage::disk('public')->path($croppedPath);
+
+            // Create directory if it doesn't exist
+            $directory = dirname($croppedFullPath);
+            if (!file_exists($directory)) {
+                mkdir($directory, 0755, true);
+            }
+
+            // Create image manager instance with GD driver
+            $manager = new ImageManager(new Driver());
+
+            // Load image and crop it
+            $image = $manager->read($originalImage);
+
+            // Garantir que os valores são inteiros positivos
+            $cropX = max(0, (int)$this->cropData['x']);
+            $cropY = max(0, (int)$this->cropData['y']);
+            $cropWidth = max(10, (int)$this->cropData['width']);
+            $cropHeight = max(10, (int)$this->cropData['height']);
+
+            Log::info('Recortando imagem com dimensões', [
+                'x' => $cropX,
+                'y' => $cropY,
+                'width' => $cropWidth,
+                'height' => $cropHeight
+            ]);
+
+            $image->crop(
+                $cropWidth,
+                $cropHeight,
+                $cropX,
+                $cropY
+            );
+
+            // Save the cropped image
+            $image->save($croppedFullPath);
+
+            Log::info('Imagem recortada salva com sucesso', [
+                'path' => $croppedPath
+            ]);
+
+            return $croppedPath;
+        } catch (\Throwable $e) {
+            Log::error('Error processing cropped image: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+            ]);
+            return null;
         }
+    }
+
+    /**
+     * Set crop data from JavaScript
+     */
+    public function setCropData($data): void
+    {
+        $this->cropData = $data;
+        Log::info('Dados do recorte recebidos', $data);
+    }
+
+    /**
+     * Handle file upload and prepare for cropping
+     */
+    public function updatedCover(): void
+    {
+        if ($this->cover) {
+            $this->tempImageUrl = $this->cover->temporaryUrl();
+            $this->showCropper = true;
+
+            // Dispatch event to initialize cropper
+            $this->dispatch('updatedCover');
+
+            // Adicionar um log para debug
+            Log::info('Cover atualizado, showCropper = ' . ($this->showCropper ? 'true' : 'false'));
+        }
+    }
+
+    /**
+     * Cancel cropping
+     */
+    public function cancelCrop(): void
+    {
+        $this->reset(['cover', 'showCropper', 'tempImageUrl', 'cropData']);
     }
 }; ?>
 
@@ -227,34 +180,136 @@ new class extends Component {
     <x-settings.layout :heading="__('Capa')" :subheading="__('Atualizar sua foto de capa')">
         <form wire:submit.prevent="updateCover" class="my-6 w-full space-y-6">
             <div>
-                <x-file-upload wire:model="cover" :label="__('Capa')" accept="image/png, image/jpeg" icon="photo" :iconVariant="$cover ? 'solid' : 'outline'" />
+                <x-file-upload wire:model.live="cover" :label="__('Capa')" accept="image/png, image/jpeg" icon="photo" :iconVariant="$cover ? 'solid' : 'outline'" />
 
-                @if (auth()->user() && auth()->user()->userCoverPhotos()->latest()->first())
-                    @php
-                        $coverPhoto = auth()->user()->userCoverPhotos()->latest()->first();
-                        $coverPath = $coverPhoto->cropped_photo_path ?? $coverPhoto->photo_path;
-                    @endphp
-                    <div class="mt-4 relative">
-                        <img src="{{ Storage::url($coverPath) }}" alt="Capa" class="w-full h-40 object-cover rounded">
-                        <div class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
-                            {{ $coverPhoto->cropped_photo_path ? 'Recortada' : 'Original' }}
+                @if($showCropper && $tempImageUrl)
+                    <div class="mt-4">
+                        <div class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                            Selecione a área da imagem que deseja usar como capa
+                        </div>
+
+                        <!-- Cropper container -->
+                        <div class="cropper-container-wrapper relative mb-4" style="height: 500px !important; width: 100%; overflow: hidden; background-color: #f8f8f8;" wire:ignore>
+                            <img id="coverImage" src="{{ $tempImageUrl }}" alt="Imagem para recorte" style="max-width: 100%; min-height: 500px; height: auto; display: block;">
+                        </div>
+
+                        <script>
+                            // Inicializar o cropper diretamente quando a imagem for carregada
+                            document.addEventListener('DOMContentLoaded', function() {
+                                setTimeout(function() {
+                                    const image = document.getElementById('coverImage');
+                                    if (image && typeof Cropper !== 'undefined') {
+                                        console.log('Inicializando cropper diretamente...');
+                                        new Cropper(image, {
+                                            viewMode: 0, // Sem restrições
+                                            dragMode: 'move',
+                                            aspectRatio: 16 / 5,
+                                            autoCropArea: 1, // Usar toda a área
+                                            responsive: false, // Desativar responsividade
+                                            restore: false,
+                                            guides: true,
+                                            center: true,
+                                            highlight: true,
+                                            cropBoxMovable: true,
+                                            cropBoxResizable: true,
+                                            toggleDragModeOnDblclick: false,
+                                            minContainerWidth: 800,
+                                            minContainerHeight: 500,
+                                            minCropBoxWidth: 800,
+                                            minCropBoxHeight: 500,
+                                            minCanvasWidth: 800,
+                                            minCanvasHeight: 500,
+                                            ready: function() {
+                                                console.log('Cropper direto está pronto');
+
+                                                // FORÇAR altura do canvas para exatamente 500px
+                                                console.log('Forçando altura do canvas para 500px');
+
+                                                // Obter dados do container
+                                                const containerData = this.cropper.getContainerData();
+
+                                                // Definir altura fixa de 500px
+                                                const fixedHeight = 500;
+
+                                                // Calcular largura mantendo proporção 16:5
+                                                const fixedWidth = fixedHeight * (16/5);
+
+                                                // Centralizar o canvas horizontalmente
+                                                const left = (containerData.width - fixedWidth) / 2;
+                                                const top = 0; // Alinhar ao topo
+
+                                                console.log('Dimensões do canvas:', {
+                                                    width: fixedWidth,
+                                                    height: fixedHeight,
+                                                    left: left,
+                                                    top: top
+                                                });
+
+                                                // Aplicar o tamanho fixo ao canvas
+                                                this.cropper.setCanvasData({
+                                                    left: left,
+                                                    top: top,
+                                                    width: fixedWidth,
+                                                    height: fixedHeight
+                                                });
+
+                                                // Ajustar a caixa de recorte para ter o mesmo tamanho
+                                                this.cropper.setCropBoxData({
+                                                    left: left,
+                                                    top: top,
+                                                    width: fixedWidth,
+                                                    height: fixedHeight
+                                                });
+                                            },
+                                            crop: function(event) {
+                                                // Enviar dados do recorte para o componente Livewire
+                                                const data = {
+                                                    x: Math.round(event.detail.x),
+                                                    y: Math.round(event.detail.y),
+                                                    width: Math.round(event.detail.width),
+                                                    height: Math.round(event.detail.height)
+                                                };
+
+                                                // Encontrar o componente Livewire
+                                                const livewireEl = document.querySelector('[wire\\:id]');
+                                                if (livewireEl && livewireEl.__livewire) {
+                                                    Livewire.find(livewireEl.__livewire.$id).setCropData(data);
+                                                }
+                                            }
+                                        });
+                                    }
+                                }, 500);
+                            });
+                        </script>
+
+                        <!-- Crop controls -->
+                        <div class="flex items-center gap-2 mt-2">
+                            <flux:button type="button" variant="primary" wire:click="cancelCrop" class="flex-1">
+                                Cancelar
+                            </flux:button>
+                            <flux:button type="submit" variant="primary" class="flex-1">
+                                Salvar
+                            </flux:button>
                         </div>
                     </div>
+                @elseif (auth()->user() && auth()->user()->userCoverPhotos()->latest()->first())
+                    @php
+                        $coverPhoto = auth()->user()->userCoverPhotos()->latest()->first();
+                        $photoPath = $coverPhoto->cropped_photo_path ?? $coverPhoto->photo_path;
+                    @endphp
+                    <img src="{{ Storage::url($photoPath) }}" alt="Capa" class="mt-4 w-full h-40 rounded object-cover">
                 @endif
             </div>
 
             <div class="flex items-center gap-4">
-                <div class="flex items-center justify-end">
-                    <flux:button variant="primary" type="submit" class="w-full">
-                        <div class="flex items-center justify-center gap-2">
-                            <x-flux::icon name="photo" class="w-5 h-5" />
-                            <span>{{ __('Selecionar e Recortar Imagem') }}</span>
-                        </div>
-                    </flux:button>
-                </div>
+                @if(!$showCropper)
+                    <div class="flex items-center justify-end">
+                        <flux:button variant="primary" type="submit" class="w-full">Salvar</flux:button>
+                    </div>
+                @endif
 
                 <x-action-message class="me-3" on="cover-updated">
-                    {{ __('Capa atualizada.') }}
+                    Capa atualizada.
                 </x-action-message>
 
                 @if (session('error'))
@@ -262,165 +317,154 @@ new class extends Component {
                         {{ session('error') }}
                     </flux:text>
                 @endif
-
-                @if (session('success'))
-                    <flux:text class="mt-2 font-medium !dark:text-green-400 !text-green-600">
-                        {{ session('success') }}
-                    </flux:text>
-                @endif
             </div>
         </form>
     </x-settings.layout>
 
-    <!-- Modal de Recorte de Imagem -->
-    @if($showCropperModal)
-    <div
-        x-data="{
-            cropper: null,
-            isInitializing: false,
-            initCropper() {
-                // Evitar múltiplas inicializações simultâneas
-                if (this.isInitializing || this.cropper) {
-                    console.log('Cropper já está sendo inicializado ou já existe.');
+    <!-- Cropper.js initialization script -->
+    <script>
+        document.addEventListener('livewire:initialized', function() {
+            let cropper = null;
+
+            // Função para inicializar o cropper
+            function initCropper() {
+                console.log('Inicializando cropper...');
+                const image = document.getElementById('coverImage');
+                if (!image) {
+                    console.log('Imagem não encontrada');
                     return;
                 }
 
-                this.isInitializing = true;
-                console.log('Inicializando cropper...');
+                // Garantir que a imagem esteja carregada
+                if (!image.complete) {
+                    image.onload = function() {
+                        setupCropper(image);
+                    };
+                } else {
+                    setupCropper(image);
+                }
+            }
 
-                // Usar um único setTimeout para garantir que o DOM esteja pronto
-                setTimeout(() => {
-                    try {
-                        const image = this.$refs.cropperImage;
-                        console.log('Elemento de imagem:', image);
+            // Configurar o cropper na imagem
+            function setupCropper(image) {
+                console.log('Configurando cropper na imagem');
 
-                        if (!image) {
-                            console.error('Elemento de imagem não encontrado!');
-                            this.isInitializing = false;
-                            return;
-                        }
+                // Destruir cropper existente se houver
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
+                }
 
-                        // Verificar se o Cropper está disponível
-                        if (typeof Cropper === 'undefined') {
-                            console.error('Cropper não está definido!');
-                            this.isInitializing = false;
-                            return;
-                        }
+                // Inicializar Cropper.js com opções mais simples primeiro
+                try {
+                    cropper = new Cropper(image, {
+                        viewMode: 2,
+                        dragMode: 'move',
+                        aspectRatio: 16 / 5,
+                        autoCropArea: 0.9,
+                        restore: false,
+                        guides: true,
+                        center: true,
+                        highlight: true,
+                        cropBoxMovable: true,
+                        cropBoxResizable: true,
+                        toggleDragModeOnDblclick: true,
+                        minContainerWidth: 800,
+                        minContainerHeight: 500,
+                        minCropBoxWidth: 400,
+                        minCropBoxHeight: 500,
+                        CanvasWidth: 800,
+                        CanvasHeight: 500,
+                        ready: function() {
+                            console.log('Cropper está pronto');
 
-                        // Destruir instância anterior se existir
-                        if (this.cropper) {
-                            this.cropper.destroy();
-                            this.cropper = null;
-                        }
+                            // Ajustar o tamanho do canvas quando o cropper estiver pronto
+                            const canvas = this.cropper.getCanvasData();
+                            const containerData = this.cropper.getContainerData();
 
-                        // Inicializar o Cropper
-                        this.cropper = new Cropper(image, {
-                            aspectRatio: 16/9, // Proporção retangular para capa
-                            viewMode: 1,
-                            dragMode: 'move',
-                            autoCropArea: 1,
-                            responsive: true,
-                            restore: false,
-                            guides: true,
-                            center: true,
-                            highlight: false,
-                            cropBoxMovable: true,
-                            cropBoxResizable: true,
-                            toggleDragModeOnDblclick: false,
-                            minContainerWidth: 600,
-                            minContainerHeight: 400,
-                            crop: (event) => {
-                                // Atualizar os dados de recorte no componente Livewire
-                                @this.cropData = {
-                                    x: Math.round(event.detail.x),
-                                    y: Math.round(event.detail.y),
-                                    width: Math.round(event.detail.width),
-                                    height: Math.round(event.detail.height)
-                                };
-                            },
-                            ready: () => {
-                                console.log('Cropper está pronto!');
-                                this.isInitializing = false;
+                            // Calcular o novo tamanho do canvas para preencher o container
+                            const newWidth = containerData.width;
+                            const newHeight = 500;
+
+                            // Centralizar o canvas
+                            const left = 0;
+                            const top = (containerData.height - newHeight) / 2;
+
+                            // Aplicar o novo tamanho
+                            this.cropper.setCanvasData({
+                                left: left,
+                                top: top,
+                                width: 800,
+                                height: 500
+                            });
+
+                            // Ajustar a caixa de recorte para cobrir todo o canvas
+                            this.cropper.setCropBoxData({
+                                left: 0,
+                                top: top,
+                                width: newWidth,
+                                height: 500
+                            });
+                        },
+                        crop: function(event) {
+                            // Enviar dados do recorte para o componente Livewire
+                            const data = {
+                                x: Math.round(event.detail.x),
+                                y: Math.round(event.detail.y),
+                                width: Math.round(event.detail.width),
+                                height: Math.round(event.detail.height)
+                            };
+                            console.log('Dados do recorte:', data);
+
+                            // Encontrar o componente Livewire
+                            const livewireEl = document.querySelector('[wire\\:id]');
+                            if (livewireEl && livewireEl.__livewire) {
+                                Livewire.find(livewireEl.__livewire.$id).setCropData(data);
                             }
-                        });
-                        console.log('Cropper inicializado com sucesso!');
-                    } catch (error) {
-                        console.error('Erro ao inicializar o Cropper:', error);
-                        this.isInitializing = false;
-                    }
-                }, 500);
-            },
-            init() {
-                // Observar mudanças na visibilidade do modal
-                this.$watch('$wire.showCropperModal', (value) => {
-                    console.log('Modal visibilidade alterada:', value);
-                    if (value) {
-                        // Modal aberto, inicializar o cropper após um pequeno atraso
-                        // Apenas inicializar se ainda não estiver inicializado
-                        if (!this.cropper && !this.isInitializing) {
-                            this.initCropper();
                         }
-                    } else {
-                        // Modal fechado, destruir o cropper
-                        this.destroyCropper();
+                    });
+                } catch (error) {
+                    console.error('Erro ao inicializar o cropper:', error);
+                }
+            }
+
+            // Observar mudanças no DOM para detectar quando o cropper deve ser inicializado
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    if (mutation.type === 'childList' || mutation.type === 'attributes') {
+                        const coverImage = document.getElementById('coverImage');
+                        if (coverImage && !cropper) {
+                            // Pequeno atraso para garantir que a imagem esteja renderizada
+                            setTimeout(initCropper, 100);
+                        }
                     }
                 });
+            });
 
-                // Inicializar o cropper se o modal já estiver aberto
-                if (this.$wire.showCropperModal && !this.cropper && !this.isInitializing) {
-                    this.initCropper();
+            // Iniciar observação
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src', 'style', 'class']
+            });
+
+            // Também inicializar quando o evento updatedCover for disparado
+            Livewire.on('updatedCover', () => {
+                console.log('Evento updatedCover recebido');
+                setTimeout(initCropper, 100);
+            });
+
+            // Limpar cropper quando o componente for destruído
+            document.addEventListener('livewire:navigating', () => {
+                if (cropper) {
+                    cropper.destroy();
+                    cropper = null;
                 }
-            },
-            destroyCropper() {
-                console.log('Destruindo cropper...');
-                if (this.cropper) {
-                    this.cropper.destroy();
-                    this.cropper = null;
-                }
-                this.isInitializing = false;
-            }
-        }"
-        x-init="init"
-        @hidden.window="destroyCropper"
-    >
-        <flux:modal wire:model="showCropperModal" size="xl" wire:key="cropper-modal-{{ now() }}">
-            <flux:modal.header>
-                <flux:heading size="sm">Recortar Imagem de Capa</flux:heading>
-            </flux:modal.header>
 
-            <flux:modal.body>
-                <div class="space-y-4">
-                    @if($tempImagePath)
-                        <div class="relative w-full h-[400px] bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden cropper-container-wrapper">
-                            <img
-                                x-ref="cropperImage"
-                                src="{{ Storage::url($tempImagePath) }}"
-                                class="max-w-full"
-                                alt="Imagem para recorte"
-                                style="max-height: 100%; display: block; max-width: 100%;"
-                                @load="if (!cropper && !isInitializing) { initCropper(); }"
-                            />
-                        </div>
-
-                        <div class="text-sm text-gray-500 dark:text-gray-400">
-                            <p>Arraste a imagem para posicionar e ajuste o tamanho da área de recorte conforme necessário.</p>
-                        </div>
-                    @else
-                        <div class="text-center py-8">
-                            <x-flux::icon name="photo" class="w-12 h-12 mx-auto text-gray-400" />
-                            <p class="mt-2 text-gray-500">Nenhuma imagem selecionada para recorte</p>
-                        </div>
-                    @endif
-                </div>
-            </flux:modal.body>
-
-            <flux:modal.footer>
-                <div class="flex justify-end space-x-3">
-                    <x-flux.button wire:click="cancelCropping" variant="secondary">Cancelar</x-flux.button>
-                    <x-flux.button wire:click="saveCroppedImage" variant="primary">Salvar</x-flux.button>
-                </div>
-            </flux:modal.footer>
-        </flux:modal>
-    </div>
-    @endif
+                // Parar de observar
+                observer.disconnect();
+            });
+        });
+    </script>
 </section>
