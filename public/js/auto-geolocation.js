@@ -13,21 +13,22 @@ document.addEventListener('DOMContentLoaded', function () {
     // Configurações
     const CONFIG = {
         // Intervalo para verificar a localização (em milissegundos)
-        // 1 hora = 3600000 ms
-        CHECK_INTERVAL: 3600000,
+        // 6 horas = 21600000 ms (aumentado significativamente para reduzir frequência)
+        CHECK_INTERVAL: 21600000,
 
         // Distância mínima (em metros) para considerar uma mudança de localização
-        MIN_DISTANCE: 100,
+        // Aumentado para reduzir atualizações desnecessárias
+        MIN_DISTANCE: 1000,
 
         // Tempo máximo (em milissegundos) para considerar coordenadas válidas
-        // 24 horas = 86400000 ms
-        MAX_COORDS_AGE: 86400000,
+        // 48 horas = 172800000 ms
+        MAX_COORDS_AGE: 172800000,
 
         // Opções para a API de geolocalização
         GEO_OPTIONS: {
-            enableHighAccuracy: true,
-            timeout: 10000,
-            maximumAge: 0
+            enableHighAccuracy: false, // Reduzir para economizar bateria
+            timeout: 15000,
+            maximumAge: 7200000 // 2 horas - permite usar cache de localização por mais tempo
         }
     };
 
@@ -128,8 +129,22 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Variável para controlar o throttling
+    let lastUpdateTime = 0;
+    const MIN_UPDATE_INTERVAL = 300000; // 5 minutos entre atualizações
+
     // Função para atualizar a localização no servidor
     function updateLocationOnServer(latitude, longitude) {
+        // Implementação de throttling para evitar múltiplas chamadas
+        const now = Date.now();
+        if (now - lastUpdateTime < MIN_UPDATE_INTERVAL) {
+            console.log('Atualização de localização ignorada (muito frequente)');
+            return;
+        }
+
+        // Atualiza o timestamp da última atualização
+        lastUpdateTime = now;
+
         // Garantir que os valores são numéricos
         const lat = parseFloat(latitude);
         const lng = parseFloat(longitude);
@@ -146,6 +161,15 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Verifica se já existe uma requisição em andamento
+        if (window.pendingLocationUpdate) {
+            console.log('Já existe uma atualização de localização em andamento');
+            return;
+        }
+
+        // Marca que há uma requisição em andamento
+        window.pendingLocationUpdate = true;
+
         fetch('/update-user-location', {
             method: 'POST',
             headers: {
@@ -159,6 +183,9 @@ document.addEventListener('DOMContentLoaded', function () {
         })
             .then(response => response.json())
             .then(data => {
+                // Remove a marcação de requisição em andamento
+                window.pendingLocationUpdate = false;
+
                 if (data.success) {
                     console.log('Localização atualizada com sucesso');
 
@@ -173,6 +200,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             })
             .catch(error => {
+                // Remove a marcação de requisição em andamento mesmo em caso de erro
+                window.pendingLocationUpdate = false;
                 console.error('Erro ao enviar coordenadas:', error);
             });
     }
@@ -230,9 +259,31 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     }
 
-    // Verifica a localização imediatamente ao carregar a página
-    checkAndUpdateLocation();
+    // Verifica se já existe uma verificação recente no localStorage
+    const lastCheck = localStorage.getItem('lastLocationCheck');
+    const now = Date.now();
 
-    // Configura verificação periódica da localização
-    setInterval(checkAndUpdateLocation, CONFIG.CHECK_INTERVAL);
+    // Só verifica imediatamente se não houver verificação recente (nas últimas 6 horas)
+    if (!lastCheck || (now - parseInt(lastCheck)) > 21600000) {
+        // Atrasa a verificação inicial para não interferir com o carregamento da página
+        setTimeout(() => {
+            checkAndUpdateLocation();
+            localStorage.setItem('lastLocationCheck', now.toString());
+        }, 30000); // Atrasa 30 segundos após o carregamento da página
+    }
+
+    // Configura verificação periódica da localização com um atraso inicial maior
+    setTimeout(() => {
+        // Usa um intervalo mais longo para reduzir o impacto no desempenho
+        const intervalId = setInterval(() => {
+            // Verifica se a página está visível antes de atualizar a localização
+            if (document.visibilityState === 'visible') {
+                checkAndUpdateLocation();
+                localStorage.setItem('lastLocationCheck', Date.now().toString());
+            }
+        }, CONFIG.CHECK_INTERVAL);
+
+        // Armazena o ID do intervalo para poder cancelá-lo se necessário
+        window.autoGeoLocationIntervalId = intervalId;
+    }, 60000); // Atrasa 1 minuto após o carregamento da página
 });

@@ -24,6 +24,8 @@ use App\Models\Product;
 use App\Models\Group;
 use App\Models\GroupInvitation;
 use App\Models\Event;
+use App\Models\Wallet;
+use App\Models\WalletTransaction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -52,6 +54,7 @@ class User extends Authenticatable
         'privado',
         'bio',
         'role', // Adicionado role
+        'active', // Adicionado active
         'last_seen',
         'status'
     ];
@@ -269,6 +272,7 @@ class User extends Authenticatable
             'aniversario' => 'date',
             'privado' => 'boolean',
             'role' => 'string', // Adicionado cast para role
+            'active' => 'boolean', // Adicionado cast para active
             'last_seen' => 'datetime',
             'status' => 'string',
         ];
@@ -530,5 +534,62 @@ class User extends Authenticatable
             ->explode(' ')
             ->map(fn (string $name) => Str::of($name)->substr(0, 1))
             ->implode('');
+    }
+
+    /**
+     * Pedidos do usuário
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
+     * Get the user's wallet
+     */
+    public function wallet()
+    {
+        return $this->hasOne(Wallet::class);
+    }
+
+    /**
+     * Get the user's wallet transactions
+     */
+    public function walletTransactions()
+    {
+        return $this->hasMany(WalletTransaction::class);
+    }
+
+    /**
+     * Get or create the user's wallet
+     */
+    public function getWalletAttribute()
+    {
+        // First try to find the existing wallet
+        $wallet = $this->wallet()->first();
+
+        if ($wallet) {
+            // Existing wallet found, return it
+            return $wallet;
+        } else {
+            // No wallet found, create a new one with default values
+            logger()->info('Creating new wallet for user', [
+                'user_id' => $this->id,
+                'initial_balance' => 0.00
+            ]);
+
+            return $this->wallet()->create([
+                'balance' => 0.00,
+                'active' => true,
+            ]);
+        }
+    }
+
+    /**
+     * Get the user's wallet balance formatted
+     */
+    public function getFormattedWalletBalanceAttribute()
+    {
+        return 'R$ ' . number_format($this->wallet->balance, 2, ',', '.');
     }
 }

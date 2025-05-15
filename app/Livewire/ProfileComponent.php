@@ -54,7 +54,13 @@ class ProfileComponent extends Component
 
     public function cover()
     {
-        $path = UserCoverPhoto::where('user_id', $this->user->id)->latest()->value('photo_path');
+        $coverPhoto = UserCoverPhoto::where('user_id', $this->user->id)->latest()->first();
+        if (!$coverPhoto) {
+            return null;
+        }
+
+        // Usar a versão recortada se disponível, caso contrário usar a original
+        $path = $coverPhoto->cropped_photo_path ?? $coverPhoto->photo_path;
         return $path ? Storage::url($path) : null;
     }
 
@@ -74,6 +80,13 @@ class ProfileComponent extends Component
     {
         return Post::where('user_id', $this->user->id)
             ->whereNotNull('image')
+            ->count();
+    }
+
+    public function videosCount(): int
+    {
+        return Post::where('user_id', $this->user->id)
+            ->whereNotNull('video')
             ->count();
     }
 
@@ -98,6 +111,43 @@ class ProfileComponent extends Component
         // Recarregar usuário para obter dados atualizados
         $this->user->refresh();
     }
+
+    // Método para exibir imagens do usuário
+    public function showUserImages()
+    {
+        $this->dispatch('show-user-images', userId: $this->user->id);
+    }
+
+    // Método para exibir vídeos do usuário
+    public function showUserVideos()
+    {
+        $this->dispatch('show-user-videos', userId: $this->user->id);
+    }
+
+    // Método para exibir usuários que o perfil está seguindo
+    public function showUserFollowing()
+    {
+        $this->dispatch('show-user-following', userId: $this->user->id);
+    }
+
+    // Método para exibir seguidores do perfil
+    public function showUserFollowers()
+    {
+        $this->dispatch('show-user-followers', userId: $this->user->id);
+    }
+
+    // Método para exibir todas as postagens do usuário
+    public function showUserPosts()
+    {
+        $this->dispatch('show-user-posts', userId: $this->user->id);
+    }
+
+    // Método para exibir o componente de envio de charm
+    public function showSendCharm()
+    {
+        $this->dispatch('show-send-charm', userId: $this->user->id);
+    }
+
 
     public function render()
     {

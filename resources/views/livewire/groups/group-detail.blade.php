@@ -21,7 +21,7 @@
 
                         <span class="flex items-center">
                             @if($group->privacy === 'public')
-                                <x-flux::icon icon="globe" class="w-4 h-4 mr-1" />
+
                                 Público
                             @elseif($group->privacy === 'private')
                                 <x-flux::icon icon="lock-closed" class="w-4 h-4 mr-1" />
@@ -156,7 +156,7 @@
         </flux:modal.body>
 
         <flux:modal.footer>
-            <flux:button wire:click="$set('showJoinConfirmation', false)" color="secondary">
+            <flux:button wire:click="$wire.set('showJoinConfirmation', false)" color="secondary">
                 Cancelar
             </flux:button>
 
@@ -178,7 +178,7 @@
         </flux:modal.body>
 
         <flux:modal.footer>
-            <flux:button wire:click="$set('showLeaveConfirmation', false)" color="secondary">
+            <flux:button wire:click="$wire.set('showLeaveConfirmation', false)" color="secondary">
                 Cancelar
             </flux:button>
 

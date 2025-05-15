@@ -1,8 +1,8 @@
-<div wire:poll.30s="checkFriendsStatus">
+<div wire:poll.600s="checkFriendsStatus">
     @if(count($newOnlineFriends) > 0)
-        <div 
-            x-data="{ show: true }" 
-            x-show="show" 
+        <div
+            x-data="{ show: true }"
+            x-show="show"
             x-init="setTimeout(() => { show = false }, 5000)"
             class="fixed bottom-4 right-4 z-50 max-w-sm"
         >
@@ -16,8 +16,8 @@
                         <p class="text-sm font-medium text-gray-900 dark:text-gray-100">{{ $friend['name'] }}</p>
                         <p class="text-xs text-green-600 dark:text-green-400">Acabou de ficar online</p>
                     </div>
-                    <button 
-                        @click="show = false" 
+                    <button
+                        @click="show = false"
                         class="ml-auto text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
                     >
                         <x-flux::icon name="x-mark" class="w-4 h-4" />

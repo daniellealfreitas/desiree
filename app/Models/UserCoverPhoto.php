@@ -8,5 +8,13 @@ class UserCoverPhoto extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'photo_path'];
+    protected $fillable = [
+    'user_id',
+    'photo_path',
+    'crop_x',
+    'crop_y',
+    'crop_width',
+    'crop_height',
+    'cropped_photo_path'
+];
 }

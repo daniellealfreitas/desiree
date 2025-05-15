@@ -23,30 +23,30 @@ class EventAttendeeController extends Controller
             return redirect()->route('events.show', $event->slug)
                 ->with('error', 'Este evento não está mais disponível para inscrições.');
         }
-        
+
         // Check if the event is in the past
         if ($event->has_passed) {
             return redirect()->route('events.show', $event->slug)
                 ->with('error', 'Este evento já ocorreu.');
         }
-        
+
         // Check if the event is sold out
         if ($event->is_sold_out) {
             return redirect()->route('events.show', $event->slug)
                 ->with('error', 'Este evento está esgotado.');
         }
-        
+
         // Check if the user is already registered
         $existingRegistration = EventAttendee::where('event_id', $event->id)
             ->where('user_id', Auth::id())
-            ->where('status', '!=', 'cancelled')
+            ->where('event_attendees.status', '!=', 'cancelled')
             ->first();
-            
+
         if ($existingRegistration) {
             return redirect()->route('events.show', $event->slug)
                 ->with('info', 'Você já está inscrito neste evento.');
         }
-        
+
         // If the event is free, register the user directly
         if ($event->is_free) {
             $attendee = EventAttendee::create([
@@ -59,11 +59,11 @@ class EventAttendeeController extends Controller
                 'amount_paid' => 0,
                 'paid_at' => now(),
             ]);
-            
+
             return redirect()->route('events.show', $event->slug)
                 ->with('success', 'Inscrição realizada com sucesso!');
         }
-        
+
         // If the event has a price, create a registration and redirect to payment
         $attendee = EventAttendee::create([
             'event_id' => $event->id,
@@ -71,11 +71,11 @@ class EventAttendeeController extends Controller
             'status' => 'registered',
             'payment_status' => 'pending',
         ]);
-        
+
         // Create Stripe checkout session
         try {
             Stripe::setApiKey(config('cashier.secret'));
-            
+
             $session = Session::create([
                 'payment_method_types' => ['card'],
                 'line_items' => [[
@@ -100,18 +100,18 @@ class EventAttendeeController extends Controller
                     'user_id' => Auth::id(),
                 ],
             ]);
-            
+
             return redirect($session->url);
-            
+
         } catch (ApiErrorException $e) {
             // Delete the registration if payment creation fails
             $attendee->delete();
-            
+
             return redirect()->route('events.show', $event->slug)
                 ->with('error', 'Ocorreu um erro ao processar o pagamento. Por favor, tente novamente.');
         }
     }
-    
+
     /**
      * Handle successful payment.
      */
@@ -122,18 +122,18 @@ class EventAttendeeController extends Controller
             return redirect()->route('events.show', $event->slug)
                 ->with('error', 'Registro de inscrição inválido.');
         }
-        
+
         // Mark the payment as completed
         $attendee->markPaymentCompleted(
             $request->session_id ?? 'manual',
             'stripe',
             $event->price
         );
-        
+
         return redirect()->route('events.show', $event->slug)
             ->with('success', 'Pagamento realizado com sucesso! Seu ingresso foi confirmado.');
     }
-    
+
     /**
      * Handle cancelled payment.
      */
@@ -144,14 +144,14 @@ class EventAttendeeController extends Controller
             return redirect()->route('events.show', $event->slug)
                 ->with('error', 'Registro de inscrição inválido.');
         }
-        
+
         // Mark the payment as failed
         $attendee->markPaymentFailed();
-        
+
         return redirect()->route('events.show', $event->slug)
             ->with('info', 'Pagamento cancelado. Você pode tentar novamente a qualquer momento.');
     }
-    
+
     /**
      * Cancel the user's registration for the event.
      */
@@ -159,15 +159,15 @@ class EventAttendeeController extends Controller
     {
         $attendee = EventAttendee::where('event_id', $event->id)
             ->where('user_id', Auth::id())
-            ->where('status', '!=', 'cancelled')
+            ->where('event_attendees.status', '!=', 'cancelled')
             ->firstOrFail();
-            
+
         $attendee->cancel();
-        
+
         return redirect()->route('events.show', $event->slug)
             ->with('success', 'Sua inscrição foi cancelada.');
     }
-    
+
     /**
      * Check in an attendee (admin only).
      */
@@ -178,21 +178,21 @@ class EventAttendeeController extends Controller
             return redirect()->route('events.show', $event->slug)
                 ->with('error', 'Você não tem permissão para fazer check-in de participantes.');
         }
-        
+
         // Verify that the attendee belongs to the event
         if ($attendee->event_id != $event->id) {
             return redirect()->route('events.show', $event->slug)
                 ->with('error', 'Registro de inscrição inválido.');
         }
-        
+
         // Check if the attendee is confirmed
         if ($attendee->status != 'confirmed') {
             return redirect()->route('events.show', $event->slug)
                 ->with('error', 'Este participante não está confirmado.');
         }
-        
+
         $attendee->checkIn();
-        
+
         return redirect()->route('events.show', $event->slug)
             ->with('success', 'Check-in realizado com sucesso para ' . $attendee->user->name);
     }

@@ -1,0 +1,84 @@
+/* 
+ * Cropper.js Fix Styles
+ * Este arquivo contém estilos para garantir que o Cropper.js funcione corretamente
+ */
+
+/* Garantir que o container do cropper tenha posição relativa */
+.cropper-container {
+  position: relative !important;
+  direction: ltr !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  touch-action: none !important;
+  user-select: none !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  z-index: 10 !important;
+}
+
+/* Garantir que a imagem dentro do cropper seja exibida corretamente */
+.cropper-container img {
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  image-orientation: 0deg !important;
+}
+
+/* Garantir que a área de visualização seja exibida corretamente */
+.cropper-view-box {
+  display: block !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  height: 100% !important;
+  outline: 1px solid #39f !important;
+  outline-color: rgba(51, 153, 255, 0.75) !important;
+}
+
+/* Garantir que a área de recorte seja exibida corretamente */
+.cropper-crop-box {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+}
+
+/* Garantir que as linhas de guia sejam exibidas corretamente */
+.cropper-line {
+  background-color: #39f !important;
+  opacity: 0.5 !important;
+}
+
+/* Garantir que os pontos de controle sejam exibidos corretamente */
+.cropper-point {
+  width: 5px !important;
+  height: 5px !important;
+  background-color: #39f !important;
+  opacity: 0.75 !important;
+}
+
+/* Garantir que a área de recorte seja exibida corretamente */
+.cropper-face {
+  background-color: #fff !important;
+  opacity: 0.1 !important;
+}
+
+/* Garantir que a área de sombra seja exibida corretamente */
+.cropper-dashed {
+  border: 0 dashed #eee !important;
+  opacity: 0.5 !important;
+}
+
+/* Garantir que o modal tenha z-index adequado */
+.flux-modal {
+  z-index: 50 !important;
+}
+
+/* Garantir que o container do cropper tenha altura adequada */
+.cropper-container-wrapper {
+  height: 400px !important;
+  overflow: hidden !important;
+}

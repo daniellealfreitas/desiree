@@ -8,11 +8,13 @@
 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
 <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
-<?php echo app('flux')->fluxAppearance(); ?>
 
+<!-- Cropper.js CSS -->
+<link href="<?php echo e(asset('css/cropper.css')); ?>" rel="stylesheet" />
 
-<!-- Script de geolocalização automática -->
+<!-- Scripts personalizados -->
 <?php if(auth()->guard()->check()): ?>
+<!-- Script de geolocalização automática -->
 <script src="<?php echo e(asset('js/auto-geolocation.js')); ?>"></script>
 <?php endif; ?>
 <?php /**PATH C:\xampp\htdocs\desiree2\resources\views/partials/head.blade.php ENDPATH**/ ?>

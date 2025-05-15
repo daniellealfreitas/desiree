@@ -65,6 +65,12 @@
                                                         <div class="ml-4">
                                                             <div class="text-sm font-medium text-gray-900 dark:text-white">
                                                                 {{ $item->product->name }}
+                                                                @if($item->product->is_digital)
+                                                                    <span class="ml-1 inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900 px-1.5 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-100">
+                                                                        <flux:icon name="document" class="h-3 w-3 mr-0.5" />
+                                                                        DIGITAL
+                                                                    </span>
+                                                                @endif
                                                             </div>
                                                             @if(!empty($item->options))
                                                                 <div class="text-xs text-gray-500 dark:text-gray-400">
@@ -94,23 +100,75 @@
                         </div>
                     </div>
 
-                    <!-- Endereço de Entrega -->
+                    @php
+                        $hasDigitalProducts = $order->items->contains(function ($item) {
+                            return $item->product->is_digital;
+                        });
+
+                        $hasPhysicalProducts = $order->items->contains(function ($item) {
+                            return !$item->product->is_digital;
+                        });
+                    @endphp
+
+                    @if($hasDigitalProducts && in_array($order->status, ['processing', 'completed', 'delivered']))
+                    <!-- Produtos Digitais -->
+                    <div class="bg-white dark:bg-zinc-800 overflow-hidden shadow rounded-lg mb-6">
+                        <div class="px-4 py-5 sm:p-6">
+                            <div class="flex items-center">
+                                <flux:icon name="document" class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2" />
+                                <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white">Produtos Digitais</h3>
+                            </div>
+
+                            <div class="mt-4 bg-blue-50 dark:bg-blue-900/20 p-4 rounded-md">
+                                <p class="text-sm text-gray-700 dark:text-gray-300">
+                                    Este pedido contém produtos digitais que estão disponíveis para download.
+                                </p>
+                                <div class="mt-3">
+                                    <flux:button :href="route('shop.downloads')" size="sm" color="blue">
+                                        <flux:icon name="arrow-down-tray" class="h-4 w-4 mr-1" />
+                                        Acessar Meus Downloads
+                                    </flux:button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
+
+                    @if($hasPhysicalProducts)
+                    <!-- Informações de Entrega -->
                     <div class="bg-white dark:bg-zinc-800 overflow-hidden shadow rounded-lg">
                         <div class="px-4 py-5 sm:p-6">
-                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">Endereço de Entrega</h3>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mb-4">Informações de Entrega</h3>
 
                             @if($order->shipping_address)
-                                <address class="not-italic text-sm text-gray-500 dark:text-gray-400">
-                                    {{ $order->shipping_address['address'] }}<br>
-                                    {{ $order->shipping_address['city'] }} - {{ $order->shipping_address['state'] }}<br>
-                                    {{ $order->shipping_address['zip_code'] }}, {{ $order->shipping_address['country'] }}<br>
-                                    <span class="font-medium text-gray-900 dark:text-white">Telefone:</span> {{ $order->shipping_address['phone'] }}
-                                </address>
+                                @if(isset($order->shipping_address['pickup']) && $order->shipping_address['pickup'])
+                                    <div class="flex items-center">
+                                        <flux:icon name="map-pin" class="h-5 w-5 text-blue-600 dark:text-blue-400 mr-2" />
+                                        <span class="text-sm font-medium text-gray-900 dark:text-white">Retirada no local</span>
+                                    </div>
+                                    @if(isset($order->shipping_address['message']))
+                                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $order->shipping_address['message'] }}
+                                        </p>
+                                    @endif
+                                @elseif(isset($order->shipping_address['address']))
+                                    <address class="not-italic text-sm text-gray-500 dark:text-gray-400">
+                                        {{ $order->shipping_address['address'] ?? 'Endereço não informado' }}<br>
+                                        {{ $order->shipping_address['city'] ?? '' }} {{ isset($order->shipping_address['state']) ? '- '.$order->shipping_address['state'] : '' }}<br>
+                                        {{ $order->shipping_address['zip_code'] ?? '' }}{{ isset($order->shipping_address['country']) ? ', '.$order->shipping_address['country'] : '' }}<br>
+                                        @if(isset($order->shipping_address['phone']))
+                                            <span class="font-medium text-gray-900 dark:text-white">Telefone:</span> {{ $order->shipping_address['phone'] }}
+                                        @endif
+                                    </address>
+                                @else
+                                    <p class="text-sm text-gray-500 dark:text-gray-400">Informações de entrega não disponíveis.</p>
+                                @endif
                             @else
-                                <p class="text-sm text-gray-500 dark:text-gray-400">Nenhum endereço de entrega informado.</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Nenhuma informação de entrega disponível.</p>
                             @endif
                         </div>
                     </div>
+                    @endif
                 </div>
 
                 <!-- Resumo do Pedido -->
@@ -177,6 +235,21 @@
                                     </div>
                                 @endif
                             </div>
+
+                            @php
+                                $hasDigitalProducts = $order->items->contains(function ($item) {
+                                    return $item->product->is_digital;
+                                });
+                            @endphp
+
+                            @if($hasDigitalProducts && in_array($order->status, ['processing', 'completed', 'delivered']))
+                                <div class="mt-6">
+                                    <flux:button :href="route('shop.downloads')" class="w-full" color="blue">
+                                        <flux:icon name="arrow-down-tray" class="h-5 w-5 mr-2" />
+                                        Acessar Meus Downloads
+                                    </flux:button>
+                                </div>
+                            @endif
 
                             @if($order->status === 'pending' || $order->status === 'processing')
                                 <div class="mt-6">

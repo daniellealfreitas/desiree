@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\Auth;
         <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $recentUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
             <li class="flex items-center justify-between space-x-3">
                 <div class="relative flex items-center space-x-3 ">
-                    <img src="<?php echo e(asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg')); ?>" class="w-10 h-10 rounded-full object-cover"> <?php
+                    <div class="relative">
+                        <img src="<?php echo e(asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg')); ?>" class="w-10 h-10 rounded-full object-cover">
+                        <div class="absolute top-0 right-0">
+                            <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
@@ -28,15 +31,17 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
+                        </div>
+                    </div>
                     <span>
-                        <a href="/<?php echo e($user['username']); ?>" class="text-blue-500 hover:underline">
+                        <a href="/<?php echo e($user['username']); ?>" class="text-white hover:underline text-sm">
                             <?php echo e($user['name']); ?>
 
                         </a>
                     </span>
                 </div>
                 <!--[if BLOCK]><![endif]--><?php if($user['id'] !== Auth::id()): ?>
-                    <button wire:click="toggleFollow(<?php echo e($user['id']); ?>)" 
+                    <button wire:click="toggleFollow(<?php echo e($user['id']); ?>)"
                             class="<?php echo \Illuminate\Support\Arr::toCssClasses([
                                 'px-4 py-2 rounded text-sm font-medium',
                                 'bg-yellow-500 text-white' => $requestStatus[$user['id']] === 'pending',

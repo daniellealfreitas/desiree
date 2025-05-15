@@ -1,9 +1,15 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
+        <!-- Notification Toast -->
+        <x-notification-toast position="top-right" />
+
+        <!-- Flash Messages -->
+        <x-flash-messages />
+
         <flux:header container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
@@ -42,6 +48,12 @@
             <flux:spacer />
 
             <flux:navbar class="mr-1.5 space-x-0.5 py-0!">
+                <!-- Mini Cart -->
+                @livewire('shop.mini-cart')
+
+                <!-- Wallet Balance -->
+                @livewire('wallet.wallet-balance')
+
                 <flux:tooltip :content="__('Buscar')" position="bottom">
                     <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" :label="__('Buscar')" />
                 </flux:tooltip>
@@ -93,6 +105,12 @@
                     <flux:menu.separator />
 
                     <flux:menu.radio.group>
+                        <flux:menu.item :href="route('wallet.index')" icon="wallet" wire:navigate>
+                            <div class="flex items-center justify-between w-full">
+                                <span>{{ __('Carteira') }}</span>
+                                <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
+                            </div>
+                        </flux:menu.item>
                         <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Settings') }}</flux:menu.item>
                     </flux:menu.radio.group>
 
@@ -121,6 +139,13 @@
                     <flux:navlist.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                     </flux:navlist.item>
+
+                    <flux:navlist.item icon="wallet" :href="route('wallet.index')" :current="request()->routeIs('wallet.*')" wire:navigate>
+                        <div class="flex items-center justify-between w-full">
+                            <span>{{ __('Carteira') }}</span>
+                            <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
+                        </div>
+                    </flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
@@ -140,5 +165,8 @@
         {{ $slot }}
 
         @fluxScripts
+
+        <!-- CSRF Token para requisições AJAX -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     </body>
 </html>

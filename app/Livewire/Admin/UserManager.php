@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Illuminate\Support\Str;
 
 class UserManager extends Component
 {
@@ -32,7 +33,7 @@ class UserManager extends Component
     protected $rules = [
         'name' => 'required|string|max:255',
         'email' => 'required|email|max:255',
-        'role' => 'required|in:user,admin,moderator',
+        'role' => 'required|in:visitante,vip,admin',
         'active' => 'boolean',
     ];
 
@@ -56,49 +57,86 @@ class UserManager extends Component
         }
     }
 
+    public function createUser()
+    {
+        $this->resetForm();
+        $this->isEditing = false;
+        $this->showModal = true;
+    }
+
     public function edit($id)
     {
         $this->resetForm();
         $this->isEditing = true;
         $this->userId = $id;
-        
+
         $user = User::findOrFail($id);
-        
+
         $this->name = $user->name;
         $this->email = $user->email;
         $this->role = $user->role;
         $this->active = $user->active;
-        
+
         $this->showModal = true;
     }
 
     public function save()
     {
         $this->validate();
-        
+
         try {
-            $user = User::findOrFail($this->userId);
-            
-            $user->name = $this->name;
-            $user->email = $this->email;
-            $user->role = $this->role;
-            $user->active = $this->active;
-            
-            $user->save();
-            
+            if ($this->isEditing) {
+                // Atualizar usuário existente
+                $user = User::findOrFail($this->userId);
+
+                $user->name = $this->name;
+                $user->email = $this->email;
+                $user->role = $this->role;
+                $user->active = $this->active;
+
+                $user->save();
+
+                $message = 'Usuário atualizado com sucesso!';
+            } else {
+                // Criar novo usuário
+                $existingUser = User::where('email', $this->email)->first();
+                if ($existingUser) {
+                    $this->addError('email', 'Este email já está em uso.');
+                    return false;
+                }
+
+                $user = new User();
+                $user->name = $this->name;
+                $user->email = $this->email;
+                $user->role = $this->role;
+                $user->active = $this->active;
+                $user->password = bcrypt(Str::random(10)); // Senha temporária
+                $user->username = Str::slug($this->name) . rand(100, 999);
+
+                $user->save();
+
+                $message = 'Usuário criado com sucesso! Uma senha temporária foi gerada.';
+            }
+
             $this->showModal = false;
             $this->resetForm();
-            
+
             $this->dispatch('notify', [
-                'message' => 'Usuário atualizado com sucesso!',
+                'message' => $message,
                 'type' => 'success'
             ]);
-            
+
+            $this->dispatch('saved');
+
+            return true;
+
         } catch (\Exception $e) {
             $this->dispatch('notify', [
                 'message' => 'Erro ao salvar usuário: ' . $e->getMessage(),
                 'type' => 'error'
             ]);
+
+            return false;
         }
     }
 
@@ -112,32 +150,36 @@ class UserManager extends Component
     {
         try {
             $user = User::findOrFail($this->deleteId);
-            
+
             // Não permitir excluir o próprio usuário
             if ($user->id === auth()->id()) {
                 throw new \Exception('Você não pode excluir seu próprio usuário.');
             }
-            
+
             // Verificar se o usuário tem pedidos
             if ($user->orders()->count() > 0) {
                 throw new \Exception('Não é possível excluir um usuário que possui pedidos.');
             }
-            
+
             $user->delete();
-            
+
             $this->confirmingDelete = false;
             $this->deleteId = null;
-            
+
             $this->dispatch('notify', [
                 'message' => 'Usuário excluído com sucesso!',
                 'type' => 'success'
             ]);
-            
+
+            return true;
+
         } catch (\Exception $e) {
             $this->dispatch('notify', [
                 'message' => 'Erro ao excluir usuário: ' . $e->getMessage(),
                 'type' => 'error'
             ]);
+
+            return false;
         }
     }
 
@@ -146,16 +188,16 @@ class UserManager extends Component
         $this->userId = null;
         $this->name = '';
         $this->email = '';
-        $this->role = 'user';
+        $this->role = 'visitante';
         $this->active = true;
-        
+
         $this->resetErrorBag();
     }
 
     public function render()
     {
         $query = User::query();
-        
+
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%')
@@ -163,15 +205,15 @@ class UserManager extends Component
                   ->orWhere('username', 'like', '%' . $this->search . '%');
             });
         }
-        
+
         if ($this->roleFilter) {
             $query->where('role', $this->roleFilter);
         }
-        
+
         $query->orderBy($this->sortBy, $this->sortDirection);
-        
+
         $users = $query->paginate($this->perPage);
-        
+
         return view('livewire.admin.user-manager', [
             'users' => $users,
         ])->layout('layouts.admin', ['title' => 'Gerenciar Usuários']);

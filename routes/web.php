@@ -60,7 +60,7 @@ Route::get('feed_imagens', function () {
     return view('feed_imagens', compact('posts'));
 })->middleware(['auth', 'verified'])->name('feed_imagens');
 
-Route::view('feed_videos', 'feed_videos')
+Route::get('feed_videos', App\Livewire\ReelsFeed::class)
     ->middleware(['auth', 'verified'])
     ->name('feed_videos');
 
@@ -175,6 +175,42 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/loja/meus-pedidos', App\Livewire\Shop\UserOrders::class)->name('shop.user.orders');
     Route::get('/loja/pedido/{id}', App\Livewire\Shop\OrderDetail::class)->name('shop.order.detail');
     Route::get('/loja/lista-desejos', App\Livewire\Shop\Wishlist::class)->name('shop.wishlist');
+
+    // Rotas para produtos digitais
+    Route::get('/loja/meus-downloads', [App\Http\Controllers\DigitalProductController::class, 'index'])->name('shop.downloads');
+    Route::get('/loja/download/{id}', [App\Http\Controllers\DigitalProductController::class, 'download'])->name('shop.downloads.download');
+});
+
+// Rotas da carteira
+Route::middleware(['auth'])->prefix('carteira')->group(function () {
+    Route::get('/', [App\Http\Controllers\WalletController::class, 'index'])->name('wallet.index');
+
+    // Adicionar fundos
+    Route::get('/adicionar', function () {
+        return view('wallet.add-funds');
+    })->name('wallet.add-funds');
+    Route::post('/adicionar', [App\Http\Controllers\WalletController::class, 'processAddFunds'])->name('wallet.add-funds.process');
+    Route::get('/adicionar/sucesso', [App\Http\Controllers\WalletController::class, 'addFundsSuccess'])->name('wallet.add-funds.success');
+    Route::get('/adicionar/cancelar', [App\Http\Controllers\WalletController::class, 'addFundsCancel'])->name('wallet.add-funds.cancel');
+
+    // Transferir fundos
+    Route::get('/transferir', function () {
+        return view('wallet.transfer');
+    })->name('wallet.transfer');
+    Route::post('/transferir', [App\Http\Controllers\WalletController::class, 'processTransferFunds'])->name('wallet.transfer.process');
+
+    // Sacar fundos
+    Route::get('/sacar', function () {
+        return view('wallet.withdraw');
+    })->name('wallet.withdraw');
+    Route::post('/sacar', [App\Http\Controllers\WalletController::class, 'processWithdrawFunds'])->name('wallet.withdraw.process');
+});
+
+// Rotas de exemplos
+Route::middleware(['auth'])->prefix('examples')->group(function () {
+    Route::get('/image-cropper', function () {
+        return view('examples.image-cropper-example');
+    })->name('examples.image-cropper');
 });
 
 // Rotas de administração
@@ -185,12 +221,19 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->group(function () {
     Route::get('/pedidos', App\Livewire\Admin\OrderManager::class)->name('admin.orders');
     Route::get('/cupons', App\Livewire\Admin\CouponManager::class)->name('admin.coupons');
     Route::get('/usuarios', App\Livewire\Admin\UserManager::class)->name('admin.users');
+    Route::get('/carteiras', App\Livewire\Admin\WalletManager::class)->name('admin.wallets');
     Route::get('/configuracoes', App\Livewire\Admin\Settings::class)->name('admin.settings');
     Route::get('/eventos', App\Livewire\Admin\EventManager::class)->name('admin.events');
 });
 
 
 Route::get('/meus-pagamentos', [PaymentController::class, 'index'])->name('meus-pagamentos');
+
+// Rotas para pagamento de drink
+Route::middleware(['auth'])->group(function () {
+    Route::get('/payment/success/{userId}', [PaymentController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/payment/cancel', [PaymentController::class, 'paymentCancel'])->name('payment.cancel');
+});
 
 
 Route::middleware('guest')->group(function () {

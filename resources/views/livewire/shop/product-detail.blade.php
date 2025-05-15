@@ -64,7 +64,16 @@
                 <div class="space-y-6">
                     <div>
                         <h1 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-3xl">{{ $product->name }}</h1>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ $product->category?->name ?? 'Sem categoria' }}</p>
+                        <div class="flex items-center mt-1">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ $product->category?->name ?? 'Sem categoria' }}</p>
+
+                            @if($product->is_digital)
+                                <span class="ml-2 inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900 px-2 py-1 text-xs font-medium text-blue-700 dark:text-blue-100">
+                                    <flux:icon name="document" class="h-3 w-3 mr-1" />
+                                    PRODUTO DIGITAL
+                                </span>
+                            @endif
+                        </div>
                     </div>
 
                     <div class="flex items-center">
@@ -82,6 +91,13 @@
                             <p class="text-3xl font-bold text-gray-900 dark:text-white">
                                 R$ {{ number_format($product->price, 2, ',', '.') }}
                             </p>
+                        @endif
+
+                        @if($product->isUnavailable())
+                            <span class="ml-3 inline-flex items-center rounded-md bg-gray-100 dark:bg-gray-800 px-2 py-1 text-xs font-medium text-gray-700 dark:text-gray-300">
+                                <flux:icon name="x-mark" class="h-3 w-3 mr-1" />
+                                INDISPONÍVEL
+                            </span>
                         @endif
                     </div>
 
@@ -110,30 +126,48 @@
                     <div>
                         <h3 class="text-sm font-medium text-gray-900 dark:text-white">Quantidade</h3>
                         <div class="mt-2 flex items-center">
-                            <flux:button wire:click="decrementQuantity" variant="outline" size="sm">
-                                <flux:icon name="minus" class="h-4 w-4" />
-                            </flux:button>
-                            <span class="mx-4 text-gray-900 dark:text-white">{{ $quantity }}</span>
-                            <flux:button wire:click="incrementQuantity" variant="outline" size="sm">
-                                <flux:icon name="plus" class="h-4 w-4" />
-                            </flux:button>
+                            @if($product->isAvailable())
+                                <flux:button wire:click="decrementQuantity" variant="outline" size="sm" :disabled="$quantity <= 1">
+                                    <flux:icon name="minus" class="h-4 w-4" />
+                                </flux:button>
+                                <span class="mx-4 text-gray-900 dark:text-white">{{ $quantity }}</span>
+                                <flux:button wire:click="incrementQuantity" variant="outline" size="sm" :disabled="$quantity >= $product->stock">
+                                    <flux:icon name="plus" class="h-4 w-4" />
+                                </flux:button>
 
-                            <span class="ml-4 text-sm text-gray-500 dark:text-gray-400">
-                                {{ $product->stock }} disponíveis
-                            </span>
+                                <span class="ml-4 text-sm {{ $product->stock < 10 ? 'text-amber-600 dark:text-amber-400' : 'text-gray-500 dark:text-gray-400' }}">
+                                    {{ $product->stock }} {{ $product->stock == 1 ? 'disponível' : 'disponíveis' }}
+                                </span>
+                            @else
+                                <span class="text-sm text-red-600 dark:text-red-400 font-medium">
+                                    Produto indisponível no momento
+                                </span>
+                            @endif
                         </div>
                     </div>
 
                     <div class="flex space-x-4">
-                        <flux:button
-                            wire:click="addToCart"
-                            wire:loading.attr="disabled"
-                            wire:target="addToCart"
-                            class="flex-1"
-                        >
-                            <flux:icon name="shopping-cart" class="h-5 w-5 mr-2" />
-                            Adicionar ao Carrinho
-                        </flux:button>
+                        @if($product->isAvailable())
+                            <flux:button
+                                wire:click="addToCart"
+                                wire:loading.attr="disabled"
+                                wire:target="addToCart"
+                                class="flex-1"
+                                id="add-to-cart-button"
+                            >
+                                <flux:icon name="shopping-cart" class="h-5 w-5 mr-2" />
+                                Adicionar ao Carrinho
+                            </flux:button>
+                        @else
+                            <flux:button
+                                disabled
+                                class="flex-1 opacity-70 cursor-not-allowed"
+                                variant="primary"
+                            >
+                                <flux:icon name="x-mark" class="h-5 w-5 mr-2" />
+                                Indisponível
+                            </flux:button>
+                        @endif
 
                         <flux:button
                             wire:click="addToWishlist"
@@ -150,15 +184,42 @@
                     </div>
 
                     <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
-                        <div class="flex items-center">
-                            <flux:icon name="truck" class="h-5 w-5 text-gray-400 mr-2" />
-                            <span class="text-sm text-gray-700 dark:text-gray-300">Entrega em todo o Brasil</span>
-                        </div>
+                        @if(!$product->is_digital)
+                            <div class="flex items-center">
+                                <flux:icon name="truck" class="h-5 w-5 text-gray-400 mr-2" />
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Retirada no local</span>
+                            </div>
+                        @else
+                            <div class="flex items-center">
+                                <flux:icon name="arrow-down-tray" class="h-5 w-5 text-gray-400 mr-2" />
+                                <span class="text-sm text-gray-700 dark:text-gray-300">Download imediato após a compra</span>
+                            </div>
+                        @endif
 
-                        <div class="flex items-center mt-2">
-                            <flux:icon name="shield-check" class="h-5 w-5 text-gray-400 mr-2" />
-                            <span class="text-sm text-gray-700 dark:text-gray-300">Garantia de 30 dias</span>
-                        </div>
+                        
+
+                        @if($product->is_digital)
+                            <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 rounded-md">
+                                <h4 class="text-sm font-medium text-blue-800 dark:text-blue-200 flex items-center">
+                                    <flux:icon name="information-circle" class="h-5 w-5 mr-1" />
+                                    Informações sobre o produto digital
+                                </h4>
+                                <ul class="mt-2 text-xs text-blue-700 dark:text-blue-300 space-y-1 pl-6 list-disc">
+                                    <li>Acesso imediato após a confirmação do pagamento</li>
+                                    @if($product->download_limit)
+                                        <li>Limite de {{ $product->download_limit }} download(s)</li>
+                                    @else
+                                        <li>Downloads ilimitados</li>
+                                    @endif
+
+                                    @if($product->download_expiry_days)
+                                        <li>Disponível por {{ $product->download_expiry_days }} dias após a compra</li>
+                                    @else
+                                        <li>Sem prazo de expiração</li>
+                                    @endif
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

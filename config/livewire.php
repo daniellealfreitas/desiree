@@ -66,7 +66,7 @@ return [
     'temporary_file_upload' => [
         'disk' => 'local',        // Using local disk for temporary storage
         'rules' => ['file', 'max:102400'],  // 100MB max file size
-        'directory' => 'livewire-tmp',   
+        'directory' => 'livewire-tmp',
         'middleware' => 'throttle:60,1',
         'preview_mimes' => [   // Supported file types for temporary pre-signed file URLs
             'png', 'gif', 'bmp', 'svg', 'wav', 'mp4',
@@ -130,6 +130,8 @@ return [
     'navigate' => [
         'show_progress_bar' => true,
         'progress_bar_color' => '#2299dd',
+        'persist_state' => false, // Não manter o estado entre navegações para garantir que as mensagens flash sejam exibidas
+        'prevent_duplicates' => true, // Evitar navegações duplicadas
     ],
 
     /*
@@ -157,4 +159,17 @@ return [
     */
 
     'pagination_theme' => 'tailwind',
+
+    /*
+    |---------------------------------------------------------------------------
+    | Development / Debug Mode
+    |---------------------------------------------------------------------------
+    |
+    | Set this to true during development to enable additional debugging features
+    | like verbose console logging. Set to false in production to improve
+    | performance and reduce console noise.
+    |
+    */
+
+    'dev_mode' => env('LIVEWIRE_DEV_MODE', env('APP_DEBUG', false)),
 ];

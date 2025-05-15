@@ -25,20 +25,20 @@
                     @foreach($pendingInvitations as $invitation)
                         <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                             <div class="flex items-center">
-                                <a href="{{ route('user.profile', $invitation->user->username) }}" class="flex-shrink-0">
+                                <a href="{{ $invitation->user && $invitation->user->username ? route('user.profile', $invitation->user->username) : '#' }}" class="flex-shrink-0">
                                     <img
-                                        src="{{ $invitation->user->userPhotos->first() ? asset('storage/' . $invitation->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
-                                        alt="{{ $invitation->user->name }}"
+                                        src="{{ $invitation->user && $invitation->user->userPhotos->first() ? asset('storage/' . $invitation->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
+                                        alt="{{ $invitation->user ? $invitation->user->name : 'Usuário' }}"
                                         class="w-10 h-10 rounded-full object-cover"
                                     >
                                 </a>
 
                                 <div class="ml-3">
-                                    <a href="{{ route('user.profile', $invitation->user->username) }}" class="text-sm font-medium text-gray-900 dark:text-white hover:underline">
-                                        {{ $invitation->user->name }}
+                                    <a href="{{ $invitation->user && $invitation->user->username ? route('user.profile', $invitation->user->username) : '#' }}" class="text-sm font-medium text-gray-900 dark:text-white hover:underline">
+                                        {{ $invitation->user ? $invitation->user->name : 'Usuário não encontrado' }}
                                     </a>
                                     <div class="text-xs text-gray-500 dark:text-gray-400">
-                                        Convidado por {{ $invitation->inviter->name }} {{ $invitation->created_at->diffForHumans() }}
+                                        Convidado por {{ $invitation->inviter ? $invitation->inviter->name : 'Usuário' }} {{ $invitation->created_at->diffForHumans() }}
                                     </div>
                                 </div>
                             </div>
@@ -57,7 +57,7 @@
             @forelse($users as $user)
                 <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <div class="flex items-center">
-                        <a href="{{ route('user.profile', $user->username) }}" class="flex-shrink-0">
+                        <a href="{{ $user->username ? route('user.profile', $user->username) : '#' }}" class="flex-shrink-0">
                             <img
                                 src="{{ $user->userPhotos->first() ? asset('storage/' . $user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
                                 alt="{{ $user->name }}"
@@ -66,7 +66,7 @@
                         </a>
 
                         <div class="ml-3">
-                            <a href="{{ route('user.profile', $user->username) }}" class="text-sm font-medium text-gray-900 dark:text-white hover:underline">
+                            <a href="{{ $user->username ? route('user.profile', $user->username) : '#' }}" class="text-sm font-medium text-gray-900 dark:text-white hover:underline">
                                 {{ $user->name }}
                             </a>
                             <div class="text-xs text-gray-500 dark:text-gray-400">
@@ -114,17 +114,21 @@
                         Este é um grupo secreto. Ao convidar esta pessoa, você estará revelando a existência do grupo.
                     </p>
                 @endif
+            @else
+                <p>Carregando informações do usuário...</p>
             @endif
         </flux:modal.body>
 
         <flux:modal.footer>
-            <flux:button wire:click="$set('showInviteModal', false)" color="secondary">
+            <flux:button wire:click="$wire.set('showInviteModal', false)" color="secondary">
                 Cancelar
             </flux:button>
 
-            <flux:button wire:click="invite" color="primary">
-                Convidar
-            </flux:button>
+            @if($selectedUser)
+                <flux:button wire:click="invite" color="primary">
+                    Convidar
+                </flux:button>
+            @endif
         </flux:modal.footer>
     </flux:modal>
 </div>

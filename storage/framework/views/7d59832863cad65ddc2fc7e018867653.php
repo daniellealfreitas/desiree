@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>" class="dark">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>" class="<?php echo e(session('appearance', 'dark')); ?>">
     <head>
         <?php echo $__env->make('partials.head', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </head>
@@ -88,11 +88,12 @@
 <?php $component = $__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48; ?>
 <?php unset($__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48); ?>
 <?php endif; ?>
+                
                 <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('follow-request-notifications', []);
+[$__name, $__params] = $__split('follow-request-notifications');
 
 $__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-0', $__slots ?? [], get_defined_vars());
 
@@ -160,6 +161,47 @@ if (isset($__slots)) unset($__slots);
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
 <?php $component->withAttributes(['class' => 'me-4']); ?>
+                <?php if (isset($component)) { $__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.item','data' => ['icon' => 'currency-dollar','href' => route('wallet.index'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::navbar.item'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'currency-dollar','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('wallet.index')),'wire:navigate' => true]); ?>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-sm font-medium text-green-400 dark:text-green-400">R$ <?php echo e(number_format(auth()->user()->wallet->balance, 2, ',', '.')); ?></span>
+                    </div>
+                 <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48)): ?>
+<?php $attributes = $__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48; ?>
+<?php unset($__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48)): ?>
+<?php $component = $__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48; ?>
+<?php unset($__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48); ?>
+<?php endif; ?>
+                <!-- Mini Cart -->
+                <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('shop.mini-cart');
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-2', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+
                 <?php if (isset($component)) { $__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.item','data' => ['icon' => 'magnifying-glass','href' => '#','label' => 'Search']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -440,6 +482,30 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginal5027d420cfeeb03dd925cfc08ae44851 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal5027d420cfeeb03dd925cfc08ae44851 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::menu.item','data' => ['icon' => 'wallet','href' => route('wallet.index')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::menu.item'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'wallet','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('wallet.index'))]); ?>
+                        <div class="flex items-center justify-between w-full">
+                            <span>Minha Carteira</span>
+                            <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">R$ <?php echo e(number_format(auth()->user()->wallet->balance, 2, ',', '.')); ?></span>
+                        </div>
+                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal5027d420cfeeb03dd925cfc08ae44851)): ?>
+<?php $attributes = $__attributesOriginal5027d420cfeeb03dd925cfc08ae44851; ?>
+<?php unset($__attributesOriginal5027d420cfeeb03dd925cfc08ae44851); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal5027d420cfeeb03dd925cfc08ae44851)): ?>
+<?php $component = $__componentOriginal5027d420cfeeb03dd925cfc08ae44851; ?>
+<?php unset($__componentOriginal5027d420cfeeb03dd925cfc08ae44851); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginal5027d420cfeeb03dd925cfc08ae44851 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal5027d420cfeeb03dd925cfc08ae44851 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::menu.item','data' => ['icon' => 'credit-card','href' => route('meus-pagamentos')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::menu.item'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -707,6 +773,28 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
 <?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
 <?php endif; ?>
+                        <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'arrow-down-tray','href' => route('shop.downloads'),'current' => request()->routeIs('shop.downloads')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::navlist.item'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'arrow-down-tray','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('shop.downloads')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('shop.downloads'))]); ?>
+                            <?php echo e(__('Meus Downloads')); ?>
+
+                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $attributes = $__attributesOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4)): ?>
@@ -839,6 +927,50 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
 <?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
 <?php endif; ?>
+                        <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'users','href' => route('admin.users'),'current' => request()->routeIs('admin.users')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::navlist.item'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'users','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('admin.users')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('admin.users'))]); ?>
+                            <?php echo e(__('Usuários')); ?>
+
+                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $attributes = $__attributesOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+                        <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'wallet','href' => route('admin.wallets'),'current' => request()->routeIs('admin.wallets')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::navlist.item'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'wallet','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('admin.wallets')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('admin.wallets'))]); ?>
+                            <?php echo e(__('Carteiras')); ?>
+
+                         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $attributes = $__attributesOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4)): ?>
@@ -919,14 +1051,14 @@ if (isset($__slots)) unset($__slots);
 
                     <?php if (isset($component)) { $__componentOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal8b1fe5c87f0876e7c101dbc6fe82a9a4 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.group','data' => ['expandable' => true,'heading' => 'Feed','class' => ' lg:grid']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.group','data' => ['expandable' => true,'heading' => 'Feed','class' => 'lg:grid','expanded' => request()->routeIs('feed.*')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::navlist.group'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['expandable' => true,'heading' => 'Feed','class' => ' lg:grid']); ?>
+<?php $component->withAttributes(['expandable' => true,'heading' => 'Feed','class' => 'lg:grid','expanded' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('feed.*'))]); ?>
                         <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'photo','href' => route('feed_imagens')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -1043,28 +1175,7 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
 <?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
 <?php endif; ?>
-                    <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'chat-bubble-left-right','href' => route('bate_papo'),'current' => request()->routeIs('bate_papo'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('flux::navlist.item'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['icon' => 'chat-bubble-left-right','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('bate_papo')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('bate_papo')),'wire:navigate' => true]); ?>
-                        <?php echo e(__('Bate Papo')); ?>
-
-                     <?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
-<?php $attributes = $__attributesOriginalda376aa217444bbd92367ba1444eb3b8; ?>
-<?php unset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
-<?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
-<?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
-<?php endif; ?>
+            
                     <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'inbox','badge' => ''.e(auth()->user()->unreadMessagesCount()).'','href' => route('caixa_de_mensagens'),'current' => request()->routeIs('caixa_de_mensagens'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -1077,6 +1188,31 @@ if (isset($__slots)) unset($__slots);
 <?php $component->withAttributes(['icon' => 'inbox','badge' => ''.e(auth()->user()->unreadMessagesCount()).'','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('caixa_de_mensagens')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('caixa_de_mensagens')),'wire:navigate' => true]); ?>
                         <?php echo e(__('Caixa de Mensagens')); ?>
 
+                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $attributes = $__attributesOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+
+                    <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'wallet','href' => route('wallet.index'),'current' => request()->routeIs('wallet.*'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::navlist.item'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'wallet','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('wallet.index')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('wallet.*')),'wire:navigate' => true]); ?>
+                        <div class="flex items-center justify-between w-full">
+                            <span><?php echo e(__('Carteira')); ?></span>
+                            <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">R$ <?php echo e(number_format(auth()->user()->wallet->balance, 2, ',', '.')); ?></span>
+                        </div>
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
@@ -1625,7 +1761,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('friend-status-notifier', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-2', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-3', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -1718,11 +1854,58 @@ if (isset($__slots)) unset($__slots);
                 }
             });
 
-            // Listener para o evento reward-earned
+            // Listener para o evento reward-earned (usando a sintaxe do Livewire 3)
             document.addEventListener('livewire:initialized', () => {
+                // No Livewire 3, usamos Livewire.on em vez de Livewire.addEventListener
                 Livewire.on('reward-earned', (data) => {
                     window.triggerConfetti();
                     window.triggerXpPopup(data.points);
+                });
+
+                // Adicionar listeners para eventos do carrinho
+                console.log('[Cart Fix] Adicionando listeners para eventos do carrinho');
+
+                // Listener para o evento add-to-cart
+                Livewire.on('add-to-cart', (data) => {
+                    console.log('[Cart Fix] Evento add-to-cart recebido:', data);
+                });
+
+                // Listener para o evento cart-updated
+                Livewire.on('cart-updated', () => {
+                    console.log('[Cart Fix] Evento cart-updated recebido');
+                });
+            });
+        </script>
+
+        <!-- Scripts de correção para o carrinho (temporariamente desativados para depuração) -->
+        <!-- <script src="<?php echo e(asset('js/cart-events-fix.js')); ?>"></script> -->
+        <!-- <script src="<?php echo e(asset('js/direct-cart-handler.js')); ?>"></script> -->
+
+        <!-- CSRF Token para requisições AJAX -->
+        <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
+
+        <!-- Debug para o carrinho -->
+        <script>
+            console.log('[Cart Debug] Scripts de correção para o carrinho desativados para depuração');
+
+            // Adicionar listener para eventos do Livewire
+            document.addEventListener('livewire:initialized', () => {
+                console.log('[Cart Debug] Livewire inicializado, adicionando listeners para depuração');
+
+                // Listener para o evento add-to-cart
+                Livewire.on('add-to-cart', (data) => {
+                    console.log('[Cart Debug] Evento add-to-cart recebido:', data);
+                });
+
+                // Listener para o evento cart-updated
+                Livewire.on('cart-updated', () => {
+                    console.log('[Cart Debug] Evento cart-updated recebido');
+
+                    // Forçar atualização da página após 1 segundo
+                    setTimeout(() => {
+                        console.log('[Cart Debug] Atualizando a página para refletir as mudanças no carrinho');
+                        window.location.reload();
+                    }, 1000);
                 });
             });
         </script>

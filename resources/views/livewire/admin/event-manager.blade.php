@@ -1,5 +1,17 @@
 <div>
     <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
+        @if (session()->has('success'))
+            <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-md">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if (session()->has('error'))
+            <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-md">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Gerenciamento de Eventos</h2>
 
@@ -151,33 +163,33 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Nome e descrição -->
                 <div class="md:col-span-2">
-                    <x-flux::label for="name" value="Nome do Evento" />
-                    <x-flux::input id="name" wire:model="name" class="w-full" />
+                    <x-flux::label for="name" value="Nome do Evento *" class="font-medium text-gray-700 dark:text-gray-300" />
+                    <x-flux::input id="name" wire:model="name" class="w-full" placeholder="Digite o nome do evento" />
                     @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="md:col-span-2">
-                    <x-flux::label for="description" value="Descrição" />
-                    <x-flux::textarea id="description" wire:model="description" rows="4" class="w-full" />
+                    <x-flux::label for="description" value="Descrição" class="font-medium text-gray-700 dark:text-gray-300" />
+                    <x-flux::textarea id="description" wire:model="description" rows="4" class="w-full" placeholder="Descreva o evento" />
                     @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <!-- Data e hora -->
                 <div>
-                    <x-flux::label for="date" value="Data" />
+                    <x-flux::label for="date" value="Data do Evento *" class="font-medium text-gray-700 dark:text-gray-300" />
                     <x-flux::input id="date" type="date" wire:model="date" class="w-full" />
                     @error('date') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <x-flux::label for="start_time" value="Hora de Início" />
+                        <x-flux::label for="start_time" value="Hora de Início *" class="font-medium text-gray-700 dark:text-gray-300" />
                         <x-flux::input id="start_time" type="time" wire:model="start_time" class="w-full" />
                         @error('start_time') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
 
                     <div>
-                        <x-flux::label for="end_time" value="Hora de Término" />
+                        <x-flux::label for="end_time" value="Hora de Término" class="font-medium text-gray-700 dark:text-gray-300" />
                         <x-flux::input id="end_time" type="time" wire:model="end_time" class="w-full" />
                         @error('end_time') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                     </div>
@@ -185,88 +197,82 @@
 
                 <!-- Preço e capacidade -->
                 <div>
-                    <x-flux::label for="price" value="Preço (R$)" />
-                    <x-flux::input id="price" type="number" step="0.01" wire:model="price" class="w-full" />
+                    <x-flux::label for="price" value="Preço (R$)" class="font-medium text-gray-700 dark:text-gray-300" />
+                    <x-flux::input id="price" type="number" step="0.01" wire:model="price" class="w-full" placeholder="0.00" />
+                    <span class="text-xs text-gray-500 dark:text-gray-400">Deixe 0 para eventos gratuitos</span>
                     @error('price') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
-                    <x-flux::label for="capacity" value="Capacidade" />
-                    <x-flux::input id="capacity" type="number" wire:model="capacity" class="w-full" />
+                    <x-flux::label for="capacity" value="Capacidade" class="font-medium text-gray-700 dark:text-gray-300" />
+                    <x-flux::input id="capacity" type="number" wire:model="capacity" class="w-full" placeholder="Número máximo de participantes" />
+                    <span class="text-xs text-gray-500 dark:text-gray-400">Deixe em branco para capacidade ilimitada</span>
                     @error('capacity') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
-                <!-- Local -->
-                <div>
-                    <x-flux::label for="location" value="Local" />
-                    <x-flux::input id="location" wire:model="location" class="w-full" />
-                    @error('location') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
 
-                <div>
-                    <x-flux::label for="address" value="Endereço" />
-                    <x-flux::input id="address" wire:model="address" class="w-full" />
-                    @error('address') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div>
-                    <x-flux::label for="city" value="Cidade" />
-                    <x-flux::input id="city" wire:model="city" class="w-full" />
-                    @error('city') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <x-flux::label for="state" value="Estado" />
-                        <x-flux::input id="state" wire:model="state" class="w-full" />
-                        @error('state') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                    </div>
-
-                    <div>
-                        <x-flux::label for="zip_code" value="CEP" />
-                        <x-flux::input id="zip_code" wire:model="zip_code" class="w-full" />
-                        @error('zip_code') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                    </div>
-                </div>
 
                 <!-- Imagens -->
                 <div>
-                    <x-flux::label for="image" value="Imagem Principal" />
+                    <x-flux::label for="image" value="Imagem Principal" class="font-medium text-gray-700 dark:text-gray-300" />
                     <div class="mt-2">
                         @if($temp_image)
                             <div class="mb-2">
-                                <img src="{{ $temp_image }}" class="h-32 w-auto rounded-lg object-cover">
+                                <img src="{{ $temp_image }}" class="h-32 w-auto rounded-lg object-cover" alt="Imagem do evento">
                             </div>
                         @endif
-                        <input type="file" wire:model="image" id="image" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                        <div class="flex items-center space-x-2">
+                            <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                <span class="px-3 py-2 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 text-sm font-semibold">Escolher arquivo</span>
+                            </label>
+                            <input type="file" wire:model="image" id="image" class="hidden" />
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                {{ $image ? $image->getClientOriginalName() : 'Nenhum arquivo selecionado' }}
+                            </span>
+                        </div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 block">Imagem que aparecerá na lista de eventos (recomendado: 800x600px)</span>
                     </div>
-                    @error('image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    @error('image') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                 </div>
 
                 <div>
-                    <x-flux::label for="cover_image" value="Imagem de Capa" />
+                    <x-flux::label for="cover_image" value="Imagem de Capa" class="font-medium text-gray-700 dark:text-gray-300" />
                     <div class="mt-2">
                         @if($temp_cover_image)
                             <div class="mb-2">
-                                <img src="{{ $temp_cover_image }}" class="h-32 w-auto rounded-lg object-cover">
+                                <img src="{{ $temp_cover_image }}" class="h-32 w-auto rounded-lg object-cover" alt="Imagem de capa do evento">
                             </div>
                         @endif
-                        <input type="file" wire:model="cover_image" id="cover_image" class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+                        <div class="flex items-center space-x-2">
+                            <label for="cover_image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                <span class="px-3 py-2 rounded-md bg-blue-50 text-blue-700 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 text-sm font-semibold">Escolher arquivo</span>
+                            </label>
+                            <input type="file" wire:model="cover_image" id="cover_image" class="hidden" />
+                            <span class="text-sm text-gray-500 dark:text-gray-400">
+                                {{ $cover_image ? $cover_image->getClientOriginalName() : 'Nenhum arquivo selecionado' }}
+                            </span>
+                        </div>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 mt-1 block">Imagem de destaque para a página do evento (recomendado: 1200x600px)</span>
                     </div>
-                    @error('cover_image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    @error('cover_image') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
                 </div>
 
                 <!-- Opções -->
-                <div>
-                    <x-flux::checkbox id="is_featured" wire:model="is_featured" />
-                    <x-flux::label for="is_featured" value="Evento em destaque" class="ml-2" />
-                    @error('is_featured') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                </div>
+                <div class="md:col-span-2 mt-4">
+                    <p class="font-medium text-gray-700 dark:text-gray-300 mb-2">Opções do evento</p>
+                    <div class="flex items-center mb-2">
+                        <x-flux::checkbox id="is_featured" wire:model="is_featured" />
+                        <x-flux::label for="is_featured" value="Evento em destaque" class="ml-2 font-medium text-gray-700 dark:text-gray-300" />
+                        <span class="ml-2 text-xs text-gray-500 dark:text-gray-400">(Aparecerá em destaque na página inicial)</span>
+                        @error('is_featured') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
 
-                <div>
-                    <x-flux::checkbox id="is_active" wire:model="is_active" />
-                    <x-flux::label for="is_active" value="Evento ativo" class="ml-2" />
-                    @error('is_active') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    <div class="flex items-center">
+                        <x-flux::checkbox id="is_active" wire:model="is_active" />
+                        <x-flux::label for="is_active" value="Evento ativo" class="ml-2 font-medium text-gray-700 dark:text-gray-300" />
+                        <span class="ml-2 text-xs text-gray-500 dark:text-gray-400">(Desmarque para ocultar o evento)</span>
+                        @error('is_active') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
                 </div>
             </div>
         </x-flux::modal.body>
@@ -341,14 +347,14 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="flex items-center">
                                                 <div class="flex-shrink-0 h-10 w-10">
-                                                    <img class="h-10 w-10 rounded-full object-cover" src="{{ $attendee->user->userPhotos->first() ? asset('storage/' . $attendee->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}" alt="{{ $attendee->user->name }}">
+                                                    <img class="h-10 w-10 rounded-full object-cover" src="{{ $attendee->user && $attendee->user->userPhotos && $attendee->user->userPhotos->isNotEmpty() ? asset('storage/' . $attendee->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}" alt="{{ $attendee->user ? $attendee->user->name : 'Usuário' }}">
                                                 </div>
                                                 <div class="ml-4">
                                                     <div class="text-sm font-medium text-gray-900 dark:text-white">
-                                                        {{ $attendee->user->name }}
+                                                        {{ $attendee->user ? $attendee->user->name : 'Usuário não encontrado' }}
                                                     </div>
                                                     <div class="text-sm text-gray-500 dark:text-gray-400">
-                                                        {{ $attendee->user->email }}
+                                                        {{ $attendee->user ? $attendee->user->email : 'Email não disponível' }}
                                                     </div>
                                                 </div>
                                             </div>

@@ -9,6 +9,7 @@ use App\Models\ShippingAddress;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\Attributes;
 use Stripe\Stripe;
 use Stripe\Charge;
 use Stripe\Token;
@@ -20,6 +21,8 @@ class Checkout extends Component
     public $shippingAddress = [];
     public $paymentMethod = 'credit_card';
     public $notes = '';
+    public $hasPhysicalProducts = false;
+    public $hasDigitalProducts = false;
 
     // Campos do endereço
     public $address;
@@ -32,16 +35,19 @@ class Checkout extends Component
     // Token do Stripe
     public $stripeToken;
 
-    protected $rules = [
-        'address' => 'required|string|max:255',
-        'city' => 'required|string|max:100',
-        'state' => 'required|string|max:100',
-        'zipCode' => 'required|string|max:20',
-        'country' => 'required|string|max:100',
-        'phone' => 'required|string|max:20',
-        'paymentMethod' => 'required|in:credit_card,pix,boleto',
-        'notes' => 'nullable|string|max:500',
-    ];
+    // Wallet
+    public $walletBalance = 0;
+
+    protected function rules()
+    {
+        $rules = [
+            'paymentMethod' => 'required|in:credit_card,pix,boleto,wallet',
+            'notes' => 'nullable|string|max:500',
+        ];
+
+        // Não exigimos mais endereço, pois os produtos são retirados no local
+        return $rules;
+    }
 
     protected $validationAttributes = [
         'address' => 'endereço',
@@ -77,6 +83,18 @@ class Checkout extends Component
             $this->country = $savedAddress->country;
             $this->phone = $savedAddress->phone;
         }
+
+        // Carregar saldo da carteira
+        $wallet = Auth::user()->wallet;
+        if (!$wallet) {
+            // Criar carteira se não existir
+            $wallet = \App\Models\Wallet::create([
+                'user_id' => Auth::id(),
+                'balance' => 0,
+                'active' => true
+            ]);
+        }
+        $this->walletBalance = $wallet->balance;
     }
 
     protected function loadCart()
@@ -89,10 +107,34 @@ class Checkout extends Component
 
         // Carregar relacionamentos
         $this->cart->load('items.product');
+
+        // Verificar se há produtos físicos ou digitais no carrinho
+        $this->hasPhysicalProducts = false;
+        $this->hasDigitalProducts = false;
+
+        foreach ($this->cart->items as $item) {
+            if ($item->product->is_digital) {
+                $this->hasDigitalProducts = true;
+            } else {
+                $this->hasPhysicalProducts = true;
+            }
+
+            // Se já encontrou ambos os tipos, não precisa continuar verificando
+            if ($this->hasPhysicalProducts && $this->hasDigitalProducts) {
+                break;
+            }
+        }
     }
 
     public function placeOrder()
     {
+        logger()->info('Iniciando processamento do pedido', [
+            'user_id' => Auth::id(),
+            'payment_method' => $this->paymentMethod,
+            'has_stripe_token' => !empty($this->stripeToken),
+            'cart_total' => $this->cart ? $this->cart->getTotalWithDiscount() : 0
+        ]);
+
         $this->validate();
 
         // Validações adicionais para cartão de crédito
@@ -107,21 +149,11 @@ class Checkout extends Component
         try {
             DB::beginTransaction();
 
-            // Salvar endereço
+            // Produtos são retirados no local, não precisamos de endereço de entrega
             $shippingAddress = [
-                'address' => $this->address,
-                'city' => $this->city,
-                'state' => $this->state,
-                'zip_code' => $this->zipCode,
-                'country' => $this->country,
-                'phone' => $this->phone,
+                'pickup' => true,
+                'message' => 'Produto para retirada no local'
             ];
-
-            // Salvar ou atualizar endereço do usuário
-            ShippingAddress::updateOrCreate(
-                ['user_id' => Auth::id()],
-                $shippingAddress
-            );
 
             // Criar pedido
             $order = Order::create([
@@ -137,7 +169,7 @@ class Checkout extends Component
 
             // Adicionar itens ao pedido
             foreach ($this->cart->items as $item) {
-                OrderItem::create([
+                $orderItem = OrderItem::create([
                     'order_id' => $order->id,
                     'product_id' => $item->product_id,
                     'quantity' => $item->quantity,
@@ -149,11 +181,33 @@ class Checkout extends Component
                 $product = $item->product;
                 $product->stock -= $item->quantity;
                 $product->save();
+
+                // Se for um produto digital, criar registro de download
+                if ($product->is_digital) {
+                    // Criar um registro de download para cada quantidade do produto
+                    for ($i = 0; $i < $item->quantity; $i++) {
+                        \App\Models\ProductDownload::create([
+                            'order_item_id' => $orderItem->id,
+                            'user_id' => Auth::id(),
+                            'product_id' => $product->id,
+                            'download_count' => 0,
+                            'last_download' => null,
+                            'expires_at' => $product->download_expiry_days
+                                ? now()->addDays($product->download_expiry_days)
+                                : null,
+                        ]);
+                    }
+                }
             }
 
             // Processar pagamento com Stripe
             if ($this->paymentMethod === 'credit_card') {
                 try {
+                    // Verificar se o token do Stripe foi recebido
+                    if (empty($this->stripeToken)) {
+                        throw new \Exception('Token do cartão não recebido. Por favor, tente novamente.');
+                    }
+
                     // Configurar a chave secreta do Stripe
                     Stripe::setApiKey(config('cashier.secret'));
 
@@ -174,14 +228,125 @@ class Checkout extends Component
                     $order->status = Order::STATUS_PROCESSING;
                     $order->save();
 
+                    // Registrar sucesso no log
+                    logger()->info('Pagamento com cartão processado com sucesso', [
+                        'user_id' => Auth::id(),
+                        'order_id' => $order->id,
+                        'charge_id' => $charge->id,
+                        'amount' => $this->cart->getTotalWithDiscount()
+                    ]);
+
                 } catch (CardException $e) {
                     DB::rollBack();
+
+                    logger()->error('Erro no processamento do cartão', [
+                        'user_id' => Auth::id(),
+                        'order_id' => $order->id ?? null,
+                        'error' => $e->getMessage(),
+                        'code' => $e->getCode()
+                    ]);
 
                     $this->dispatch('notify', [
                         'message' => 'Erro no pagamento: ' . $e->getMessage(),
                         'type' => 'error'
                     ]);
 
+                    // Notificar o frontend para reativar o botão
+                    $this->dispatch('checkoutFailed');
+                    return;
+                } catch (\Exception $e) {
+                    DB::rollBack();
+
+                    logger()->error('Erro no processamento do pagamento com cartão', [
+                        'user_id' => Auth::id(),
+                        'order_id' => $order->id ?? null,
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+
+                    $this->dispatch('notify', [
+                        'message' => 'Erro ao processar o pagamento: ' . $e->getMessage(),
+                        'type' => 'error'
+                    ]);
+
+                    // Notificar o frontend para reativar o botão
+                    $this->dispatch('checkoutFailed');
+                    return;
+                }
+            } elseif ($this->paymentMethod === 'wallet') {
+                // Pagamento com carteira
+                $user = Auth::user();
+
+                try {
+                    // Recarregar o usuário e a carteira para garantir dados atualizados
+                    $user->refresh();
+
+                    // Obter a carteira com bloqueio para atualização
+                    $wallet = $user->wallet()->lockForUpdate()->first();
+
+                    if (!$wallet) {
+                        throw new \Exception('Carteira não encontrada. Por favor, tente novamente.');
+                    }
+
+                    // Atualizar o saldo da carteira na interface
+                    $this->walletBalance = $wallet->balance;
+
+                    $total = $this->cart->getTotalWithDiscount();
+
+                    // Verificar se o usuário tem saldo suficiente
+                    if ($wallet->balance < $total) {
+                        throw new \Exception('Saldo insuficiente na carteira. Adicione fundos ou escolha outro método de pagamento.');
+                    }
+
+                    // Atualizar o método de pagamento do pedido
+                    $order->payment_method = 'wallet';
+                    $order->save();
+
+                    // Processar pagamento com carteira
+                    $transaction = $wallet->subtractFunds(
+                        $total,
+                        'purchase',
+                        'Compra #' . $order->id,
+                        $order->id,
+                        Order::class
+                    );
+
+                    if (!$transaction) {
+                        throw new \Exception('Falha ao processar a transação da carteira.');
+                    }
+
+                    // Atualizar o pedido com as informações do pagamento
+                    $paymentId = 'WALLET-' . $transaction->id;
+                    $order->payment_id = $paymentId;
+                    $order->status = Order::STATUS_PROCESSING;
+                    $order->save();
+
+                    // Registrar sucesso no log
+                    logger()->info('Pagamento com carteira processado com sucesso', [
+                        'user_id' => $user->id,
+                        'order_id' => $order->id,
+                        'transaction_id' => $transaction->id,
+                        'amount' => $total
+                    ]);
+
+                } catch (\Exception $e) {
+                    DB::rollBack();
+
+                    logger()->error('Erro ao processar pagamento com carteira', [
+                        'user_id' => $user->id,
+                        'order_id' => $order->id ?? null,
+                        'amount' => $total ?? null,
+                        'error' => $e->getMessage(),
+                        'trace' => $e->getTraceAsString()
+                    ]);
+
+                    $this->dispatch('notify', [
+                        'message' => 'Erro ao processar o pagamento com a carteira: ' . $e->getMessage(),
+                        'type' => 'error'
+                    ]);
+
+                    // Notificar o frontend para reativar o botão
+                    $this->dispatch('checkoutFailed');
                     return;
                 }
             } else {
@@ -202,11 +367,149 @@ class Checkout extends Component
         } catch (\Exception $e) {
             DB::rollBack();
 
+            logger()->error('Erro ao processar o pedido', [
+                'user_id' => Auth::id(),
+                'payment_method' => $this->paymentMethod,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ]);
+
+            $errorMessage = 'Erro ao processar o pedido: ' . $e->getMessage();
+
+            // Simplificar a mensagem de erro para o usuário
+            if (str_contains($e->getMessage(), 'token')) {
+                $errorMessage = 'Erro ao processar o cartão de crédito. Por favor, verifique os dados do cartão e tente novamente.';
+            } elseif (str_contains($e->getMessage(), 'wallet') || str_contains($e->getMessage(), 'saldo')) {
+                $errorMessage = 'Erro ao processar o pagamento com a carteira. Por favor, verifique seu saldo e tente novamente.';
+            }
+
             $this->dispatch('notify', [
-                'message' => 'Erro ao processar o pedido: ' . $e->getMessage(),
+                'message' => $errorMessage,
                 'type' => 'error'
             ]);
+
+            // Notificar o frontend para reativar o botão
+            $this->dispatch('checkoutFailed');
+
+            return;
         }
+    }
+
+    public function updatedPaymentMethod($value)
+    {
+        // Sempre atualizar o saldo da carteira quando o método de pagamento for alterado
+        if ($value === 'wallet') {
+            try {
+                // Recarregar o usuário e a carteira para garantir dados atualizados
+                $user = Auth::user();
+                $user->refresh();
+
+                // Obter a carteira atualizada
+                $wallet = $user->wallet()->first();
+
+                if ($wallet) {
+                    // Forçar a atualização do saldo da carteira
+                    $wallet->refresh();
+                    $this->walletBalance = $wallet->balance;
+
+                    logger()->info('Wallet balance updated in checkout', [
+                        'user_id' => $user->id,
+                        'wallet_id' => $wallet->id,
+                        'balance' => $wallet->balance
+                    ]);
+                } else {
+                    // Criar carteira se não existir
+                    $wallet = \App\Models\Wallet::create([
+                        'user_id' => $user->id,
+                        'balance' => 0,
+                        'active' => true
+                    ]);
+                    $this->walletBalance = 0;
+
+                    logger()->info('New wallet created in checkout', [
+                        'user_id' => $user->id,
+                        'wallet_id' => $wallet->id
+                    ]);
+                }
+            } catch (\Exception $e) {
+                logger()->error('Error updating wallet balance in checkout', [
+                    'user_id' => Auth::id(),
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+
+        // Emitir evento para o JavaScript saber que o método de pagamento mudou
+        $this->dispatch('paymentMethodChanged', $value);
+
+        // Log para depuração
+        logger()->info('Método de pagamento alterado', [
+            'user_id' => Auth::id(),
+            'method' => $value,
+            'wallet_balance' => $this->walletBalance
+        ]);
+    }
+
+    /**
+     * Refresh the wallet balance
+     */
+    public function refreshWalletBalance()
+    {
+        if (Auth::check()) {
+            try {
+                $user = Auth::user();
+                $user->refresh();
+
+                $wallet = $user->wallet()->first();
+                if ($wallet) {
+                    $wallet->refresh();
+                    $this->walletBalance = $wallet->balance;
+
+                    logger()->info('Wallet balance refreshed', [
+                        'user_id' => $user->id,
+                        'wallet_id' => $wallet->id,
+                        'balance' => $wallet->balance
+                    ]);
+
+                    $this->dispatch('notify', [
+                        'message' => 'Saldo da carteira atualizado.',
+                        'type' => 'success'
+                    ]);
+                }
+            } catch (\Exception $e) {
+                logger()->error('Error refreshing wallet balance', [
+                    'user_id' => Auth::id(),
+                    'error' => $e->getMessage()
+                ]);
+            }
+        }
+    }
+
+    /**
+     * Set the Stripe token received from the frontend
+     */
+    #[Attributes\On('setStripeToken')]
+    public function setStripeToken($data)
+    {
+        $this->stripeToken = $data['token'];
+        logger()->info('Stripe token set', [
+            'user_id' => Auth::id(),
+            'token_received' => true,
+            'token' => $data['token']
+        ]);
+    }
+
+    /**
+     * Listener alternativo para o evento setStripeToken
+     * Isso garante compatibilidade com diferentes formas de envio do evento
+     */
+    public function getListeners()
+    {
+        return [
+            'setStripeToken' => 'setStripeToken'
+        ];
     }
 
     public function render()

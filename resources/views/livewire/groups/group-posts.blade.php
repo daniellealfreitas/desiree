@@ -28,7 +28,7 @@
                                 <img src="{{ $image->temporaryUrl() }}" class="h-24 w-auto rounded-lg object-cover">
                                 <button
                                     type="button"
-                                    wire:click="$set('image', null)"
+                                    wire:click="$wire.set('image', null)"
                                     class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
                                 >
                                     <x-flux::icon icon="x-mark" class="w-4 h-4" />
@@ -44,7 +44,7 @@
                                 </div>
                                 <button
                                     type="button"
-                                    wire:click="$set('video', null)"
+                                    wire:click="$wire.set('video', null)"
                                     class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
                                 >
                                     <x-flux::icon icon="x-mark" class="w-4 h-4" />
@@ -205,7 +205,7 @@
                     <div class="px-4 py-2 border-t border-gray-200 dark:border-gray-700 flex">
                         <button
                             class="flex-1 flex items-center justify-center py-1 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md"
-                            wire:click="$emit('toggleLike', {{ $post->id }})"
+                            wire:click="$dispatch('toggleLike', { id: {{ $post->id }} })"
                         >
                             @if($post->isLikedBy(auth()->user()))
                                 <x-flux::icon icon="heart" variant="solid" class="w-5 h-5 mr-2 text-red-500" />
@@ -218,7 +218,7 @@
 
                         <button
                             class="flex-1 flex items-center justify-center py-1 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md"
-                            wire:click="$emit('focusComment', {{ $post->id }})"
+                            wire:click="$dispatch('focusComment', { id: {{ $post->id }} })"
                         >
                             <x-flux::icon icon="chat-bubble-left" class="w-5 h-5 mr-2" />
                             <span>Comentar</span>

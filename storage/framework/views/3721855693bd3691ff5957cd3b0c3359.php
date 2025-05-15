@@ -1,4 +1,89 @@
-<div wire:poll.30s="refreshStatus"> 
+<?php
+use Illuminate\Support\Facades\Auth;
+?>
+
+<div wire:poll.300s="refreshStatus"> 
+    <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-images', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-0', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+    <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-videos', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-1', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+    <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-following', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-2', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+    <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-followers', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-3', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+    <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('user-posts', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-4', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+
     
     <div
         x-data="{ show: false }"
@@ -21,7 +106,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('user-status-indicator', ['userId' => $user->id]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-0', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-5', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -34,7 +119,7 @@ if (isset($__slots)) unset($__slots);
                 </div>
                 <div class="bg-zinc-800 opacity-50 p-4 rounded-lg shadow-lg">
                     <h2 class="text-3xl font-bold text-white drop-shadow-lg"><?php echo e($user->name); ?></h2>
-                    <a href="/<?php echo e($user->username); ?>" class="text-lg text-gray-200 drop-shadow-md hover:underline">
+                    <a href="/<?php echo e($user->username); ?>" class="text-lg text-white drop-shadow-md hover:underline">
                         <?php echo e('@'. $user->username); ?>
 
                     </a>
@@ -45,7 +130,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('user-status-manager', ['user' => $user]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-1', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-6', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -59,7 +144,7 @@ if (isset($__slots)) unset($__slots);
             </div>
         </div>
 
-        <div id="profile_navigation" class="flex flex-wrap items-center justify-between border-t border-gray-200 dark:border-gray-700 px-6 py-3 mt-4 text-sm text-gray-700 dark:text-gray-300">
+        <div id="profile_navigation" class="flex flex-wrap items-center justify-between border-t border-gray-200 dark:border-gray-700 px-6 py-3 mt-4 text-sm text-body">
             <div class="flex flex-wrap gap-4">
                <?php if (isset($component)) { $__componentOriginal943cdda7cef0d01ea0b343893679e71f = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal943cdda7cef0d01ea0b343893679e71f = $attributes; } ?>
@@ -73,14 +158,14 @@ if (isset($__slots)) unset($__slots);
 <?php $component->withAttributes([]); ?>
                     <?php if (isset($component)) { $__componentOriginalc04b147acd0e65cc1a77f86fb0e81580 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'photo']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'photo','wire:click' => 'showUserImages']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['variant' => 'ghost','icon' => 'photo']); ?>
+<?php $component->withAttributes(['variant' => 'ghost','icon' => 'photo','wire:click' => 'showUserImages']); ?>
                         Imagens (<?php echo e($this->imagesCount()); ?>)
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -94,15 +179,15 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginalc04b147acd0e65cc1a77f86fb0e81580 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'video-camera']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'video-camera','wire:click' => 'showUserVideos']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['variant' => 'ghost','icon' => 'video-camera']); ?>
-                        Vídeos
+<?php $component->withAttributes(['variant' => 'ghost','icon' => 'video-camera','wire:click' => 'showUserVideos']); ?>
+                        Vídeos (<?php echo e($this->videosCount()); ?>)
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580)): ?>
@@ -115,14 +200,14 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginalc04b147acd0e65cc1a77f86fb0e81580 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'users']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'users','wire:click' => 'showUserFollowing']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['variant' => 'ghost','icon' => 'users']); ?>
+<?php $component->withAttributes(['variant' => 'ghost','icon' => 'users','wire:click' => 'showUserFollowing']); ?>
                         Seguindo: <?php echo e($this->followingCount()); ?>
 
                      <?php echo $__env->renderComponent(); ?>
@@ -137,14 +222,14 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginalc04b147acd0e65cc1a77f86fb0e81580 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'users']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'users','wire:click' => 'showUserFollowers']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['variant' => 'ghost','icon' => 'users']); ?>
+<?php $component->withAttributes(['variant' => 'ghost','icon' => 'users','wire:click' => 'showUserFollowers']); ?>
                         Seguidores: <?php echo e($this->followersCount()); ?>
 
                      <?php echo $__env->renderComponent(); ?>
@@ -159,14 +244,14 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginalc04b147acd0e65cc1a77f86fb0e81580 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'rss']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'rss','wire:click' => 'showUserPosts']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['variant' => 'ghost','icon' => 'rss']); ?>
+<?php $component->withAttributes(['variant' => 'ghost','icon' => 'rss','wire:click' => 'showUserPosts']); ?>
                         Postagens: <?php echo e($this->postsCount()); ?>
 
                      <?php echo $__env->renderComponent(); ?>
@@ -181,15 +266,15 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginalc04b147acd0e65cc1a77f86fb0e81580 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'currency-dollar']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'gift','wire:click' => 'showSendCharm']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::button'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['variant' => 'ghost','icon' => 'currency-dollar']); ?>
-                        Pagar um Drink
+<?php $component->withAttributes(['variant' => 'ghost','icon' => 'gift','wire:click' => 'showSendCharm']); ?>
+                        Enviar Charm
                      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580)): ?>
@@ -231,7 +316,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('profile-progress-bar', ['username' => $user->username]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-2', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-7', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -241,8 +326,8 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
-            <section id="additional-info" class="mt-6"></section>
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Informações Adicionais</h3>
+            <section id="additional-info" class="mt-6">
+                <h3 class="text-lg font-semibold text-title mb-4">Informações Adicionais</h3>
                 <div class="flex flex-col gap-4">
                     <div>
                         <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
@@ -278,7 +363,6 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
 <?php $component->withAttributes([]); ?>
                             <strong>Aniversário:</strong> <?php echo e($user->aniversario ? $user->aniversario->format('d/m/Y') : 'Não especificado'); ?>
-
 
                          <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
@@ -359,8 +443,6 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginal4cc377eda9b63b796b6668ee7832d023; ?>
 <?php unset($__componentOriginal4cc377eda9b63b796b6668ee7832d023); ?>
 <?php endif; ?>
-
-
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                     </div>
@@ -387,7 +469,6 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginal4cc377eda9b63b796b6668ee7832d023; ?>
 <?php unset($__componentOriginal4cc377eda9b63b796b6668ee7832d023); ?>
 <?php endif; ?>
-
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><!--[if ENDBLOCK]><![endif]-->
                         </div>
                     </div>
@@ -397,7 +478,7 @@ if (isset($__slots)) unset($__slots);
 
 
             <section id="ranking" class="mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Ranking</h3>
+                <h3 class="text-lg font-semibold text-title mb-4">Ranking</h3>
                 <div class="flex flex-col gap-4">
                     <!--[if BLOCK]><![endif]--><?php $__currentLoopData = $topUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rank): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow">
@@ -409,7 +490,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('user-status-indicator', ['userId' => $rank->id]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-3', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-8', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -421,8 +502,8 @@ if (isset($__slots)) unset($__slots);
 ?>
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200"><?php echo e($rank->name); ?></h4>
-                                    <a href="/<?php echo e($rank->username); ?>" class="text-xs text-gray-600 dark:text-gray-400"><?php echo e('@' . $rank->username); ?></a>
+                                    <h4 class="text-sm font-bold text-title"><?php echo e($rank->name); ?></h4>
+                                    <a href="/<?php echo e($rank->username); ?>" class="text-xs text-body-light hover:text-link"><?php echo e('@' . $rank->username); ?></a>
                                     <?php if (isset($component)) { $__componentOriginal0638ebfbd490c7a414275d493e14cb4e = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal0638ebfbd490c7a414275d493e14cb4e = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::text','data' => []] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -444,7 +525,7 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                                 </div>
                             </div>
-                            <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                            <div class="text-sm font-semibold text-title">
                                 <?php echo e($rank->ranking_points); ?> pontos
                             </div>
                         </div>
@@ -459,7 +540,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('user-online-stats', ['user' => $user]);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-4', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-9', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -479,7 +560,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('create-post', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-5', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-10', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -495,7 +576,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('postfeed', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-6', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1812765404-11', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 

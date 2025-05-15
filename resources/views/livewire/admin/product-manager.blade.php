@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Gerenciamento de Produtos</h2>
             <flux:button wire:click="create">
-                <flux:icon name="plus" class="h-4 w-4 mr-2" />
+                <x-flux::icon name="plus" class="h-4 w-4 mr-2" />
                 Novo Produto
             </flux:button>
         </div>
@@ -39,31 +39,31 @@
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer" wire:click="sortBy('id')">
                             ID
                             @if($sortBy === 'id')
-                                <flux:icon name="{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="h-3 w-3 inline" />
+                                <x-flux::icon name="{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="h-3 w-3 inline" />
                             @endif
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer" wire:click="sortBy('name')">
                             Nome
                             @if($sortBy === 'name')
-                                <flux:icon name="{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="h-3 w-3 inline" />
+                                <x-flux::icon name="{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="h-3 w-3 inline" />
                             @endif
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer" wire:click="sortBy('price')">
                             Preço
                             @if($sortBy === 'price')
-                                <flux:icon name="{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="h-3 w-3 inline" />
+                                <x-flux::icon name="{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="h-3 w-3 inline" />
                             @endif
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer" wire:click="sortBy('stock')">
                             Estoque
                             @if($sortBy === 'stock')
-                                <flux:icon name="{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="h-3 w-3 inline" />
+                                <x-flux::icon name="{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="h-3 w-3 inline" />
                             @endif
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider cursor-pointer" wire:click="sortBy('status')">
                             Status
                             @if($sortBy === 'status')
-                                <flux:icon name="{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="h-3 w-3 inline" />
+                                <x-flux::icon name="{{ $sortDirection === 'asc' ? 'arrow-up' : 'arrow-down' }}" class="h-3 w-3 inline" />
                             @endif
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -146,16 +146,22 @@
                                         Destaque
                                     </span>
                                 @endif
+
+                                @if($product->is_digital)
+                                    <span class="ml-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200">
+                                        Digital
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                                 {{ $product->category?->name ?? 'Sem categoria' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <flux:button wire:click="edit({{ $product->id }})" variant="outline" size="xs">
-                                    <flux:icon name="pencil-square" class="h-4 w-4" />
+                                    <x-flux::icon name="pencil-square" class="h-4 w-4" />
                                 </flux:button>
                                 <flux:button wire:click="confirmDelete({{ $product->id }})" variant="outline" size="xs" class="ml-2">
-                                    <flux:icon name="trash" class="h-4 w-4 text-red-500" />
+                                    <x-flux::icon name="trash" class="h-4 w-4 text-red-500" />
                                 </flux:button>
                             </td>
                         </tr>
@@ -186,6 +192,7 @@
                         label="Nome do Produto"
                         placeholder="Nome do produto"
                         required
+                        :error="$errors->first('name')"
                     />
                 </div>
 
@@ -195,29 +202,34 @@
                         label="Descrição"
                         placeholder="Descrição do produto"
                         rows="3"
+                        :error="$errors->first('description')"
                     />
                 </div>
 
                 <div>
                     <flux:input
-                        wire:model="price"
+                        wire:model.defer="price"
                         label="Preço"
                         type="number"
                         step="0.01"
                         min="0"
                         placeholder="0.00"
                         required
+                        :error="$errors->first('price')"
+                        help="Use ponto como separador decimal (ex: 10.99)"
                     />
                 </div>
 
                 <div>
                     <flux:input
-                        wire:model="salePrice"
+                        wire:model.defer="salePrice"
                         label="Preço Promocional"
                         type="number"
                         step="0.01"
                         min="0"
                         placeholder="0.00"
+                        :error="$errors->first('salePrice')"
+                        help="Use ponto como separador decimal (ex: 9.99)"
                     />
                 </div>
 
@@ -229,6 +241,7 @@
                         min="0"
                         placeholder="0"
                         required
+                        :error="$errors->first('stock')"
                     />
                 </div>
 
@@ -236,6 +249,7 @@
                     <flux:select
                         wire:model="categoryId"
                         label="Categoria"
+                        :error="$errors->first('categoryId')"
                     >
                         <option value="">Selecione uma categoria</option>
                         @foreach($categories as $category)
@@ -249,6 +263,7 @@
                         wire:model="sku"
                         label="SKU"
                         placeholder="Código do produto"
+                        :error="$errors->first('sku')"
                     />
                 </div>
 
@@ -257,17 +272,20 @@
                         wire:model="color"
                         label="Cor"
                         placeholder="Cor do produto"
+                        :error="$errors->first('color')"
                     />
                 </div>
 
                 <div>
                     <flux:input
-                        wire:model="weight"
+                        wire:model.defer="weight"
                         label="Peso (kg)"
                         type="number"
                         step="0.01"
                         min="0"
                         placeholder="0.00"
+                        :error="$errors->first('weight')"
+                        help="Use ponto como separador decimal (ex: 1.5)"
                     />
                 </div>
 
@@ -275,6 +293,7 @@
                     <flux:select
                         wire:model="status"
                         label="Status"
+                        :error="$errors->first('status')"
                     >
                         <option value="active">Ativo</option>
                         <option value="inactive">Inativo</option>
@@ -286,6 +305,7 @@
                         wire:model="saleStartsAt"
                         label="Início da Promoção"
                         type="date"
+                        :error="$errors->first('saleStartsAt')"
                     />
                 </div>
 
@@ -294,6 +314,7 @@
                         wire:model="saleEndsAt"
                         label="Fim da Promoção"
                         type="date"
+                        :error="$errors->first('saleEndsAt')"
                     />
                 </div>
 
@@ -304,6 +325,88 @@
                     />
                 </div>
 
+                <!-- Seção de Produto Digital -->
+                <div class="sm:col-span-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Configurações de Produto Digital</h3>
+
+                    <div class="mb-4">
+                        <flux:checkbox
+                            wire:model.live="isDigital"
+                            label="Este é um produto digital"
+                        />
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            Produtos digitais não requerem envio físico e podem ser baixados pelo cliente após a compra.
+                        </p>
+                    </div>
+
+                    @if($isDigital)
+                        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mt-4">
+                            <div class="sm:col-span-2">
+                                <x-file-upload
+                                    wire:model="digitalFile"
+                                    label="Arquivo Digital"
+                                    accept=".pdf,.zip,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.mp3,.mp4,.jpg,.jpeg,.png,.gif"
+                                    icon="document"
+                                    :iconVariant="$digitalFile ? 'solid' : 'outline'"
+                                    :required="!$isEditing"
+                                    help="Formatos aceitos: PDF, ZIP, DOC, DOCX, XLS, XLSX, PPT, PPTX, MP3, MP4, JPG, JPEG, PNG, GIF (máx. 50MB)"
+                                />
+                                @error('digitalFile')
+                                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
+
+                                @if($isEditing && !$digitalFile && $productId)
+                                    @php
+                                        $product = App\Models\Product::find($productId);
+                                    @endphp
+                                    @if($product && $product->digital_file)
+                                        <div class="mt-2 flex items-center">
+                                            <x-flux::icon name="document" class="h-5 w-5 text-blue-500 mr-2" />
+                                            <span class="text-sm text-gray-700 dark:text-gray-300">
+                                                {{ $product->digital_file_name ?: 'Arquivo digital' }}
+                                            </span>
+                                        </div>
+                                    @endif
+                                @endif
+                            </div>
+
+                            <div class="sm:col-span-2">
+                                <flux:input
+                                    wire:model="digitalFileName"
+                                    label="Nome do Arquivo para Exibição"
+                                    placeholder="Ex: Manual do Produto.pdf"
+                                    help="Nome que será exibido para o cliente. Se não informado, será usado o nome original do arquivo."
+                                    :error="$errors->first('digitalFileName')"
+                                />
+                            </div>
+
+                            <div>
+                                <flux:input
+                                    wire:model="downloadLimit"
+                                    label="Limite de Downloads"
+                                    type="number"
+                                    min="0"
+                                    placeholder="Ilimitado"
+                                    help="Deixe em branco para downloads ilimitados"
+                                    :error="$errors->first('downloadLimit')"
+                                />
+                            </div>
+
+                            <div>
+                                <flux:input
+                                    wire:model="downloadExpiryDays"
+                                    label="Prazo de Expiração (dias)"
+                                    type="number"
+                                    min="0"
+                                    placeholder="Sem expiração"
+                                    help="Número de dias após a compra em que o download estará disponível. Deixe em branco para não expirar."
+                                    :error="$errors->first('downloadExpiryDays')"
+                                />
+                            </div>
+                        </div>
+                    @endif
+                </div>
+
                 <div class="sm:col-span-2">
                     <x-file-upload
                         wire:model="image"
@@ -311,14 +414,20 @@
                         accept="image/*"
                         icon="photo"
                         :iconVariant="$image ? 'solid' : 'outline'"
+                        help="Imagem principal do produto (máx. 2MB)"
                     />
+                    @error('image')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
 
                     @if($image)
                         <div class="mt-2">
                             <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="h-20 w-20 object-cover rounded">
                         </div>
                     @elseif($isEditing && $productId)
-                        @php $product = App\Models\Product::find($productId); @endphp
+                        @php
+                            $product = App\Models\Product::find($productId);
+                        @endphp
                         @if($product && $product->image)
                             <div class="mt-2">
                                 <img src="{{ $product->image }}" alt="{{ $product->name }}" class="h-20 w-20 object-cover rounded">
@@ -334,20 +443,26 @@
                         accept="image/*"
                         multiple
                         icon="photo"
+                        help="Imagens adicionais do produto (máx. 2MB cada)"
                     />
+                    @error('additionalImages.*')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
 
-                    @if($additionalImages)
+                    @if($additionalImages && count($additionalImages) > 0)
                         <div class="mt-2 flex flex-wrap gap-2">
-                            @foreach($additionalImages as $image)
-                                <img src="{{ $image->temporaryUrl() }}" alt="Preview" class="h-20 w-20 object-cover rounded">
+                            @foreach($additionalImages as $img)
+                                <img src="{{ $img->temporaryUrl() }}" alt="Preview" class="h-20 w-20 object-cover rounded">
                             @endforeach
                         </div>
                     @elseif($isEditing && $productId)
-                        @php $product = App\Models\Product::find($productId); @endphp
-                        @if($product && $product->images->count() > 0)
+                        @php
+                            $product = App\Models\Product::find($productId);
+                        @endphp
+                        @if($product && $product->images && $product->images->count() > 0)
                             <div class="mt-2 flex flex-wrap gap-2">
-                                @foreach($product->images as $image)
-                                    <img src="{{ $image->url }}" alt="{{ $product->name }}" class="h-20 w-20 object-cover rounded">
+                                @foreach($product->images as $img)
+                                    <img src="{{ $img->url }}" alt="{{ $product->name }}" class="h-20 w-20 object-cover rounded">
                                 @endforeach
                             </div>
                         @endif
@@ -359,8 +474,14 @@
                 <flux:button type="button" variant="outline" wire:click="$set('showModal', false)">
                     Cancelar
                 </flux:button>
-                <flux:button type="submit">
-                    {{ $isEditing ? 'Atualizar' : 'Salvar' }}
+                <flux:button type="submit" variant="primary" wire:loading.attr="disabled" wire:target="save">
+                    <span wire:loading.remove wire:target="save">
+                        {{ $isEditing ? 'Atualizar' : 'Salvar' }}
+                    </span>
+                    <span wire:loading wire:target="save">
+                        <x-flux::icon name="arrow-path" class="h-4 w-4 animate-spin mr-1" />
+                        Processando...
+                    </span>
                 </flux:button>
             </div>
         </form>

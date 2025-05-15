@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Str;
+@endphp
+
 <div>
     <div class="bg-white dark:bg-zinc-800">
         <div class="mx-auto max-w-3xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
@@ -41,28 +45,60 @@
                             <div class="sm:col-span-1">
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Método de Pagamento</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    {{ $order->payment_method === 'credit_card' ? 'Cartão de Crédito' :
-                                       ($order->payment_method === 'pix' ? 'PIX' :
-                                       ($order->payment_method === 'boleto' ? 'Boleto' : ucfirst($order->payment_method))) }}
+                                    @switch($order->payment_method)
+                                        @case('credit_card')
+                                            Cartão de Crédito
+                                            @break
+                                        @case('wallet')
+                                            Carteira
+                                            @break
+                                        @case('pix')
+                                            PIX
+                                            @break
+                                        @case('boleto')
+                                            Boleto
+                                            @break
+                                        @default
+                                            {{ ucfirst($order->payment_method) }}
+                                    @endswitch
                                 </dd>
                             </div>
 
                             <div class="sm:col-span-1">
                                 <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">ID do Pagamento</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    {{ $order->payment_id ?? 'N/A' }}
+                                    @if(Str::startsWith($order->payment_id, 'WALLET-'))
+                                        <span class="flex items-center">
+                                            <x-flux::icon name="wallet" class="h-4 w-4 text-green-500 mr-1" />
+                                            {{ $order->payment_id }}
+                                        </span>
+                                    @else
+                                        {{ $order->payment_id ?? 'N/A' }}
+                                    @endif
                                 </dd>
                             </div>
 
                             <div class="sm:col-span-2">
-                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Endereço de Entrega</dt>
+                                <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Informações de Entrega</dt>
                                 <dd class="mt-1 text-sm text-gray-900 dark:text-white">
-                                    @if($order->shipping_address)
+                                    @if($order->shipping_address && isset($order->shipping_address['pickup']) && $order->shipping_address['pickup'])
+                                        <div class="flex items-center">
+                                            <flux:icon name="map-pin" class="h-4 w-4 text-blue-600 dark:text-blue-400 mr-2" />
+                                            <span>Retirada no local</span>
+                                        </div>
+                                        @if(isset($order->shipping_address['message']))
+                                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                                {{ $order->shipping_address['message'] }}
+                                            </p>
+                                        @endif
+                                    @elseif($order->shipping_address && isset($order->shipping_address['address']))
                                         <address class="not-italic">
-                                            {{ $order->shipping_address['address'] }}<br>
-                                            {{ $order->shipping_address['city'] }} - {{ $order->shipping_address['state'] }}<br>
-                                            {{ $order->shipping_address['zip_code'] }}, {{ $order->shipping_address['country'] }}<br>
-                                            <span class="text-gray-500 dark:text-gray-400">Telefone:</span> {{ $order->shipping_address['phone'] }}
+                                            {{ $order->shipping_address['address'] ?? 'Endereço não informado' }}<br>
+                                            {{ $order->shipping_address['city'] ?? '' }} {{ isset($order->shipping_address['state']) ? '- '.$order->shipping_address['state'] : '' }}<br>
+                                            {{ $order->shipping_address['zip_code'] ?? '' }}{{ isset($order->shipping_address['country']) ? ', '.$order->shipping_address['country'] : '' }}<br>
+                                            @if(isset($order->shipping_address['phone']))
+                                                <span class="text-gray-500 dark:text-gray-400">Telefone:</span> {{ $order->shipping_address['phone'] }}
+                                            @endif
                                         </address>
                                     @else
                                         <span class="text-gray-500 dark:text-gray-400">Não informado</span>
@@ -94,6 +130,12 @@
                                                     <div class="ml-4">
                                                         <div class="text-sm font-medium text-gray-900 dark:text-white">
                                                             {{ $item->product->name }}
+                                                            @if($item->product->is_digital)
+                                                                <span class="ml-1 inline-flex items-center rounded-md bg-blue-50 dark:bg-blue-900 px-1.5 py-0.5 text-xs font-medium text-blue-700 dark:text-blue-100">
+                                                                    <flux:icon name="document" class="h-3 w-3 mr-0.5" />
+                                                                    DIGITAL
+                                                                </span>
+                                                            @endif
                                                         </div>
                                                         @if(!empty($item->options))
                                                             <div class="text-xs text-gray-500 dark:text-gray-400">
@@ -155,6 +197,35 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Seção de produtos digitais -->
+            @php
+                $hasDigitalProducts = $order->items->contains(function ($item) {
+                    return $item->product->is_digital;
+                });
+            @endphp
+
+            @if($hasDigitalProducts)
+                <div class="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8">
+                    <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6">
+                        <div class="flex items-start">
+                            <flux:icon name="information-circle" class="h-6 w-6 text-blue-600 dark:text-blue-400 mr-3 mt-0.5" />
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Produtos Digitais</h3>
+                                <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                    Seu pedido contém produtos digitais que estarão disponíveis para download após a confirmação do pagamento.
+                                </p>
+                                <div class="mt-4">
+                                    <flux:button :href="route('shop.downloads')" variant="outline" color="blue">
+                                        <flux:icon name="arrow-down-tray" class="h-5 w-5 mr-2" />
+                                        Acessar Meus Downloads
+                                    </flux:button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
 
             <div class="mt-8 flex justify-center space-x-4">
                 <flux:button :href="route('shop.user.orders')" variant="outline">

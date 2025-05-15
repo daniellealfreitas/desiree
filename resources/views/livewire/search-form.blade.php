@@ -134,7 +134,7 @@ use Illuminate\Support\Facades\Storage;
                         <div class="relative h-32 bg-cover bg-center rounded-t-lg"
                             style="background-image: url('{{
                                 $result->userCoverPhotos->first()
-                                ? Storage::url($result->userCoverPhotos->first()->photo_path)
+                                ? Storage::url($result->userCoverPhotos->first()->cropped_photo_path ?? $result->userCoverPhotos->first()->photo_path)
                                 : asset('images/users/capa.jpg')
                             }}'); background-size: cover; background-position: center;">
                         </div>

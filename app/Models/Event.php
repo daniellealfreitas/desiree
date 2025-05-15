@@ -56,11 +56,11 @@ class Event extends Model
             if (empty($event->slug)) {
                 $event->slug = Str::slug($event->name);
             }
-            
+
             // Ensure slug uniqueness
             $count = 1;
             $originalSlug = $event->slug;
-            
+
             while (static::where('slug', $event->slug)->exists()) {
                 $event->slug = $originalSlug . '-' . $count++;
             }
@@ -137,7 +137,7 @@ class Event extends Model
         if ($this->price == 0) {
             return 'Grátis';
         }
-        
+
         return 'R$ ' . number_format($this->price, 2, ',', '.');
     }
 
@@ -181,8 +181,8 @@ class Event extends Model
         if (!$this->capacity) {
             return false;
         }
-        
-        return $this->attendees()->where('status', '!=', 'cancelled')->count() >= $this->capacity;
+
+        return $this->attendees()->where('event_attendees.status', '!=', 'cancelled')->count() >= $this->capacity;
     }
 
     /**
@@ -193,9 +193,9 @@ class Event extends Model
         if (!$this->capacity) {
             return PHP_INT_MAX;
         }
-        
-        $registered = $this->attendees()->where('status', '!=', 'cancelled')->count();
-        
+
+        $registered = $this->attendees()->where('event_attendees.status', '!=', 'cancelled')->count();
+
         return max(0, $this->capacity - $registered);
     }
 
@@ -205,7 +205,7 @@ class Event extends Model
     public function getDayOfWeekAttribute(): string
     {
         $dayOfWeek = Carbon::parse($this->date)->dayOfWeek;
-        
+
         $days = [
             0 => 'Domingo',
             1 => 'Segunda-feira',
@@ -215,7 +215,7 @@ class Event extends Model
             5 => 'Sexta-feira',
             6 => 'Sábado',
         ];
-        
+
         return $days[$dayOfWeek];
     }
 
@@ -256,7 +256,13 @@ class Event extends Model
      */
     public function scopeOnDaysOfWeek($query, array $days)
     {
-        return $query->whereRaw('DAYOFWEEK(date) IN (' . implode(',', $days) . ')');
+        // SQLite uses strftime('%w') which returns 0-6 (0=Sunday, 6=Saturday)
+        // Convert MySQL DAYOFWEEK (1-7, 1=Sunday) to SQLite format (0-6)
+        $sqliteDays = array_map(function($day) {
+            return $day - 1;
+        }, $days);
+
+        return $query->whereRaw("strftime('%w', date) IN (" . implode(',', $sqliteDays) . ")");
     }
 
     /**
@@ -264,7 +270,8 @@ class Event extends Model
      */
     public function scopeOnEventDays($query)
     {
-        // DAYOFWEEK: 1 = Sunday, 2 = Monday, ..., 7 = Saturday
-        return $query->whereRaw('DAYOFWEEK(date) IN (4, 6, 7)'); // Wednesday, Friday, Saturday
+        // SQLite: 0=Sunday, 1=Monday, ..., 6=Saturday
+        // So Wednesday=3, Friday=5, Saturday=6
+        return $query->whereRaw("strftime('%w', date) IN (3, 5, 6)"); // Wednesday, Friday, Saturday
     }
 }

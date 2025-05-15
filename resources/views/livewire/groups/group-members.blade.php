@@ -190,7 +190,7 @@
         </flux:modal.body>
 
         <flux:modal.footer>
-            <flux:button wire:click="$set('showRoleModal', false)" color="secondary">
+            <flux:button wire:click="$wire.set('showRoleModal', false)" color="secondary">
                 Cancelar
             </flux:button>
 
@@ -214,7 +214,7 @@
         </flux:modal.body>
 
         <flux:modal.footer>
-            <flux:button wire:click="$set('showRemoveModal', false)" color="secondary">
+            <flux:button wire:click="$wire.set('showRemoveModal', false)" color="secondary">
                 Cancelar
             </flux:button>
 

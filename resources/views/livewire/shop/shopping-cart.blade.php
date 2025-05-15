@@ -65,7 +65,7 @@
                                                 <div class="flex items-center">
                                                     <flux:button 
                                                         wire:click="updateQuantity({{ $item->id }}, {{ max(1, $item->quantity - 1) }})" 
-                                                        variant="secondary" 
+                                                    
                                                         size="xs"
                                                     >
                                                         <flux:icon name="minus" class="h-3 w-3" />
@@ -73,7 +73,7 @@
                                                     <span class="mx-2 text-sm text-gray-700 dark:text-gray-300">{{ $item->quantity }}</span>
                                                     <flux:button 
                                                         wire:click="updateQuantity({{ $item->id }}, {{ min($item->product->stock, $item->quantity + 1) }})" 
-                                                        variant="secondary" 
+                                                    
                                                         size="xs"
                                                     >
                                                         <flux:icon name="plus" class="h-3 w-3" />
@@ -99,12 +99,12 @@
                         </div>
                         
                         <div class="mt-4 flex justify-between">
-                            <flux:button :href="route('shop.index')" variant="link">
+                            <flux:button :href="route('shop.index')" >
                                 <flux:icon name="arrow-left" class="h-4 w-4 mr-1" />
                                 Continuar Comprando
                             </flux:button>
                             
-                            <flux:button wire:click="clearCart" variant="secondary">
+                            <flux:button wire:click="clearCart" >
                                 <flux:icon name="trash" class="h-4 w-4 mr-1" />
                                 Limpar Carrinho
                             </flux:button>

@@ -25,24 +25,24 @@
                 <flux:label value="Privacidade" />
                 <div class="mt-2 space-y-2">
                     <div class="flex items-center">
-                        <flux:radio id="privacy-public" name="privacy" value="public" :checked="old('privacy', $group->privacy) === 'public'" />
-                        <flux:label for="privacy-public" value="Público" class="ml-2" />
+                        <input type="radio" id="privacy-public" name="privacy" value="public" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" {{ old('privacy', $group->privacy) === 'public' ? 'checked' : '' }} />
+                        <label for="privacy-public" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Público</label>
                         <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">
                             (Qualquer pessoa pode ver e entrar no grupo)
                         </span>
                     </div>
 
                     <div class="flex items-center">
-                        <flux:radio id="privacy-private" name="privacy" value="private" :checked="old('privacy', $group->privacy) === 'private'" />
-                        <flux:label for="privacy-private" value="Privado" class="ml-2" />
+                        <input type="radio" id="privacy-private" name="privacy" value="private" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" {{ old('privacy', $group->privacy) === 'private' ? 'checked' : '' }} />
+                        <label for="privacy-private" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Privado</label>
                         <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">
                             (Qualquer pessoa pode ver, mas precisa solicitar para entrar)
                         </span>
                     </div>
 
                     <div class="flex items-center">
-                        <flux:radio id="privacy-secret" name="privacy" value="secret" :checked="old('privacy', $group->privacy) === 'secret'" />
-                        <flux:label for="privacy-secret" value="Secreto" class="ml-2" />
+                        <input type="radio" id="privacy-secret" name="privacy" value="secret" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-500" {{ old('privacy', $group->privacy) === 'secret' ? 'checked' : '' }} />
+                        <label for="privacy-secret" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Secreto</label>
                         <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">
                             (Apenas membros podem ver o grupo)
                         </span>
@@ -92,8 +92,8 @@
             <!-- Opções adicionais -->
             <div>
                 <div class="flex items-center">
-                    <flux:checkbox id="posts_require_approval" name="posts_require_approval" value="1" :checked="old('posts_require_approval', $group->posts_require_approval)" />
-                    <flux:label for="posts_require_approval" value="Postagens precisam de aprovação" class="ml-2" />
+                    <input type="checkbox" id="posts_require_approval" name="posts_require_approval" value="1" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500" {{ old('posts_require_approval', $group->posts_require_approval) ? 'checked' : '' }} />
+                    <label for="posts_require_approval" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">Postagens precisam de aprovação</label>
                 </div>
                 <div class="mt-1 text-sm text-red-600">@error('posts_require_approval') {{ $message }} @enderror</div>
             </div>

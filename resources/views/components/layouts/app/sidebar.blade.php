@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ session('appearance', 'dark') }}">
     <head>
         @include('partials.head')
     </head>
@@ -15,11 +15,20 @@
             <flux:navbar class="-mb-px max-lg:hidden">
                 <flux:navbar.item icon="map-pin" :href="route('radar')" >Radar</flux:navbar.item>
                 <flux:navbar.item icon="inbox" badge="{{ auth()->user()->unreadMessagesCount() }}" :href="route('caixa_de_mensagens')">Mensagens</flux:navbar.item>
-                <livewire:follow-request-notifications />
+
+                @livewire('follow-request-notifications')
                 <livewire:notifications />
             </flux:navbar>
             <flux:spacer />
             <flux:navbar class="me-4">
+                <flux:navbar.item icon="currency-dollar" :href="route('wallet.index')" wire:navigate>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-sm font-medium text-green-400 dark:text-green-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
+                    </div>
+                </flux:navbar.item>
+                <!-- Mini Cart -->
+                @livewire('shop.mini-cart')
+
                 <flux:navbar.item icon="magnifying-glass" href="#" label="Search" />
                 <flux:navbar.item class="max-lg:hidden" icon="cog-6-tooth" :href="route('settings.profile')" label="Settings" />
                 <flux:navbar.item class="max-lg:hidden" icon="information-circle" href="#" label="Help" />
@@ -49,6 +58,12 @@
                     <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('settings.profile')">Configurações</flux:menu.item>
                     <flux:menu.item icon="arrow-right-start-on-rectangle" href="#">Meus Visitantes</flux:menu.item>
                     <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('renovar-vip')">Renovar VIP</flux:menu.item>
+                    <flux:menu.item icon="wallet" :href="route('wallet.index')">
+                        <div class="flex items-center justify-between w-full">
+                            <span>Minha Carteira</span>
+                            <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
+                        </div>
+                    </flux:menu.item>
                     <flux:menu.item icon="credit-card" :href="route('meus-pagamentos')">Meus Pagamentos</flux:menu.item>
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
@@ -85,6 +100,9 @@
                         <flux:navlist.item icon="heart" :href="route('shop.wishlist')" :current="request()->routeIs('shop.wishlist')">
                             {{ __('Lista de Desejos') }}
                         </flux:navlist.item>
+                        <flux:navlist.item icon="arrow-down-tray" :href="route('shop.downloads')" :current="request()->routeIs('shop.downloads')">
+                            {{ __('Meus Downloads') }}
+                        </flux:navlist.item>
                     </flux:navlist.group>
 
                     @if(auth()->user()->role === 'admin')
@@ -104,6 +122,12 @@
                         <flux:navlist.item icon="ticket" :href="route('admin.coupons')" :current="request()->routeIs('admin.coupons')">
                             {{ __('Cupons') }}
                         </flux:navlist.item>
+                        <flux:navlist.item icon="users" :href="route('admin.users')" :current="request()->routeIs('admin.users')">
+                            {{ __('Usuários') }}
+                        </flux:navlist.item>
+                        <flux:navlist.item icon="wallet" :href="route('admin.wallets')" :current="request()->routeIs('admin.wallets')">
+                            {{ __('Carteiras') }}
+                        </flux:navlist.item>
                     </flux:navlist.group>
                     @endif
                     <flux:navlist.item icon="trophy" :href="route('points.history')" :current="request()->routeIs('points.history')" wire:navigate>
@@ -116,7 +140,7 @@
                         {{ __('Contos') }}
                     </flux:navlist.item>
 
-                    <flux:navlist.group expandable heading="Feed" class=" lg:grid">
+                    <flux:navlist.group expandable heading="Feed" class="lg:grid" :expanded="request()->routeIs('feed.*')">
                         <flux:navlist.item icon="photo" :href="route('feed_imagens')">Imagens</flux:navlist.item>
                         <flux:navlist.item icon="video-camera" :href="route('feed_videos')"> Vídeos</flux:navlist.item>
                     </flux:navlist.group>
@@ -131,11 +155,16 @@
                     <flux:navlist.item icon="user-group" :href="route('grupos.index')" :current="request()->routeIs('grupos.*')" wire:navigate>
                         {{ __('Grupos') }}
                     </flux:navlist.item>
-                    <flux:navlist.item icon="chat-bubble-left-right" :href="route('bate_papo')" :current="request()->routeIs('bate_papo')" wire:navigate>
-                        {{ __('Bate Papo') }}
-                    </flux:navlist.item>
+
                     <flux:navlist.item icon="inbox" badge="{{ auth()->user()->unreadMessagesCount() }}" :href="route('caixa_de_mensagens')" :current="request()->routeIs('caixa_de_mensagens')" wire:navigate>
                         {{ __('Caixa de Mensagens') }}
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="wallet" :href="route('wallet.index')" :current="request()->routeIs('wallet.*')" wire:navigate>
+                        <div class="flex items-center justify-between w-full">
+                            <span>{{ __('Carteira') }}</span>
+                            <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
+                        </div>
                     </flux:navlist.item>
 
                 </flux:navlist.group>
@@ -314,22 +343,17 @@
                 }, 2000);
             };
 
-            // Add keyboard shortcut to trigger animations
-            document.addEventListener('keydown', function(event) {
-                if (event.key === 'F10') {
-                    // Trigger both animations when F10 is pressed
-                    window.triggerConfetti();
-                    window.triggerXpPopup(50); // Example: 50 XP
-                }
-            });
-
-            // Listener para o evento reward-earned
+            // Listener para o evento reward-earned (usando a sintaxe do Livewire 3)
             document.addEventListener('livewire:initialized', () => {
+                // No Livewire 3, usamos Livewire.on em vez de Livewire.addEventListener
                 Livewire.on('reward-earned', (data) => {
                     window.triggerConfetti();
                     window.triggerXpPopup(data.points);
                 });
             });
         </script>
+
+        <!-- CSRF Token para requisições AJAX -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     </body>
 </html>

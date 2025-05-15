@@ -1,5 +1,5 @@
 <div
-    wire:poll.15s="refreshStatus"
+    wire:poll.360s="refreshStatus"
     class="mt-2 flex flex-col"
     x-data="{
         inactivityTimer: null,
@@ -11,8 +11,8 @@
                 const checkInactivity = () => {
                     const inactiveTime = Date.now() - lastActivity;
                     if (inactiveTime > 180000 && '<?php echo e($userStatus); ?>' !== 'away') { // 3 minutos
-                        window.Livewire.find('<?php echo e($_instance->getId()); ?>').$set('userStatus', 'away');
-                        window.Livewire.find('<?php echo e($_instance->getId()); ?>').call('updateStatus');
+                        $wire.set('userStatus', 'away');
+                        $wire.updateStatus();
                     }
                 };
 
@@ -20,13 +20,14 @@
                     document.addEventListener(event, () => {
                         lastActivity = Date.now();
                         if ('<?php echo e($userStatus); ?>' === 'away') {
-                            window.Livewire.find('<?php echo e($_instance->getId()); ?>').$set('userStatus', 'online');
-                            window.Livewire.find('<?php echo e($_instance->getId()); ?>').call('updateStatus');
+                            $wire.set('userStatus', 'online');
+                            $wire.updateStatus();
                         }
                     });
                 });
 
-                this.inactivityTimer = setInterval(checkInactivity, 30000); // Verificar a cada 30 segundos
+                // Usar setInterval diretamente
+                this.inactivityTimer = setInterval(checkInactivity, 120000);
             }
         }
     }"

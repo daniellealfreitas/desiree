@@ -25,7 +25,7 @@ $getRecentUsers = function () {
         $request = FollowRequest::where('sender_id', Auth::id())
             ->where('receiver_id', $user->id)
             ->first();
-            
+
         $this->requestStatus[$user->id] = $request ? $request->status : null;
         return $user;
     })
@@ -62,15 +62,20 @@ mount(function () {
         @foreach ($recentUsers as $user)
             <li class="flex items-center justify-between space-x-3">
                 <div class="relative flex items-center space-x-3 ">
-                    <img src="{{ asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg') }}" class="w-10 h-10 rounded-full object-cover"> <livewire:user-status-indicator :userId="$user['id']" />
+                    <div class="relative">
+                        <img src="{{ asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg') }}" class="w-10 h-10 rounded-full object-cover">
+                        <div class="absolute top-0 right-0">
+                            <livewire:user-status-indicator :userId="$user['id']" />
+                        </div>
+                    </div>
                     <span>
-                        <a href="/{{ $user['username'] }}" class="text-blue-500 hover:underline">
+                        <a href="/{{ $user['username'] }}" class="text-white hover:underline text-sm">
                             {{ $user['name'] }}
                         </a>
                     </span>
                 </div>
                 @if($user['id'] !== Auth::id())
-                    <button wire:click="toggleFollow({{ $user['id'] }})" 
+                    <button wire:click="toggleFollow({{ $user['id'] }})"
                             @class([
                                 'px-4 py-2 rounded text-sm font-medium',
                                 'bg-yellow-500 text-white' => $requestStatus[$user['id']] === 'pending',

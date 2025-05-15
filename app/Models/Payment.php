@@ -10,13 +10,27 @@ class Payment extends Model
 
     protected $fillable = [
         'user_id',
+        'sender_id',
         'payment_date',
         'amount',
         'status',
+        'message',
+        'payment_id',
+        'payment_method',
+        'charm_type',
+    ];
+
+    protected $casts = [
+        'payment_date' => 'datetime',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id');
     }
 }

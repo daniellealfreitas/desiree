@@ -120,17 +120,6 @@
                         <p class="text-gray-700 dark:text-gray-300">
                             <span class="font-medium">Local:</span> {{ $event->location }}
                         </p>
-                        @if($event->address)
-                            <p class="text-gray-700 dark:text-gray-300">
-                                {{ $event->address }}
-                                @if($event->city || $event->state)
-                                    , {{ $event->city }} {{ $event->state ? ' - ' . $event->state : '' }}
-                                @endif
-                                @if($event->zip_code)
-                                    , {{ $event->zip_code }}
-                                @endif
-                            </p>
-                        @endif
                     </div>
                 </div>
 

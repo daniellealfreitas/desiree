@@ -1,4 +1,4 @@
-<div class="flex flex-col w-full" wire:poll.10s>
+<div class="flex flex-col w-full" wire:poll.600s>
     <!-- Filtro de distância -->
     <div class="w-full bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 mb-6">
         <div class="flex justify-between items-center mb-2">

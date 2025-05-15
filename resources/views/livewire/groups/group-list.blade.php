@@ -90,7 +90,7 @@
                         <div class="absolute top-2 right-2">
                             @if($group->privacy === 'public')
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                    <x-flux::icon icon="globe" class="w-3 h-3 mr-1" />
+                                    
                                     Público
                                 </span>
                             @elseif($group->privacy === 'private')
@@ -138,7 +138,7 @@
                     <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600">
                         @if(auth()->check() && auth()->user()->isMemberOf($group))
                             <flux:button href="{{ route('grupos.show', $group->slug) }}" color="secondary" class="w-full">
-                                <x-flux::icon icon="login" class="w-4 h-4 mr-2" />
+                                
                                 Acessar
                             </flux:button>
                         @else

@@ -11,12 +11,12 @@ use Livewire\Volt\Component;
 ?>
 
 <div id="Container" class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
-    <div id="capa" class="relative h-32 bg-cover bg-center rounded-t-lg" 
+    <div id="capa" class="relative h-32 bg-cover bg-center rounded-t-lg"
         style="background:url(<?php echo e($this->cover() ?? asset('images/users/capa.jpg')); ?>); background-size: cover; background-position: center;">
     </div>
     <div id="container_user"  class="relative z-10 -mt-12 flex flex-col items-center">
         <div id="avatar"   class="relative">
-            <img src="<?php echo e($this->avatar() ?? asset('images/users/avatar.jpg')); ?>" 
+            <img src="<?php echo e($this->avatar() ?? asset('images/users/avatar.jpg')); ?>"
             alt="Foto de Perfil" class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
             <?php
 $__split = function ($name, $params = []) {
@@ -35,25 +35,25 @@ unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
         </div>
-        <h2 class="text-xl font-semibold mt-2"><?php echo e($user->name); ?></h2>
-        <p class="text-gray-600">
-            <a href="<?php echo e(route('user.profile', ['username' => $user->username])); ?>" class="hover:underline">
+        <h2 class="text-title text-xl font-semibold mt-2"><?php echo e($user->name); ?></h2>
+        <p class="text-body-light">
+            <a href="<?php echo e(route('user.profile', ['username' => $user->username])); ?>" class="text-link hover:underline">
                 <?php echo e('@' . $user->username); ?>
 
             </a>
         </p>
         <div id="info_user" class="mt-4 flex justify-around w-full">
             <div class="text-center">
-                <p class="text-lg font-semibold"><?php echo e($this->postsCount()); ?></p>
-                <p class="text-gray-500">Posts</p>
+                <p class="text-subtitle text-lg font-semibold"><?php echo e($this->postsCount()); ?></p>
+                <p class="text-body-lighter">Posts</p>
             </div>
             <div class="text-center">
-                <p class="text-lg font-semibold"><?php echo e($this->followingCount()); ?></p>
-                <p class="text-gray-500">Seguindo</p>
+                <p class="text-subtitle text-lg font-semibold"><?php echo e($this->followingCount()); ?></p>
+                <p class="text-body-lighter">Seguindo</p>
             </div>
             <div class="text-center">
-                <p class="text-lg font-semibold"><?php echo e($this->followersCount()); ?></p>
-                <p class="text-gray-500">Seguidores</p>
+                <p class="text-subtitle text-lg font-semibold"><?php echo e($this->followersCount()); ?></p>
+                <p class="text-body-lighter">Seguidores</p>
             </div>
         </div>
     </div>

@@ -46,6 +46,9 @@ class GroupController extends Controller
         $data['creator_id'] = Auth::id();
         $data['slug'] = Str::slug($request->name);
 
+        // Garante que posts_require_approval seja boolean
+        $data['posts_require_approval'] = $request->has('posts_require_approval');
+
         // Handle image uploads
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('groups/images', 'public');
@@ -117,6 +120,9 @@ class GroupController extends Controller
         ]);
 
         $data = $request->except(['image', 'cover_image']);
+
+        // Garante que posts_require_approval seja boolean
+        $data['posts_require_approval'] = $request->has('posts_require_approval');
 
         // Handle image uploads
         if ($request->hasFile('image')) {

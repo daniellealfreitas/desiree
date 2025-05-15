@@ -56,10 +56,7 @@ class EventController extends Controller
             'price' => 'nullable|numeric|min:0',
             'capacity' => 'nullable|integer|min:1',
             'location' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'state' => 'nullable|string|max:255',
-            'zip_code' => 'nullable|string|max:20',
+
             'is_featured' => 'nullable|boolean',
         ]);
 
@@ -91,9 +88,11 @@ class EventController extends Controller
         $event = Event::where('slug', $slug)->firstOrFail();
 
         // Get related events (same day of week, upcoming)
+        $dayOfWeek = Carbon::parse($event->date)->dayOfWeek;
+
         $relatedEvents = Event::where('id', '!=', $event->id)
             ->where('is_active', true)
-            ->whereRaw('DAYOFWEEK(date) = DAYOFWEEK(?)', [$event->date])
+            ->whereRaw("strftime('%w', date) = ?", [$dayOfWeek])
             ->where('date', '>=', now()->format('Y-m-d'))
             ->orderBy('date')
             ->limit(3)
@@ -138,10 +137,7 @@ class EventController extends Controller
             'price' => 'nullable|numeric|min:0',
             'capacity' => 'nullable|integer|min:1',
             'location' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:255',
-            'city' => 'nullable|string|max:255',
-            'state' => 'nullable|string|max:255',
-            'zip_code' => 'nullable|string|max:20',
+
             'is_featured' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
         ]);

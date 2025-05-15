@@ -30,21 +30,30 @@ class Product extends Model
         'options',
         'color',
         'sale_starts_at',
-        'sale_ends_at'
+        'sale_ends_at',
+        'is_digital',
+        'digital_file',
+        'digital_file_name',
+        'download_limit',
+        'download_expiry_days'
     ];
 
     /**
      * Os atributos que devem ser convertidos.
      */
     protected $casts = [
-        'price' => 'decimal:2',
-        'sale_price' => 'decimal:2',
+        'price' => 'float',
+        'sale_price' => 'float',
+        'weight' => 'float',
         'featured' => 'boolean',
         'stock' => 'integer',
         'dimensions' => 'array',
         'options' => 'array',
         'sale_starts_at' => 'datetime',
         'sale_ends_at' => 'datetime',
+        'is_digital' => 'boolean',
+        'download_limit' => 'integer',
+        'download_expiry_days' => 'integer',
     ];
 
     /**
@@ -133,6 +142,38 @@ class Product extends Model
     }
 
     /**
+     * Escopo para produtos disponíveis (com estoque > 0).
+     */
+    public function scopeAvailable($query)
+    {
+        return $query->where('stock', '>', 0);
+    }
+
+    /**
+     * Escopo para produtos indisponíveis (com estoque <= 0).
+     */
+    public function scopeUnavailable($query)
+    {
+        return $query->where('stock', '<=', 0);
+    }
+
+    /**
+     * Verifica se o produto está disponível (estoque > 0).
+     */
+    public function isAvailable()
+    {
+        return $this->stock > 0;
+    }
+
+    /**
+     * Verifica se o produto está indisponível (estoque <= 0).
+     */
+    public function isUnavailable()
+    {
+        return $this->stock <= 0;
+    }
+
+    /**
      * Verifica se o produto está em promoção.
      */
     public function isOnSale()
@@ -192,5 +233,37 @@ class Product extends Model
         $image = $this->mainImage ?? $this->images()->first();
 
         return $image ? $image->url : null;
+    }
+
+    /**
+     * Downloads do produto.
+     */
+    public function downloads()
+    {
+        return $this->hasMany(ProductDownload::class);
+    }
+
+    /**
+     * Verifica se o produto é digital.
+     */
+    public function isDigital()
+    {
+        return $this->is_digital;
+    }
+
+    /**
+     * Verifica se o produto requer envio físico.
+     */
+    public function requiresShipping()
+    {
+        return !$this->is_digital;
+    }
+
+    /**
+     * Verifica se o produto tem arquivo digital disponível.
+     */
+    public function hasDigitalFile()
+    {
+        return $this->is_digital && !empty($this->digital_file);
     }
 }

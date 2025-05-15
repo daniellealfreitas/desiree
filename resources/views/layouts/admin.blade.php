@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ session('appearance', 'light') }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,6 +17,9 @@
 </head>
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-zinc-900">
+        <!-- Notification Toast -->
+        <x-notification-toast position="top-right" />
+
         <!-- Sidebar -->
         <div class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-zinc-800 shadow-md transform transition-transform duration-300 lg:translate-x-0" id="sidebar">
             <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
@@ -51,6 +54,11 @@
                 <a href="{{ route('admin.users') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md {{ request()->routeIs('admin.users') ? 'bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-700 hover:text-gray-900 dark:hover:text-white' }}">
                     <flux:icon name="users" class="mr-3 h-6 w-6 {{ request()->routeIs('admin.users') ? 'text-gray-500 dark:text-gray-300' : 'text-gray-400 dark:text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}" />
                     Usuários
+                </a>
+
+                <a href="{{ route('admin.wallets') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md {{ request()->routeIs('admin.wallets') ? 'bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-700 hover:text-gray-900 dark:hover:text-white' }}">
+                    <flux:icon name="wallet" class="mr-3 h-6 w-6 {{ request()->routeIs('admin.wallets') ? 'text-gray-500 dark:text-gray-300' : 'text-gray-400 dark:text-gray-400 group-hover:text-gray-500 dark:group-hover:text-gray-300' }}" />
+                    Carteiras
                 </a>
 
                 <a href="{{ route('admin.coupons') }}" class="group flex items-center px-2 py-2 text-base font-medium rounded-md {{ request()->routeIs('admin.coupons') ? 'bg-gray-100 dark:bg-zinc-700 text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-zinc-700 hover:text-gray-900 dark:hover:text-white' }}">
@@ -111,7 +119,7 @@
                         <flux:icon name="sun" class="hidden dark:block h-5 w-5" />
                         <flux:icon name="moon" class="block dark:hidden h-5 w-5" />
                     </button>
-                    
+
                     <!-- User dropdown -->
                     <div class="relative" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center text-sm font-medium text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-white">
@@ -142,19 +150,25 @@
         document.getElementById('openSidebar').addEventListener('click', function() {
             document.getElementById('sidebar').classList.remove('-translate-x-full');
         });
-        
+
         document.getElementById('closeSidebar').addEventListener('click', function() {
             document.getElementById('sidebar').classList.add('-translate-x-full');
         });
-        
-        // Theme toggle
+
+        // Theme toggle - usando a função global definida em app.js
         document.getElementById('theme-toggle').addEventListener('click', function() {
-            if (document.documentElement.classList.contains('dark')) {
-                document.documentElement.classList.remove('dark');
-                localStorage.theme = 'light';
+            // Verificar se a função global está disponível
+            if (typeof window.toggleTheme === 'function') {
+                window.toggleTheme();
             } else {
-                document.documentElement.classList.add('dark');
-                localStorage.theme = 'dark';
+                // Fallback caso a função global não esteja disponível
+                if (document.documentElement.classList.contains('dark')) {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.theme = 'light';
+                } else {
+                    document.documentElement.classList.add('dark');
+                    localStorage.theme = 'dark';
+                }
             }
         });
     </script>

@@ -20,7 +20,11 @@ class Messages extends Component
     public $conversations = [];
     public $unreadCount = 0;
 
-    protected $listeners = ['messageReceived' => 'loadConversations'];
+    // Livewire 3 usa o método getListeners() em vez de $listeners
+    protected function getListeners()
+    {
+        return ['messageReceived' => 'loadConversations'];
+    }
 
     public function mount()
     {

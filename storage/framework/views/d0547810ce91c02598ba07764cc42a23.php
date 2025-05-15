@@ -1,5 +1,5 @@
 <div
-    wire:poll.10s="refreshStatus"
+    wire:poll.300s="refreshStatus"
     class="relative"
     x-data="{
         showTooltip: false,
@@ -12,7 +12,7 @@
                 const checkInactivity = () => {
                     const inactiveTime = Date.now() - lastActivity;
                     if (inactiveTime > 180000) { // 3 minutos
-                        window.Livewire.find('<?php echo e($_instance->getId()); ?>').call('setAwayStatus');
+                        $wire.setAwayStatus();
                     }
                 };
 
@@ -20,20 +20,21 @@
                     document.addEventListener(event, () => {
                         lastActivity = Date.now();
                         if ('<?php echo e($status); ?>' === 'away' || '<?php echo e($status); ?>' === 'dnd') {
-                            window.Livewire.find('<?php echo e($_instance->getId()); ?>').call('setOnlineStatus');
+                            $wire.setOnlineStatus();
                         }
                     });
                 });
 
-                this.inactivityTimer = setInterval(checkInactivity, 30000); // Verificar a cada 30 segundos
+                // Usar setInterval diretamente
+                this.inactivityTimer = setInterval(checkInactivity, 120000);
             }
         }
     }"
     x-init="setupInactivityDetection()"
-    @click="showTooltip = !showTooltip"
+    @click="showTooltip=!showTooltip"
 >
     <span
-        class="absolute left-1 top-1 transform translate-x-1/4 -translate-y-1/4 w-3 h-3 rounded-full border-1 border-white shadow-md
+        class="absolute right-0 top-0 w-3 h-3 rounded-full border border-white shadow-md
             <?php if($status=='online'): ?> bg-green-500
             <?php elseif($status=='away'): ?> bg-yellow-400
             <?php elseif($status=='dnd'): ?> bg-red-600

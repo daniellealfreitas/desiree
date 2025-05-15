@@ -124,10 +124,10 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <flux:button wire:click="viewOrder({{ $order->id }})" variant="secondary" size="xs">
+                                <flux:button wire:click="viewOrder({{ $order->id }})" variant="primary" size="xs">
                                     <flux:icon name="eye" class="h-4 w-4" />
                                 </flux:button>
-                                <flux:button wire:click="editStatus({{ $order->id }})" variant="secondary" size="xs" class="ml-2">
+                                <flux:button wire:click="editStatus({{ $order->id }})" variant="primary" size="xs" class="ml-2">
                                     <flux:icon name="pencil-square" class="h-4 w-4" />
                                 </flux:button>
                             </td>
@@ -182,15 +182,31 @@
                     </div>
 
                     <div>
-                        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Endereço de Entrega</h3>
+                        <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Informações de Entrega</h3>
                         <div class="mt-2 text-sm text-gray-900 dark:text-white">
                             @if($viewingOrder->shipping_address)
-                                <p>{{ $viewingOrder->shipping_address['address'] }}</p>
-                                <p>{{ $viewingOrder->shipping_address['city'] }} - {{ $viewingOrder->shipping_address['state'] }}</p>
-                                <p>{{ $viewingOrder->shipping_address['zip_code'] }}, {{ $viewingOrder->shipping_address['country'] }}</p>
-                                <p><span class="font-medium">Telefone:</span> {{ $viewingOrder->shipping_address['phone'] }}</p>
+                                @if(isset($viewingOrder->shipping_address['pickup']) && $viewingOrder->shipping_address['pickup'])
+                                    <div class="flex items-center">
+                                        <x-flux::icon name="map-pin" class="h-4 w-4 text-blue-600 dark:text-blue-400 mr-2" />
+                                        <span>Retirada no local</span>
+                                    </div>
+                                    @if(isset($viewingOrder->shipping_address['message']))
+                                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                            {{ $viewingOrder->shipping_address['message'] }}
+                                        </p>
+                                    @endif
+                                @elseif(isset($viewingOrder->shipping_address['address']))
+                                    <p>{{ $viewingOrder->shipping_address['address'] }}</p>
+                                    <p>{{ $viewingOrder->shipping_address['city'] ?? '' }} - {{ $viewingOrder->shipping_address['state'] ?? '' }}</p>
+                                    <p>{{ $viewingOrder->shipping_address['zip_code'] ?? '' }}, {{ $viewingOrder->shipping_address['country'] ?? '' }}</p>
+                                    @if(isset($viewingOrder->shipping_address['phone']))
+                                        <p><span class="font-medium">Telefone:</span> {{ $viewingOrder->shipping_address['phone'] }}</p>
+                                    @endif
+                                @else
+                                    <p>Formato de endereço não reconhecido.</p>
+                                @endif
                             @else
-                                <p>Nenhum endereço de entrega informado.</p>
+                                <p>Nenhuma informação de entrega disponível.</p>
                             @endif
                         </div>
                     </div>
@@ -289,7 +305,7 @@
                 @endif
 
                 <div class="flex justify-end">
-                    <flux:button wire:click="$set('showOrderDetails', false)" variant="secondary">
+                    <flux:button wire:click="$set('showOrderDetails', false)" variant="primary">
                         Fechar
                     </flux:button>
                 </div>
@@ -335,7 +351,7 @@
                 </div>
 
                 <div class="flex justify-end space-x-3">
-                    <flux:button type="button" variant="secondary" wire:click="$set('showStatusModal', false)">
+                    <flux:button type="button" variant="primary" wire:click="$set('showStatusModal', false)">
                         Cancelar
                     </flux:button>
                     <flux:button type="submit">

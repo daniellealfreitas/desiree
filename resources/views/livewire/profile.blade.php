@@ -1,4 +1,14 @@
-<div wire:poll.30s="refreshStatus"> {{-- Atualiza status a cada 30s --}}
+<?php
+use Illuminate\Support\Facades\Auth;
+?>
+
+<div wire:poll.300s="refreshStatus"> {{-- Atualiza status a cada 5 minutos (300s) --}}
+    <livewire:user-images />
+    <livewire:user-videos />
+    <livewire:user-following />
+    <livewire:user-followers />
+    <livewire:user-posts />
+
     {{-- Profile header  --}}
     <div
         x-data="{ show: false }"
@@ -19,7 +29,7 @@
                 </div>
                 <div class="bg-zinc-800 opacity-50 p-4 rounded-lg shadow-lg">
                     <h2 class="text-3xl font-bold text-white drop-shadow-lg">{{ $user->name }}</h2>
-                    <a href="/{{ $user->username }}" class="text-lg text-gray-200 drop-shadow-md hover:underline">
+                    <a href="/{{ $user->username }}" class="text-lg text-white drop-shadow-md hover:underline">
                         {{ '@'. $user->username }}
                     </a>
                     {{-- Novo componente de status do usuário --}}
@@ -28,26 +38,26 @@
             </div>
         </div>
 
-        <div id="profile_navigation" class="flex flex-wrap items-center justify-between border-t border-gray-200 dark:border-gray-700 px-6 py-3 mt-4 text-sm text-gray-700 dark:text-gray-300">
+        <div id="profile_navigation" class="flex flex-wrap items-center justify-between border-t border-gray-200 dark:border-gray-700 px-6 py-3 mt-4 text-sm text-body">
             <div class="flex flex-wrap gap-4">
                <flux:button.group>
-                    <flux:button variant="ghost" icon="photo" >
+                    <flux:button variant="ghost" icon="photo" wire:click="showUserImages">
                         Imagens ({{ $this->imagesCount() }})
                     </flux:button>
-                    <flux:button variant="ghost" icon="video-camera" >
-                        Vídeos
+                    <flux:button variant="ghost" icon="video-camera" wire:click="showUserVideos">
+                        Vídeos ({{ $this->videosCount() }})
                     </flux:button>
-                    <flux:button variant="ghost" icon="users" >
+                    <flux:button variant="ghost" icon="users" wire:click="showUserFollowing">
                         Seguindo: {{ $this->followingCount() }}
                     </flux:button>
-                    <flux:button variant="ghost" icon="users">
+                    <flux:button variant="ghost" icon="users" wire:click="showUserFollowers">
                         Seguidores: {{ $this->followersCount() }}
                     </flux:button>
-                    <flux:button variant="ghost" icon="rss" >
+                    <flux:button variant="ghost" icon="rss" wire:click="showUserPosts">
                         Postagens: {{ $this->postsCount() }}
                     </flux:button>
-                    <flux:button variant="ghost" icon="currency-dollar">
-                        Pagar um Drink
+                    <flux:button variant="ghost" icon="gift" wire:click="showSendCharm">
+                        Enviar Charm
                     </flux:button>
                </flux:button.group>
             </div>
@@ -65,8 +75,8 @@
     <div class="flex gap-6 mt-6">
         <div class="w-1/3">
            <livewire:profile-progress-bar :username="$user->username" />
-            <section id="additional-info" class="mt-6"></section>
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Informações Adicionais</h3>
+            <section id="additional-info" class="mt-6">
+                <h3 class="text-lg font-semibold text-title mb-4">Informações Adicionais</h3>
                 <div class="flex flex-col gap-4">
                     <div>
                         <flux:text>
@@ -74,7 +84,6 @@
                         </flux:text>
                         <flux:text>
                             <strong>Aniversário:</strong> {{ $user->aniversario ? $user->aniversario->format('d/m/Y') : 'Não especificado' }}
-
                         </flux:text>
                         <flux:text>
                             <strong>Localização:</strong> {{ $user->city->name ?? 'Não especificado' }}
@@ -89,8 +98,6 @@
                         <div class="flex flex-wrap gap-2">
                             @foreach($user->hobbies as $hobby)
                                 <flux:badge>{{ $hobby->nome }}</flux:badge>
-
-
                             @endforeach
                         </div>
                     </div>
@@ -99,7 +106,6 @@
                         <div class="flex flex-wrap gap-2">
                             @foreach($user->procuras as $procura)
                                 <flux:badge>{{ $procura->nome }}</flux:badge>
-
                             @endforeach
                         </div>
                     </div>
@@ -109,7 +115,7 @@
 
 
             <section id="ranking" class="mt-6">
-                <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Ranking</h3>
+                <h3 class="text-lg font-semibold text-title mb-4">Ranking</h3>
                 <div class="flex flex-col gap-4">
                     @foreach($topUsers as $rank)
                         <div class="flex items-center justify-between bg-gray-100 dark:bg-gray-700 p-4 rounded-lg shadow">
@@ -118,12 +124,12 @@
                                     <img src="{{ $rank->avatar ?? asset('images/default-avatar.jpg') }}" class="w-full h-full object-cover" /><livewire:user-status-indicator :userId="$rank->id" />
                                 </div>
                                 <div>
-                                    <h4 class="text-sm font-bold text-gray-800 dark:text-gray-200">{{ $rank->name }}</h4>
-                                    <a href="/{{ $rank->username }}" class="text-xs text-gray-600 dark:text-gray-400">{{ '@' . $rank->username }}</a>
+                                    <h4 class="text-sm font-bold text-title">{{ $rank->name }}</h4>
+                                    <a href="/{{ $rank->username }}" class="text-xs text-body-light hover:text-link">{{ '@' . $rank->username }}</a>
                                     <flux:text>Level 1</flux:text>
                                 </div>
                             </div>
-                            <div class="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                            <div class="text-sm font-semibold text-title">
                                 {{ $rank->ranking_points }} pontos
                             </div>
                         </div>
