@@ -130,11 +130,11 @@
                                         <span class="bi-facebook"></span>
                                     </a>
                                 </li>
-                                {{-- <li class="social-icon-item">
-                                    <a href="#" class="social-icon-link">
+                                <li class="social-icon-item">
+                                    <a href="https://x.com/CLUBDESIREE" class="social-icon-link" target="_blank">
                                         <span class="bi-twitter"></span>
                                     </a>
-                                </li> --}}
+                                </li>
                                 <li class="social-icon-item">
                                     <a href="#" class="social-icon-link">
                                         <span class="bi-instagram"></span>

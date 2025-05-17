@@ -12,8 +12,8 @@ use App\Models\UserLevel;
 use App\Models\UserPoint;
 use App\Models\Notification;
 use App\Models\FollowRequest;
-use App\Models\LookingForOption;
-use App\Models\PreferenceOption;
+// use App\Models\LookingForOption;
+// use App\Models\PreferenceOption;
 use App\Models\UserPhoto;
 use App\Models\UserCoverPhoto;
 use App\Models\Post;
@@ -94,15 +94,15 @@ class User extends Authenticatable
         }
     }
 
-    // Relacionamento com "looking_for" via pivot
-    public function lookingFor() {
-        return $this->belongsToMany(LookingForOption::class, 'user_looking_for', 'user_id', 'looking_for_option_id');
-    }
+    // Relacionamento com "looking_for" via pivot - Temporarily commented out until model is created
+    // public function lookingFor() {
+    //     return $this->belongsToMany(LookingForOption::class, 'user_looking_for', 'user_id', 'looking_for_option_id');
+    // }
 
-    // Relacionamento com "preferences" via pivot
-    public function preferences() {
-        return $this->belongsToMany(PreferenceOption::class, 'user_preferences', 'user_id', 'preference_option_id');
-    }
+    // Relacionamento com "preferences" via pivot - Temporarily commented out until model is created
+    // public function preferences() {
+    //     return $this->belongsToMany(PreferenceOption::class, 'user_preferences', 'user_id', 'preference_option_id');
+    // }
 
     // Relacionamento com fotos
     public function photos()

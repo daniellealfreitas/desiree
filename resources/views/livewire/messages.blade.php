@@ -1,7 +1,7 @@
 <div class="container mx-auto p-4">
     <div class="flex flex-col md:flex-row gap-4 h-[calc(100vh-12rem)]">
         <!-- Sidebar with conversations -->
-        <div class="w-full md:w-1/3 bg-white dark:bg-zinc-800 rounded-lg shadow-md overflow-hidden flex flex-col">
+        <section id="conversations" class="w-full md:w-1/3 bg-white dark:bg-zinc-800 rounded-lg shadow-md overflow-hidden flex flex-col">
             <div class="p-4 border-b border-gray-200 dark:border-zinc-700 flex justify-between items-center">
                 <h2 class="text-xl font-semibold text-title">Conversas</h2>
                 <div class="relative">
@@ -82,7 +82,7 @@
                     @endforelse
                 @endif
             </div>
-        </div>
+        </section>
 
         <!-- Message area -->
         <div class="w-full md:w-2/3 bg-white dark:bg-zinc-800 rounded-lg shadow-md overflow-hidden flex flex-col">

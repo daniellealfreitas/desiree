@@ -208,7 +208,10 @@ Route::middleware(['auth'])->prefix('carteira')->group(function () {
 
 // Rotas de exemplos
 Route::middleware(['auth'])->prefix('examples')->group(function () {
-    // Exemplos removidos
+    // Guia de cores
+    Route::get('/color-guide', function () {
+        return view('color-guide');
+    })->name('examples.color-guide');
 });
 
 // Rotas de administração

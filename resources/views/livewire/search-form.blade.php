@@ -71,15 +71,22 @@ use Illuminate\Support\Facades\Storage;
                         <flux:radio value="id_decrescente" label="ID Decrescente" />
                         <flux:radio value="last_access" label="Último Acesso" checked />
                     </flux:radio.group>
+
+                    <label class="block text-sm font-medium text-gray-700 dark:text-white">Sexo:</label>
+                    <div class="space-y-2">
+                        <flux:checkbox wire:model="filters.sexo" value="casal" label="Casal" />
+                        <flux:checkbox wire:model="filters.sexo" value="homem" label="Homem" />
+                        <flux:checkbox wire:model="filters.sexo" value="mulher" label="Mulher" />
+                    </div>
                 </div>
 
                 {{-- Coluna 2 --}}
                 <div class="space-y-4">
                     <label class="block text-sm font-medium text-gray-700 dark:text-white">Busco por:</label>
                     <div class="space-y-2">
-                        <flux:checkbox wire:model="filters.busco" value="casais" label="Casais" />
-                        <flux:checkbox wire:model="filters.busco" value="homens" label="Homens" />
-                        <flux:checkbox wire:model="filters.busco" value="mulheres" label="Mulheres" />
+                        @foreach($procuras as $procura)
+                            <flux:checkbox wire:model="filters.busco" value="{{ $procura->nome }}" label="{{ $procura->nome }}" />
+                        @endforeach
                         <flux:checkbox wire:model="real_profiles" label="Perfis Reais" checked />
                     </div>
 
@@ -96,9 +103,9 @@ use Illuminate\Support\Facades\Storage;
                 <div class="space-y-4">
                     <label class="block text-sm font-medium text-gray-700 dark:text-white">Que Buscam por:</label>
                     <div class="space-y-2">
-                        <flux:checkbox wire:model="looking_for" value="casais" label="Casais" />
-                        <flux:checkbox wire:model="looking_for" value="homens" label="Homens" checked />
-                        <flux:checkbox wire:model="looking_for" value="mulheres" label="Mulheres" />
+                        @foreach($procuras as $procura)
+                            <flux:checkbox wire:model="filters.que_buscam" value="{{ $procura->nome }}" label="{{ $procura->nome }}" />
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -155,9 +162,13 @@ use Illuminate\Support\Facades\Storage;
                             {{-- Name and username --}}
                             <h2 class="text-xl font-semibold mt-2">{{ $result->name }}</h2>
                             <p class="text-gray-600">
-                                <a href="{{ route('user.profile', ['username' => $result->username]) }}" class="hover:underline">
-                                    {{ '@' . $result->username }}
-                                </a>
+                                @if($result->username)
+                                    <a href="{{ route('user.profile', ['username' => $result->username]) }}" class="hover:underline">
+                                        {{ '@' . $result->username }}
+                                    </a>
+                                @else
+                                    <span>@sem-username</span>
+                                @endif
                             </p>
 
                             {{-- User stats --}}
@@ -192,7 +203,7 @@ use Illuminate\Support\Facades\Storage;
                             @endif
 
                             {{-- Follow button --}}
-                            @if(auth()->check() && auth()->id() !== $result->id)
+                            @if(auth()->check() && auth()->id() !== $result->id && $result->username)
                                 <div class="mt-3">
                                     <a href="{{ route('user.profile', ['username' => $result->username]) }}"
                                        class="inline-flex items-center px-4 py-2 bg-red-500 text-white text-sm font-medium rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">

@@ -1,0 +1,427 @@
+/**
+ * Padronização de Cores de Texto
+ *
+ * Este arquivo define classes de cores de texto padronizadas para o projeto,
+ * garantindo consistência visual e boa legibilidade em todos os temas.
+ * Inclui efeitos neon, animações e compatibilidade com temas claro/escuro.
+ */
+
+/* Variáveis de cores para tema claro */
+:root {
+  /* Cores base */
+  --color-title: #757677;
+  /* gray-900 */
+  --color-subtitle: #757677;
+  /* gray-800 */
+  --color-body: #94979c;
+  /* gray-700 */
+  --color-body-light: #4B5563;
+  /* gray-600 */
+  --color-body-lighter: #6B7280;
+  /* gray-500 */
+  --color-muted: #6B7280;
+  /* gray-500 */
+  --color-label: #616366;
+  /* gray-700 */
+
+  /* Links */
+  --color-link: #DC2626;
+  /* red-600 */
+  --color-link-hover: #B91C1C;
+  /* red-700 */
+  --color-link-focus: #EF4444;
+  /* red-500 */
+  --color-link-subtle: #4B5563;
+  /* gray-600 */
+  --color-link-subtle-hover: #1F2937;
+  /* gray-800 */
+
+  /* Status */
+  --color-success: #16A34A;
+  /* green-600 */
+  --color-warning: #CA8A04;
+  /* yellow-600 */
+  --color-danger: #DC2626;
+  /* red-600 */
+  --color-info: #2563EB;
+  /* blue-600 */
+  --color-disabled: #9CA3AF;
+  /* gray-400 */
+
+  /* Preços */
+  --color-price: #474e5e;
+  /* gray-900 */
+  --color-price-discount: #DC2626;
+  /* red-600 */
+  --color-price-old: #6B7280;
+  /* gray-500 */
+
+  /* Efeitos neon */
+  --neon-primary: 0 0 5px rgba(220, 38, 38, 0.5), 0 0 10px rgba(220, 38, 38, 0.3);
+  /* red */
+  --neon-success: 0 0 5px rgba(22, 163, 74, 0.5), 0 0 10px rgba(22, 163, 74, 0.3);
+  /* green */
+  --neon-warning: 0 0 5px rgba(202, 138, 4, 0.5), 0 0 10px rgba(202, 138, 4, 0.3);
+  /* yellow */
+  --neon-info: 0 0 5px rgba(37, 99, 235, 0.5), 0 0 10px rgba(37, 99, 235, 0.3);
+  /* blue */
+  --neon-purple: 0 0 5px rgba(147, 51, 234, 0.5), 0 0 10px rgba(147, 51, 234, 0.3);
+  /* purple */
+  --neon-pink: 0 0 5px rgba(219, 39, 119, 0.5), 0 0 10px rgba(219, 39, 119, 0.3);
+  /* pink */
+
+  /* Transições */
+  --transition-normal: all 0.3s ease;
+  --transition-fast: all 0.15s ease;
+  --transition-slow: all 0.5s ease;
+}
+
+/* Variáveis de cores para tema escuro */
+.dark {
+  /* Cores base */
+  --color-title: #FFFFFF;
+  /* white */
+  --color-subtitle: #F3F4F6;
+  /* gray-100 */
+  --color-body: #D1D5DB;
+  /* gray-300 */
+  --color-body-light: #9CA3AF;
+  /* gray-400 */
+  --color-body-lighter: #6B7280;
+  /* gray-500 */
+  --color-muted: #6B7280;
+  /* gray-500 */
+  --color-label: #E5E7EB;
+  /* gray-200 */
+
+  /* Links */
+  --color-link: #F87171;
+  /* red-400 */
+  --color-link-hover: #FCA5A5;
+  /* red-300 */
+  --color-link-focus: #EF4444;
+  /* red-500 */
+  --color-link-subtle: #9CA3AF;
+  /* gray-400 */
+  --color-link-subtle-hover: #E5E7EB;
+  /* gray-200 */
+
+  /* Status */
+  --color-success: #4ADE80;
+  /* green-400 */
+  --color-warning: #FACC15;
+  /* yellow-400 */
+  --color-danger: #F87171;
+  /* red-400 */
+  --color-info: #60A5FA;
+  /* blue-400 */
+  --color-disabled: #4B5563;
+  /* gray-600 */
+
+  /* Preços */
+  --color-price: #FFFFFF;
+  /* white */
+  --color-price-discount: #F87171;
+  /* red-400 */
+  --color-price-old: #6B7280;
+  /* gray-500 */
+
+  /* Efeitos neon */
+  --neon-primary: 0 0 7px rgba(248, 113, 113, 0.7), 0 0 14px rgba(248, 113, 113, 0.5);
+  /* red-400 */
+  --neon-success: 0 0 7px rgba(74, 222, 128, 0.7), 0 0 14px rgba(74, 222, 128, 0.5);
+  /* green-400 */
+  --neon-warning: 0 0 7px rgba(250, 204, 21, 0.7), 0 0 14px rgba(250, 204, 21, 0.5);
+  /* yellow-400 */
+  --neon-info: 0 0 7px rgba(96, 165, 250, 0.7), 0 0 14px rgba(96, 165, 250, 0.5);
+  /* blue-400 */
+  --neon-purple: 0 0 7px rgba(167, 139, 250, 0.7), 0 0 14px rgba(167, 139, 250, 0.5);
+  /* purple-400 */
+  --neon-pink: 0 0 7px rgba(244, 114, 182, 0.7), 0 0 14px rgba(244, 114, 182, 0.5);
+  /* pink-400 */
+}
+
+@layer components {
+
+  /* Classes de texto básicas */
+  .text-title {
+    color: var(--color-title) !important;
+  }
+
+  .text-subtitle {
+    color: var(--color-subtitle) !important;
+  }
+
+  .text-body {
+    color: var(--color-body) !important;
+  }
+
+  .text-body-light {
+    color: var(--color-body-light) !important;
+  }
+
+  .text-body-lighter {
+    color: var(--color-body-lighter) !important;
+  }
+
+  .text-label {
+    color: var(--color-label) !important;
+    font-weight: 500;
+  }
+
+  .text-muted {
+    color: var(--color-muted) !important;
+  }
+
+  /* Links com efeitos de hover, focus e transições */
+  .text-link {
+    color: var(--color-link) !important;
+    transition: var(--transition-normal);
+  }
+
+  .text-link:hover {
+    color: var(--color-link-hover) !important;
+    text-shadow: var(--neon-primary);
+  }
+
+  .text-link:focus {
+    color: var(--color-link-focus) !important;
+    text-shadow: var(--neon-primary);
+    outline: none;
+  }
+
+  .text-link-subtle {
+    color: var(--color-link-subtle) !important;
+    transition: var(--transition-normal);
+  }
+
+  .text-link-subtle:hover {
+    color: var(--color-link-subtle-hover) !important;
+    text-shadow: 0 0 3px rgba(107, 114, 128, 0.3);
+  }
+
+  .text-link-subtle:focus {
+    color: var(--color-link-subtle-hover) !important;
+    text-shadow: 0 0 3px rgba(107, 114, 128, 0.3);
+    outline: none;
+  }
+
+  /* Cores de status */
+  .text-success {
+    color: var(--color-success) !important;
+  }
+
+  .text-warning {
+    color: var(--color-warning) !important;
+  }
+
+  .text-danger {
+    color: var(--color-danger) !important;
+  }
+
+  .text-info {
+    color: var(--color-info) !important;
+  }
+
+  /* Links desabilitados com cursor not-allowed */
+  .text-disabled {
+    color: var(--color-disabled) !important;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Cores para preços */
+  .text-price {
+    color: var(--color-price) !important;
+    font-weight: 700;
+  }
+
+  .text-price-discount {
+    color: var(--color-price-discount) !important;
+    font-weight: 700;
+  }
+
+  .text-price-old {
+    color: var(--color-price-old) !important;
+    text-decoration: line-through;
+  }
+
+  /* Combinações específicas para fundos zinc */
+  .bg-zinc-50 .text-auto,
+  .bg-zinc-100 .text-auto {
+    color: #1F2937 !important;
+    /* gray-800 */
+  }
+
+  .bg-zinc-200 .text-auto {
+    color: #1F2937 !important;
+    /* gray-800 */
+  }
+
+  .bg-zinc-300 .text-auto {
+    color: #1F2937 !important;
+    /* gray-800 */
+  }
+
+  .bg-zinc-400 .text-auto {
+    color: #111827 !important;
+    /* gray-900 */
+  }
+
+  .bg-zinc-500 .text-auto {
+    color: #FFFFFF !important;
+    /* white */
+  }
+
+  .bg-zinc-600 .text-auto {
+    color: #FFFFFF !important;
+    /* white */
+  }
+
+  .bg-zinc-700 .text-auto {
+    color: #FFFFFF !important;
+    /* white */
+  }
+
+  .bg-zinc-800 .text-auto {
+    color: #E5E7EB !important;
+    /* gray-200 */
+  }
+
+  .bg-zinc-900 .text-auto,
+  .bg-zinc-950 .text-auto {
+    color: #F3F4F6 !important;
+    /* gray-100 */
+  }
+
+  /* Classes para efeitos neon em divs */
+  .neon-box {
+    transition: var(--transition-normal);
+  }
+
+  .neon-box-red {
+    box-shadow: 0 0 0 rgba(220, 38, 38, 0);
+  }
+
+  .neon-box-red:hover,
+  .neon-box-red:focus {
+    box-shadow: 0 0 15px rgba(220, 38, 38, 0.5), 0 0 30px rgba(220, 38, 38, 0.3);
+  }
+
+  .neon-box-green {
+    box-shadow: 0 0 0 rgba(22, 163, 74, 0);
+  }
+
+  .neon-box-green:hover,
+  .neon-box-green:focus {
+    box-shadow: 0 0 15px rgba(22, 163, 74, 0.5), 0 0 30px rgba(22, 163, 74, 0.3);
+  }
+
+  .neon-box-blue {
+    box-shadow: 0 0 0 rgba(37, 99, 235, 0);
+  }
+
+  .neon-box-blue:hover,
+  .neon-box-blue:focus {
+    box-shadow: 0 0 15px rgba(37, 99, 235, 0.5), 0 0 30px rgba(37, 99, 235, 0.3);
+  }
+
+  .neon-box-purple {
+    box-shadow: 0 0 0 rgba(147, 51, 234, 0);
+  }
+
+  .neon-box-purple:hover,
+  .neon-box-purple:focus {
+    box-shadow: 0 0 15px rgba(147, 51, 234, 0.5), 0 0 30px rgba(147, 51, 234, 0.3);
+  }
+
+  .neon-box-pink {
+    box-shadow: 0 0 0 rgba(219, 39, 119, 0);
+  }
+
+  .neon-box-pink:hover,
+  .neon-box-pink:focus {
+    box-shadow: 0 0 15px rgba(219, 39, 119, 0.5), 0 0 30px rgba(219, 39, 119, 0.3);
+  }
+
+  /* Efeitos de texto neon */
+  .neon-text {
+    transition: var(--transition-normal);
+  }
+
+  .neon-text-red {
+    color: #DC2626;
+    /* red-600 */
+  }
+
+  .neon-text-red:hover,
+  .neon-text-red:focus {
+    text-shadow: var(--neon-primary);
+  }
+
+  .neon-text-green {
+    color: #16A34A;
+    /* green-600 */
+  }
+
+  .neon-text-green:hover,
+  .neon-text-green:focus {
+    text-shadow: var(--neon-success);
+  }
+
+  .neon-text-blue {
+    color: #2563EB;
+    /* blue-600 */
+  }
+
+  .neon-text-blue:hover,
+  .neon-text-blue:focus {
+    text-shadow: var(--neon-info);
+  }
+
+  .neon-text-purple {
+    color: #9333EA;
+    /* purple-600 */
+  }
+
+  .neon-text-purple:hover,
+  .neon-text-purple:focus {
+    text-shadow: var(--neon-purple);
+  }
+
+  .neon-text-pink {
+    color: #DB2777;
+    /* pink-600 */
+  }
+
+  .neon-text-pink:hover,
+  .neon-text-pink:focus {
+    text-shadow: var(--neon-pink);
+  }
+
+  /* Versões escuras dos efeitos neon de texto */
+  .dark .neon-text-red {
+    color: #F87171;
+    /* red-400 */
+  }
+
+  .dark .neon-text-green {
+    color: #4ADE80;
+    /* green-400 */
+  }
+
+  .dark .neon-text-blue {
+    color: #60A5FA;
+    /* blue-400 */
+  }
+
+  .dark .neon-text-purple {
+    color: #A78BFA;
+    /* purple-400 */
+  }
+
+  .dark .neon-text-pink {
+    color: #F472B6;
+    /* pink-400 */
+  }
+}
