@@ -60,7 +60,7 @@
             x-transition:leave-end="opacity-0"
             class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg shadow-lg ring-1"
             :class="{
-                'bg-white dark:bg-zinc-800 ring-gray-200 dark:ring-zinc-700': notification.type === 'info',
+                'bg-zinc-800 dark:bg-zinc-800 ring-gray-200 dark:ring-zinc-700': notification.type === 'info',
                 'bg-green-50 dark:bg-green-900 ring-green-200 dark:ring-green-800': notification.type === 'success',
                 'bg-red-50 dark:bg-red-900 ring-red-200 dark:ring-red-800': notification.type === 'error',
                 'bg-yellow-50 dark:bg-yellow-900 ring-yellow-200 dark:ring-yellow-800': notification.type === 'warning',

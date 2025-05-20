@@ -1,4 +1,4 @@
-<div wire:poll.1800s="checkFriendsStatus">
+<div>
     @if(count($newOnlineFriends) > 0)
         <div
             x-data="{ show: true }"

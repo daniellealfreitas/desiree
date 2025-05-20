@@ -101,7 +101,7 @@ class Coupon extends Model
             return $discount;
         }
 
-        // Desconto fixo
+        // Desconto fixo (não pode ser maior que o total)
         return min($this->value, $total);
     }
 }

@@ -1,17 +1,13 @@
 <div
     id="toast-notification-container"
     wire:id="toast-notification"
-    wire:poll.500ms
     x-data="{ refreshCount: 0 }"
     x-init="
-        setInterval(() => {
-            refreshCount++;
-            if ($wire) $wire.refreshComponent();
-        }, 2000);
-
         // Adicionar listener para eventos de toast
         window.addEventListener('toast-added', () => {
             refreshCount++;
+            // Comentado para evitar loop de refresh
+            // if ($wire) $wire.refreshComponent();
         });
 
         // Log para debug
@@ -46,11 +42,11 @@
                 "
                 x-show="show"
                 x-transition:leave-end="transform opacity-0 translate-y-4"
-                class="w-full max-w-sm overflow-hidden rounded-lg shadow-xl border transform transition-all duration-300
-                    @if($notification['type'] === 'success') border-green-200 bg-green-50 dark:border-green-700 dark:bg-green-900/50
-                    @elseif($notification['type'] === 'error') border-red-200 bg-red-50 dark:border-red-700 dark:bg-red-900/50
-                    @elseif($notification['type'] === 'message') border-purple-200 bg-purple-50 dark:border-purple-700 dark:bg-purple-900/50
-                    @else border-gray-200 bg-white dark:border-gray-700 dark:bg-zinc-800
+                class="w-full max-w-sm overflow-hidden rounded-lg shadow-xl border transform transition-all duration-300 bg-zinc-800 text-white
+                    @if($notification['type'] === 'success') border-green-700
+                    @elseif($notification['type'] === 'error') border-red-700
+                    @elseif($notification['type'] === 'message') border-purple-700
+                    @else border-gray-700
                     @endif"
             >
                 <div class="flex">
@@ -89,7 +85,7 @@
                             @endif
                         </div>
                         <div class="ml-3 w-0 flex-1 pt-0.5">
-                            <p class="text-sm font-medium text-gray-900 dark:text-white">
+                            <p class="text-sm font-medium text-white">
                                 {{ $notification['message'] }}
                             </p>
 
@@ -107,7 +103,7 @@
                         <div class="ml-4 flex flex-shrink-0">
                             <button
                                 wire:click="removeToast('{{ $notification['id'] }}')"
-                                class="inline-flex rounded-md text-gray-400 hover:text-gray-500"
+                                class="inline-flex rounded-md text-gray-300 hover:text-white"
                             >
                                 <span class="sr-only">Fechar</span>
                                 <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">

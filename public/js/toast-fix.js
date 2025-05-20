@@ -6,9 +6,12 @@
  */
 
 // Controle para evitar duplicação de notificações
-const processedNotifications = new Set();
+// Verificar se já existe uma variável global para evitar redeclaração
+if (typeof window.processedNotifications === 'undefined') {
+    window.processedNotifications = new Set();
+}
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('livewire:initialized', function () {
     console.log('[Toast Fix] Verificando componente de notificação toast...');
 
     // Verificar se o componente toast-notification existe
@@ -34,16 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     // Tentar criar o componente manualmente
                     console.log('[Toast Fix] Tentando criar o componente manualmente...');
 
-                    // Criar um elemento para o componente
-                    const toastContainer = document.createElement('div');
-                    toastContainer.setAttribute('wire:id', 'toast-notification');
-                    toastContainer.setAttribute('wire:poll.500ms', '');
-                    toastContainer.style.display = 'none';
-
-                    // Adicionar ao body
-                    document.body.appendChild(toastContainer);
-
-                    console.log('[Toast Fix] Elemento criado e adicionado ao DOM');
+                    // Não criar o componente manualmente, pois isso pode causar problemas
+                    console.log('[Toast Fix] Não é recomendado criar o componente manualmente, aguardando carregamento normal');
                 }
             });
         }
@@ -59,17 +54,17 @@ document.addEventListener('DOMContentLoaded', function () {
         const notificationId = `${event.detail.message}-${Date.now()}`;
 
         // Verificar se esta notificação já foi processada recentemente (nos últimos 2 segundos)
-        if (processedNotifications.has(notificationId)) {
+        if (window.processedNotifications.has(notificationId)) {
             console.log('[Toast Fix] Notificação duplicada ignorada:', notificationId);
             return;
         }
 
         // Adicionar à lista de notificações processadas
-        processedNotifications.add(notificationId);
+        window.processedNotifications.add(notificationId);
 
         // Remover da lista após 2 segundos para evitar acúmulo de memória
         setTimeout(() => {
-            processedNotifications.delete(notificationId);
+            window.processedNotifications.delete(notificationId);
         }, 2000);
 
         // Verificar se o componente toast-notification existe

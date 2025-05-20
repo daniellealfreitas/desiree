@@ -1,29 +1,29 @@
 /**
  * Livewire Fix
- * 
+ *
  * Este script corrige problemas comuns com o Livewire 3, incluindo o erro
  * "Could not find Livewire component in DOM tree"
  */
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('livewire:initialized', function () {
     console.log('[Livewire Fix] Inicializando correções para o Livewire...');
-    
+
     // Verificar se o Livewire está disponível
     if (!window.Livewire) {
         console.warn('[Livewire Fix] Livewire não encontrado no escopo global');
         return;
     }
-    
+
     // Patch para o método closestComponent
     if (window.Livewire.closestComponent) {
         const originalClosestComponent = window.Livewire.closestComponent;
-        
-        window.Livewire.closestComponent = function(el) {
+
+        window.Livewire.closestComponent = function (el) {
             try {
                 return originalClosestComponent(el);
             } catch (error) {
                 console.warn('[Livewire Fix] Erro ao encontrar componente mais próximo:', error.message);
-                
+
                 // Tentar encontrar o componente de outra forma
                 if (el && el.closest) {
                     const closestEl = el.closest('[wire\\:id]');
@@ -38,24 +38,24 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 }
-                
+
                 // Retornar um objeto vazio para evitar erros
                 return {
-                    get: function() { return null; },
-                    call: function() { return null; },
+                    get: function () { return null; },
+                    call: function () { return null; },
                     $wire: {}
                 };
             }
         };
-        
+
         console.log('[Livewire Fix] Método closestComponent corrigido');
     }
-    
+
     // Patch para o método get
     if (window.Livewire.get) {
         const originalGet = window.Livewire.get;
-        
-        window.Livewire.get = function(el, property) {
+
+        window.Livewire.get = function (el, property) {
             try {
                 return originalGet(el, property);
             } catch (error) {
@@ -63,20 +63,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 return null;
             }
         };
-        
+
         console.log('[Livewire Fix] Método get corrigido');
     }
-    
-    // Verificar componentes na página
-    setTimeout(function() {
-        const wireComponents = document.querySelectorAll('[wire\\:id]');
-        console.log(`[Livewire Fix] Encontrados ${wireComponents.length} componentes Livewire na página`);
-        
-        wireComponents.forEach(function(component) {
-            const wireId = component.getAttribute('wire:id');
-            console.log(`[Livewire Fix] Componente encontrado: ${wireId}`);
-        });
-    }, 1000);
-    
+
+    // Não verificar componentes na página para evitar recarregamentos desnecessários
+
     console.log('[Livewire Fix] Correções aplicadas com sucesso');
 });

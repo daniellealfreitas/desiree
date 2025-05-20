@@ -73,48 +73,6 @@ class MessageNotifier extends Component
         }
     }
 
-    /**
-     * Método para testar notificação diretamente
-     */
-    public function testMessageNotification()
-    {
-        // Buscar um usuário diferente do atual para simular uma mensagem recebida
-        $sender = \App\Models\User::where('id', '!=', Auth::id())->first();
-
-        if (!$sender) {
-            // Se não encontrar outro usuário, usar o próprio usuário (apenas para teste)
-            $sender = Auth::user();
-        }
-
-        $senderName = $sender->name;
-        $messagePreview = "Esta é uma mensagem de teste em tempo real";
-
-        // Obter avatar do remetente ou usar avatar padrão
-        $avatar = null;
-        if ($sender->userPhotos->first()) {
-            $avatar = asset($sender->userPhotos->first()->photo_path);
-        } else {
-            // Usar avatar padrão do Flux UI
-            $avatar = asset('vendor/fluxui/img/avatar.jpg');
-        }
-
-        // Disparar notificação toast usando o componente ToastNotification
-        $this->dispatch('toast',
-            message: "{$senderName}: {$messagePreview}",
-            type: 'message',
-            timeout: 5000,
-            avatar: $avatar,
-            senderId: $sender->id
-        )->to('toast-notification');
-
-        // Registrar no log para debug
-        \Illuminate\Support\Facades\Log::info('Teste de notificação de mensagem enviado', [
-            'sender' => $senderName,
-            'receiver' => Auth::user()->name,
-            'preview' => $messagePreview
-        ]);
-    }
-
     public function render()
     {
         // Verificar novas mensagens a cada renderização

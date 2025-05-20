@@ -3,24 +3,11 @@
  *
  * Este script adiciona suporte para notificações toast em tempo real em todas as páginas
  */
-document.addEventListener('livewire:init', function () {
+document.addEventListener('livewire:initialized', function () {
     console.log('Toast Notification Handler: Inicializado - Versão 2.0');
 
-    // Verificar se o componente toast-notification existe
-    setTimeout(() => {
-        const toastContainer = document.getElementById('toast-notification-container');
-        if (toastContainer) {
-            console.log('Toast notification container encontrado:', toastContainer);
-        } else {
-            console.warn('Toast notification container NÃO encontrado!');
-        }
-
-        if (Livewire.getByName('toast-notification')) {
-            console.log('Componente toast-notification encontrado via Livewire.getByName');
-        } else {
-            console.warn('Componente toast-notification NÃO encontrado via Livewire.getByName');
-        }
-    }, 1000);
+    // Não verificar o componente toast-notification no carregamento
+    // para evitar recarregamentos desnecessários
     console.log('Toast Notification Handler: Inicializado');
 
     // Adicionar método para mostrar notificação diretamente
@@ -43,8 +30,8 @@ document.addEventListener('livewire:init', function () {
                     senderId
                 );
 
-                // Disparar evento para atualizar o componente
-                document.dispatchEvent(new CustomEvent('toast-added'));
+                // Comentado para evitar loops de refresh
+                // document.dispatchEvent(new CustomEvent('toast-added'));
 
                 return true;
             } catch (error) {
@@ -71,8 +58,8 @@ document.addEventListener('livewire:init', function () {
                         senderId
                     );
 
-                    // Disparar evento para atualizar o componente
-                    document.dispatchEvent(new CustomEvent('toast-added'));
+                    // Comentado para evitar loops de refresh
+                    // document.dispatchEvent(new CustomEvent('toast-added'));
 
                     return true;
                 }
@@ -169,56 +156,7 @@ document.addEventListener('livewire:init', function () {
         return false;
     };
 
-    // Adicionar método global para testar notificações (apenas para desenvolvimento)
-    window.testToast = function (type = 'message') {
-        if (window.location.hostname !== 'localhost' && !window.location.hostname.includes('127.0.0.1')) {
-            console.log('Função de teste desativada em ambiente de produção');
-            return false;
-        }
-
-        console.log('Testando notificação toast do tipo:', type);
-
-        // Tentar diferentes abordagens para garantir que a notificação seja exibida
-
-        // 1. Verificar se o componente toast-notification existe
-        if (Livewire.getByName('toast-notification')) {
-            console.log('Componente toast-notification encontrado, enviando notificação');
-
-            // Chamar o método testToast do componente
-            Livewire.getByName('toast-notification')[0].call('testToast');
-            return true;
-        }
-
-        // 2. Verificar se o componente messages existe
-        if (Livewire.getByName('messages')) {
-            console.log('Componente messages encontrado, enviando notificação');
-
-            // Chamar o método testMessageNotification do componente
-            Livewire.getByName('messages')[0].call('testMessageNotification');
-            return true;
-        }
-
-        // 3. Tentar usar o método showToast diretamente
-        if (window.showToast) {
-            console.log('Usando método showToast diretamente');
-            window.showToast('Esta é uma mensagem de teste em tempo real', type, 5000);
-            return true;
-        }
-
-        // 4. Tentar usar o método directToast do componente messages
-        if (Livewire.getByName('messages')) {
-            console.log('Usando método directToast do componente messages');
-            Livewire.getByName('messages')[0].call('directToast',
-                'Esta é uma mensagem de teste em tempo real',
-                type,
-                5000
-            );
-            return true;
-        }
-
-        console.warn('Nenhum componente de notificação encontrado');
-        return false;
-    };
+    // Método de teste removido para evitar recarregamentos desnecessários
 
     // Adicionar listener para eventos de browser
     Livewire.on('browser-event', (data) => {
@@ -240,8 +178,8 @@ document.addEventListener('livewire:init', function () {
                     data.data.senderId
                 );
 
-                // Disparar evento para atualizar o componente
-                document.dispatchEvent(new CustomEvent('toast-added'));
+                // Comentado para evitar loops de refresh
+                // document.dispatchEvent(new CustomEvent('toast-added'));
 
                 return true;
             }
@@ -265,8 +203,8 @@ document.addEventListener('livewire:init', function () {
                 data.senderId
             );
 
-            // Disparar evento para atualizar o componente
-            document.dispatchEvent(new CustomEvent('toast-added'));
+            // Comentado para evitar loops de refresh
+            // document.dispatchEvent(new CustomEvent('toast-added'));
 
             return true;
         }

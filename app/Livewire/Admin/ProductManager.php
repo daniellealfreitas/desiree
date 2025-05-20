@@ -31,9 +31,6 @@ class ProductManager extends Component
     public $categoryId;
     public $featured = false;
     public $status = 'active';
-    public $sku;
-    public $weight;
-    public $color;
     public $saleStartsAt;
     public $saleEndsAt;
     public $image;
@@ -61,9 +58,6 @@ class ProductManager extends Component
         'categoryId' => 'nullable|exists:categories,id',
         'featured' => 'boolean',
         'status' => 'required|in:active,inactive',
-        'sku' => 'nullable|string|max:100',
-        'weight' => 'nullable|numeric|min:0',
-        'color' => 'nullable|string|max:50',
         'saleStartsAt' => 'nullable|date',
         'saleEndsAt' => 'nullable|date|after_or_equal:saleStartsAt',
         'image' => 'nullable|image|max:2048',
@@ -89,8 +83,6 @@ class ProductManager extends Component
         'categoryId.exists' => 'A categoria selecionada não existe.',
         'status.required' => 'O status do produto é obrigatório.',
         'status.in' => 'O status deve ser ativo ou inativo.',
-        'weight.numeric' => 'O peso deve ser um valor numérico.',
-        'weight.min' => 'O peso não pode ser negativo.',
         'saleEndsAt.after_or_equal' => 'A data de término da promoção deve ser posterior à data de início.',
         'image.image' => 'O arquivo deve ser uma imagem.',
         'image.max' => 'A imagem não pode ter mais de 2MB.',
@@ -158,15 +150,12 @@ class ProductManager extends Component
             // Valores numéricos
             $this->price = $product->price ?? 0;
             $this->salePrice = $product->sale_price;
-            $this->weight = $product->weight;
             $this->stock = $product->stock;
 
             // Outros campos
             $this->categoryId = $product->category_id;
             $this->featured = (bool)$product->featured;
             $this->status = $product->status;
-            $this->sku = $product->sku;
-            $this->color = $product->color;
             $this->saleStartsAt = $product->sale_starts_at ? $product->sale_starts_at->format('Y-m-d') : null;
             $this->saleEndsAt = $product->sale_ends_at ? $product->sale_ends_at->format('Y-m-d') : null;
 
@@ -187,29 +176,75 @@ class ProductManager extends Component
 
     public function save()
     {
-        // Validação condicional para produtos digitais
-        if ($this->isDigital && !$this->isEditing) {
-            $this->validate([
-                'digitalFile' => 'required|file|max:51200|mimes:pdf,zip,doc,docx,xls,xlsx,ppt,pptx,mp3,mp4,jpg,jpeg,png,gif',
-            ]);
+        // Log para depuração
+        \Log::info('Método save() chamado', [
+            'name' => $this->name,
+            'price' => $this->price,
+            'stock' => $this->stock
+        ]);
+
+        // Verificar se o método está sendo chamado
+        session()->flash('message', 'Método save() foi chamado');
+
+        // Verificar se o formulário está sendo enviado corretamente
+        if (request()->isMethod('post')) {
+            \Log::info('Requisição POST recebida');
+        } else {
+            \Log::info('Requisição não é POST', ['method' => request()->method()]);
         }
 
         // Garantir que valores decimais sejam números
         if ($this->price === '') $this->price = 0;
         if ($this->salePrice === '') $this->salePrice = null;
-        if ($this->weight === '') $this->weight = null;
         if ($this->downloadLimit === '') $this->downloadLimit = null;
         if ($this->downloadExpiryDays === '') $this->downloadExpiryDays = null;
 
-        // Validação padrão
-        $this->validate();
+        // Definir regras de validação
+        $rules = [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'price' => 'required|numeric|min:0',
+            'salePrice' => 'nullable|numeric|min:0',
+            'stock' => 'required|integer|min:0',
+            'categoryId' => 'nullable|exists:categories,id',
+            'featured' => 'boolean',
+            'status' => 'required|in:active,inactive',
+            'saleStartsAt' => 'nullable|date',
+            'saleEndsAt' => 'nullable|date|after_or_equal:saleStartsAt',
+            'image' => 'nullable|image|max:2048',
+            'additionalImages.*' => 'nullable|image|max:2048',
+            'isDigital' => 'boolean',
+            'digitalFileName' => 'nullable|string|max:255',
+            'downloadLimit' => 'nullable|integer|min:0',
+            'downloadExpiryDays' => 'nullable|integer|min:0',
+        ];
+
+        // Adicionar validação condicional para produtos digitais
+        if ($this->isDigital && !$this->isEditing) {
+            $rules['digitalFile'] = 'required|file|max:51200|mimes:pdf,zip,doc,docx,xls,xlsx,ppt,pptx,mp3,mp4,jpg,jpeg,png,gif';
+        } else if ($this->isDigital) {
+            $rules['digitalFile'] = 'nullable|file|max:51200|mimes:pdf,zip,doc,docx,xls,xlsx,ppt,pptx,mp3,mp4,jpg,jpeg,png,gif';
+        }
+
+        // Validação com mensagens de erro
+        $validated = $this->validate($rules, $this->messages);
 
         try {
+            // Log antes de criar/editar o produto
+            \Log::info('Iniciando criação/edição de produto', [
+                'isEditing' => $this->isEditing,
+                'name' => $this->name,
+                'price' => $this->price,
+                'stock' => $this->stock
+            ]);
+
             if ($this->isEditing) {
                 $product = Product::findOrFail($this->productId);
+                \Log::info('Editando produto existente', ['product_id' => $this->productId]);
             } else {
                 $product = new Product();
                 $product->slug = Str::slug($this->name);
+                \Log::info('Criando novo produto', ['slug' => $product->slug]);
             }
 
             $product->name = $this->name;
@@ -220,9 +255,6 @@ class ProductManager extends Component
             $product->category_id = $this->categoryId ?: null;
             $product->featured = (bool)$this->featured;
             $product->status = $this->status;
-            $product->sku = $this->sku;
-            $product->weight = $this->weight;
-            $product->color = $this->color;
             $product->sale_starts_at = $this->saleStartsAt;
             $product->sale_ends_at = $this->saleEndsAt;
 
@@ -269,7 +301,16 @@ class ProductManager extends Component
                 }
             }
 
+            // Log antes de salvar
+            \Log::info('Salvando produto', [
+                'product_data' => $product->toArray()
+            ]);
+
             $product->save();
+
+            \Log::info('Produto salvo com sucesso', [
+                'product_id' => $product->id
+            ]);
 
             // Upload de imagens adicionais
             if (!empty($this->additionalImages) && count($this->additionalImages) > 0) {
@@ -298,6 +339,18 @@ class ProductManager extends Component
             ]);
 
         } catch (\Exception $e) {
+            // Log detalhado do erro
+            \Log::error('Erro ao salvar produto', [
+                'exception' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'data' => [
+                    'name' => $this->name,
+                    'price' => $this->price,
+                    'stock' => $this->stock,
+                    'isDigital' => $this->isDigital
+                ]
+            ]);
+
             $this->dispatch('notify', [
                 'message' => 'Erro ao salvar produto: ' . $e->getMessage(),
                 'type' => 'error'
@@ -360,15 +413,12 @@ class ProductManager extends Component
         // Valores numéricos - inicializar com valores apropriados
         $this->price = 0;
         $this->salePrice = null;
-        $this->weight = null;
         $this->stock = 0;
 
         // Outros campos
         $this->categoryId = '';
         $this->featured = false;
         $this->status = 'active';
-        $this->sku = '';
-        $this->color = '';
         $this->saleStartsAt = null;
         $this->saleEndsAt = null;
         $this->image = null;
@@ -391,8 +441,7 @@ class ProductManager extends Component
         if ($this->search) {
             $query->where(function ($q) {
                 $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%')
-                  ->orWhere('sku', 'like', '%' . $this->search . '%');
+                  ->orWhere('description', 'like', '%' . $this->search . '%');
             });
         }
 

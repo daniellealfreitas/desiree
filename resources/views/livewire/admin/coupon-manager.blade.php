@@ -1,5 +1,11 @@
 <div>
     <div class="bg-white dark:bg-zinc-800 shadow-md rounded-lg p-6">
+        @if (session()->has('message'))
+            <div class="mb-4 text-green-600 dark:text-green-400">
+                {{ session('message') }}
+            </div>
+        @endif
+
         <div class="flex justify-between items-center mb-6">
             <h2 class="text-xl font-semibold text-gray-800 dark:text-white">Gerenciamento de Cupons</h2>
             <x-flux::button wire:click="create">
@@ -158,121 +164,114 @@
     </div>
 
     <!-- Modal de Formulário -->
-    <x-flux::modal wire:model="showModal">
-        <x-flux::modal.header>
-            <x-flux::modal.title>{{ $isEditing ? 'Editar Cupom' : 'Novo Cupom' }}</x-flux::modal.title>
-        </x-flux::modal.header>
+    <x-flux::modal wire:model.defer="showModal">
 
-        <x-flux::modal.body>
-        <form wire:submit.prevent="save" class="space-y-4">
-            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div class="sm:col-span-2">
-                    <x-flux::input
-                        wire:model="code"
-                        label="Código do Cupom"
-                        placeholder="Ex: VERAO2024"
-                        required
-                    />
-                </div>
+        <form wire:submit.prevent="save">
+            <x-flux::modal.header>
+                <x-flux::modal.title>{{ $isEditing ? 'Editar Cupom' : 'Novo Cupom' }}</x-flux::modal.title>
+            </x-flux::modal.header>
 
-                <div>
-                    <x-flux::select
-                        wire:model="type"
-                        label="Tipo de Desconto"
-                        required
-                    >
-                        <option value="percentage">Percentual (%)</option>
-                        <option value="fixed">Valor Fixo (R$)</option>
-                    </x-flux::select>
-                </div>
+            <x-flux::modal.body>
+                <div class="space-y-4">
+                    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div class="sm:col-span-2">
+                            <x-flux::input
 
-                <div>
-                    <x-flux::input
-                        wire:model="value"
-                        label="Valor do Desconto"
-                        type="number"
-                        step="{{ $type === 'percentage' ? '1' : '0.01' }}"
-                        min="0"
-                        placeholder="{{ $type === 'percentage' ? '10' : '10.00' }}"
-                        required
-                    />
-                </div>
+                                wire:model.defer="code"
+                                label="Código do Cupom"
+                                placeholder="Ex: VERAO2024"
+                                required
+                            />
+                            @error('code') 
+                                <span class="text-red-500 text-xs">{{ $message }}</span> 
+                            @enderror
+                        </div>
 
-                <div class="sm:col-span-2">
-                    <x-flux::input
-                        wire:model="description"
-                        label="Descrição"
-                        placeholder="Descrição do cupom (opcional)"
-                    />
-                </div>
+                        <div>
+                            <x-flux::select
 
-                <div>
-                    <x-flux::input
-                        wire:model="expiresAt"
-                        label="Data de Expiração"
-                        type="date"
-                        min="{{ date('Y-m-d') }}"
-                    />
-                </div>
+                                wire:model.defer="type"
+                                label="Tipo de Desconto"
+                                required
+                            >
+                                <option value="percentage">Percentual (%)</option>
+                                <option value="fixed">Valor Fixo (R$)</option>
+                            </x-flux::select>
+                            @error('type')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                <div>
-                    <x-flux::input
-                        wire:model="usageLimit"
-                        label="Limite de Uso"
-                        type="number"
-                        min="0"
-                        placeholder="Sem limite"
-                    />
-                </div>
+                        <div>
+                            <x-flux::input
 
-                <div>
-                    <x-flux::input
-                        wire:model="minPurchase"
-                        label="Valor Mínimo de Compra"
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        placeholder="0.00"
-                    />
-                </div>
+                                wire:model.defer="value"
+                                label="Valor do Desconto"
+                                type="number"
+                                step="{{ $type === 'percentage' ? '1' : '0.01' }}"
+                                min="0"
+                                required
+                            />
+                            @error('value')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
 
-                @if($type === 'percentage')
-                    <div>
-                        <x-flux::input
-                            wire:model="maxDiscount"
-                            label="Desconto Máximo (R$)"
-                            type="number"
-                            step="0.01"
-                            min="0"
-                            placeholder="Sem limite"
-                        />
+                        <div>
+                            <x-flux::input
+
+                                wire:model.defer="expiresAt"
+                                label="Data de Expiração"
+                                type="date"
+                                min="{{ date('Y-m-d') }}"
+                            />
+                            @error('expiresAt')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div>
+                            <x-flux::input
+
+                                wire:model.defer="usageLimit"
+                                label="Limite de Uso"
+                                type="number"
+                                min="0"
+                                placeholder="Sem limite"
+                            />
+                            @error('usageLimit')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
+
+
+                        <div class="sm:col-span-2">
+                            <x-flux::checkbox
+
+                                wire:model.defer="active"
+                                label="Cupom Ativo"
+                            />
+                            @error('active')
+                                <span class="text-red-500 text-xs">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
-                @endif
-
-                <div class="sm:col-span-2">
-                    <x-flux::checkbox
-                        wire:model="active"
-                        label="Cupom Ativo"
-                    />
                 </div>
-            </div>
+            </x-flux::modal.body>
 
-            </div>
+            <x-flux::modal.footer>
+                <x-flux::button type="button" color="secondary" wire:click="$set('showModal', false)">
+                    Cancelar
+                </x-flux::button>
+                <x-flux::button type="submit" color="primary">
+                    {{ $isEditing ? 'Atualizar' : 'Salvar' }}
+                </x-flux::button>
+            </x-flux::modal.footer>
         </form>
-        </x-flux::modal.body>
-
-        <x-flux::modal.footer>
-            <x-flux::button type="button" color="secondary" wire:click="$set('showModal', false)">
-                Cancelar
-            </x-flux::button>
-            <x-flux::button type="submit" wire:click="save" color="primary">
-                {{ $isEditing ? 'Atualizar' : 'Salvar' }}
-            </x-flux::button>
-        </x-flux::modal.footer>
     </x-flux::modal>
 
     <!-- Modal de Confirmação de Exclusão -->
-    <x-flux::modal wire:model="confirmingDelete">
+    <x-flux::modal wire:model.live="confirmingDelete">
         <x-flux::modal.header>
             <x-flux::modal.title>Confirmar Exclusão</x-flux::modal.title>
         </x-flux::modal.header>

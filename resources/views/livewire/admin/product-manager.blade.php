@@ -93,11 +93,6 @@
                                         <div class="text-sm font-medium text-gray-900 dark:text-white">
                                             {{ $product->name }}
                                         </div>
-                                        @if($product->sku)
-                                            <div class="text-xs text-gray-500 dark:text-gray-400">
-                                                SKU: {{ $product->sku }}
-                                            </div>
-                                        @endif
                                     </div>
                                 </div>
                             </td>
@@ -184,7 +179,12 @@
 
     <!-- Modal de Formulário -->
     <flux:modal wire:model="showModal" title="{{ $isEditing ? 'Editar Produto' : 'Novo Produto' }}">
-        <form wire:submit.prevent="save" class="space-y-4">
+        <form wire:submit="save" class="space-y-4">
+            @if($errors->any())
+                <div class="bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-200 p-4 rounded-md mb-4">
+                    <p class="font-medium">Corrija os erros abaixo para continuar:</p>
+                </div>
+            @endif
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div class="sm:col-span-2">
                     <flux:input
@@ -194,6 +194,9 @@
                         required
                         :error="$errors->first('name')"
                     />
+                    @error('name')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div class="sm:col-span-2">
@@ -218,6 +221,9 @@
                         :error="$errors->first('price')"
                         help="Use ponto como separador decimal (ex: 10.99)"
                     />
+                    @error('price')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
@@ -243,6 +249,9 @@
                         required
                         :error="$errors->first('stock')"
                     />
+                    @error('stock')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 <div>
@@ -256,37 +265,6 @@
                             <option value="{{ $category->id }}">{{ $category->name }}</option>
                         @endforeach
                     </flux:select>
-                </div>
-
-                <div>
-                    <flux:input
-                        wire:model="sku"
-                        label="SKU"
-                        placeholder="Código do produto"
-                        :error="$errors->first('sku')"
-                    />
-                </div>
-
-                <div>
-                    <flux:input
-                        wire:model="color"
-                        label="Cor"
-                        placeholder="Cor do produto"
-                        :error="$errors->first('color')"
-                    />
-                </div>
-
-                <div>
-                    <flux:input
-                        wire:model.defer="weight"
-                        label="Peso (kg)"
-                        type="number"
-                        step="0.01"
-                        min="0"
-                        placeholder="0.00"
-                        :error="$errors->first('weight')"
-                        help="Use ponto como separador decimal (ex: 1.5)"
-                    />
                 </div>
 
                 <div>
@@ -322,6 +300,7 @@
                     <flux:checkbox
                         wire:model="featured"
                         label="Produto em Destaque"
+                        :error="$errors->first('featured')"
                     />
                 </div>
 
@@ -333,6 +312,7 @@
                         <flux:checkbox
                             wire:model.live="isDigital"
                             label="Este é um produto digital"
+                            :error="$errors->first('isDigital')"
                         />
                         <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
                             Produtos digitais não requerem envio físico e podem ser baixados pelo cliente após a compra.
@@ -350,6 +330,7 @@
                                     :iconVariant="$digitalFile ? 'solid' : 'outline'"
                                     :required="!$isEditing"
                                     help="Formatos aceitos: PDF, ZIP, DOC, DOCX, XLS, XLSX, PPT, PPTX, MP3, MP4, JPG, JPEG, PNG, GIF (máx. 50MB)"
+                                    :error="$errors->first('digitalFile')"
                                 />
                                 @error('digitalFile')
                                     <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -415,6 +396,7 @@
                         icon="photo"
                         :iconVariant="$image ? 'solid' : 'outline'"
                         help="Imagem principal do produto (máx. 2MB)"
+                        :error="$errors->first('image')"
                     />
                     @error('image')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -444,6 +426,7 @@
                         multiple
                         icon="photo"
                         help="Imagens adicionais do produto (máx. 2MB cada)"
+                        :error="$errors->first('additionalImages.*')"
                     />
                     @error('additionalImages.*')
                         <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
@@ -474,7 +457,7 @@
                 <flux:button type="button" variant="outline" wire:click="$set('showModal', false)">
                     Cancelar
                 </flux:button>
-                <flux:button type="submit" variant="primary" wire:loading.attr="disabled" wire:target="save">
+                <flux:button type="submit" variant="primary" wire:loading.attr="disabled" wire:target="save" id="submit-product-form">
                     <span wire:loading.remove wire:target="save">
                         {{ $isEditing ? 'Atualizar' : 'Salvar' }}
                     </span>
@@ -505,3 +488,30 @@
         </div>
     </flux:modal>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Adicionar evento de clique ao botão de envio
+        document.getElementById('submit-product-form')?.addEventListener('click', function(e) {
+            console.log('Botão de envio clicado');
+        });
+
+        // Adicionar evento de envio ao formulário
+        const form = document.querySelector('form[wire\\:submit="save"]');
+        if (form) {
+            console.log('Formulário encontrado');
+            form.addEventListener('submit', function(e) {
+                console.log('Formulário enviado');
+                // Verificar se o formulário está sendo enviado corretamente
+                const formData = new FormData(form);
+                console.log('Dados do formulário:', {
+                    name: formData.get('name'),
+                    price: formData.get('price'),
+                    stock: formData.get('stock')
+                });
+            });
+        } else {
+            console.log('Formulário não encontrado');
+        }
+    });
+</script>

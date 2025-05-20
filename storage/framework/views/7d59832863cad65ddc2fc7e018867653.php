@@ -1882,9 +1882,8 @@ if (isset($__slots)) unset($__slots);
 
         <!-- Scripts para correções e notificações -->
         <script src="<?php echo e(asset('js/livewire-fix.js')); ?>"></script>
-        <script src="<?php echo e(asset('js/toast-tester.js')); ?>"></script>
         <script src="<?php echo e(asset('js/toast-fix.js')); ?>"></script>
-        <script src="<?php echo e(asset('js/test-message-notification.js')); ?>"></script>
+        <script src="<?php echo e(asset('js/toast-tester.js')); ?>"></script>
 
         <script>
             // Correção para o erro de showTooltip já está definida no tooltip-handler.js

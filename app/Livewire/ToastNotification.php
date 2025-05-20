@@ -63,8 +63,8 @@ class ToastNotification extends Component
             array_shift($this->notifications);
         }
 
-        // Forçar atualização da view
-        $this->dispatch('toast-added');
+        // Comentado para evitar loops de refresh
+        // $this->dispatch('toast-added');
     }
 
     // Método alternativo para receber notificações (sem atributo)
@@ -139,17 +139,21 @@ class ToastNotification extends Component
             array_shift($this->notifications);
         }
 
-        // Forçar atualização da view
-        $this->dispatch('toast-added');
+        // Comentado para evitar loops de refresh
+        // $this->dispatch('toast-added');
     }
 
     /**
      * Método para forçar a atualização do componente
+     * Comentado para evitar loops de refresh
      */
     public function refreshComponent()
     {
-        // Forçar atualização do componente
-        $this->dispatch('refresh');
+        // Comentado para evitar loops de refresh
+        // $this->dispatch('refresh');
+
+        // Apenas atualizar o componente sem disparar eventos
+        Log::info('ToastNotification: Atualização do componente solicitada (desativada para evitar loops)');
     }
 
     public function render()

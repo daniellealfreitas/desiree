@@ -296,9 +296,8 @@
 
         <!-- Scripts para correções e notificações -->
         <script src="{{ asset('js/livewire-fix.js') }}"></script>
-        <script src="{{ asset('js/toast-tester.js') }}"></script>
         <script src="{{ asset('js/toast-fix.js') }}"></script>
-        <script src="{{ asset('js/test-message-notification.js') }}"></script>
+        <script src="{{ asset('js/toast-tester.js') }}"></script>
 
         <script>
             // Correção para o erro de showTooltip já está definida no tooltip-handler.js

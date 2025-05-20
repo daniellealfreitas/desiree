@@ -26,18 +26,27 @@ class Category extends Model
     protected static function boot()
     {
         parent::boot();
-        
+
         static::creating(function ($category) {
             $category->slug = Str::slug($category->name);
         });
     }
 
     /**
-     * Produtos nesta categoria.
+     * Produtos nesta categoria (one-to-many).
+     * Comentado porque a coluna category_id não existe na tabela products
      */
-    public function products()
+    // public function products()
+    // {
+    //     return $this->hasMany(Product::class);
+    // }
+
+    /**
+     * Produtos relacionados a esta categoria (many-to-many).
+     */
+    public function relatedProducts()
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class, 'category_product');
     }
 
     /**

@@ -21,12 +21,10 @@ class CouponManager extends Component
     public $code;
     public $type = 'percentage';
     public $value;
-    public $description;
     public $active = true;
     public $expiresAt;
     public $usageLimit;
-    public $minPurchase;
-    public $maxDiscount;
+    
 
     // Controle de modal
     public $showModal = false;
@@ -35,16 +33,22 @@ class CouponManager extends Component
     public $isEditing = false;
 
     protected $rules = [
-        'code' => 'required|string|max:50',
-        'type' => 'required|in:percentage,fixed',
-        'value' => 'required|numeric|min:0',
-        'description' => 'nullable|string|max:255',
-        'active' => 'boolean',
-        'expiresAt' => 'nullable|date',
-        'usageLimit' => 'nullable|integer|min:0',
-        'minPurchase' => 'nullable|numeric|min:0',
-        'maxDiscount' => 'nullable|numeric|min:0',
+        'code'        => 'required|string|unique:coupons,code',
+        'type'        => 'required|in:percentage,fixed',
+        'value'       => 'required|numeric|min:0',
+        'expiresAt'   => 'nullable|date',
+        'usageLimit'  => 'nullable|integer|min:0',        
+        'active'      => 'boolean',
     ];
+
+    // Livewire 3 - Propriedades que podem ser atualizadas
+    protected function getListeners()
+    {
+        return [
+            'save' => 'save',
+            'delete' => 'delete',
+        ];
+    }
 
     public function updatingSearch()
     {
@@ -54,6 +58,14 @@ class CouponManager extends Component
     public function updatingActiveFilter()
     {
         $this->resetPage();
+    }
+
+    public function updatedType()
+    {
+        // Se o tipo for alterado para 'fixed', limpa o desconto máximo
+        if ($this->type === 'fixed') {
+            $this->maxDiscount = null;
+        }
     }
 
     public function sortBy($field)
@@ -69,69 +81,51 @@ class CouponManager extends Component
     public function create()
     {
         $this->resetForm();
-        $this->isEditing = false;
         $this->showModal = true;
     }
 
     public function edit($id)
     {
-        $this->resetForm();
-        $this->isEditing = true;
-        $this->couponId = $id;
-        
         $coupon = Coupon::findOrFail($id);
-        
-        $this->code = $coupon->code;
-        $this->type = $coupon->type;
-        $this->value = $coupon->value;
-        $this->description = $coupon->description;
-        $this->active = $coupon->active;
-        $this->expiresAt = $coupon->expires_at ? $coupon->expires_at->format('Y-m-d') : null;
-        $this->usageLimit = $coupon->usage_limit;
-        $this->minPurchase = $coupon->min_purchase;
-        $this->maxDiscount = $coupon->max_discount;
-        
-        $this->showModal = true;
+        $this->couponId    = $coupon->id;
+        $this->code        = $coupon->code;
+        $this->type        = $coupon->type;
+        $this->value       = $coupon->value;
+        $this->expiresAt   = optional($coupon->expires_at)->format('Y-m-d');
+        $this->usageLimit  = $coupon->usage_limit;
+        $this->active      = $coupon->active;
+        $this->isEditing   = true;
+        $this->showModal   = true;
     }
 
     public function save()
     {
-        $this->validate();
-        
-        try {
-            if ($this->isEditing) {
-                $coupon = Coupon::findOrFail($this->couponId);
-            } else {
-                $coupon = new Coupon();
-                $coupon->used = 0;
-            }
-            
-            $coupon->code = $this->code;
-            $coupon->type = $this->type;
-            $coupon->value = $this->value;
-            $coupon->description = $this->description;
-            $coupon->active = $this->active;
-            $coupon->expires_at = $this->expiresAt;
-            $coupon->usage_limit = $this->usageLimit;
-            $coupon->min_purchase = $this->minPurchase;
-            $coupon->max_discount = $this->maxDiscount;
-            
-            $coupon->save();
-            
-            $this->showModal = false;
-            $this->resetForm();
-            
-            $this->dispatch('notify', [
-                'message' => $this->isEditing ? 'Cupom atualizado com sucesso!' : 'Cupom criado com sucesso!',
-                'type' => 'success'
-            ]);
-            
-        } catch (\Exception $e) {
-            $this->dispatch('notify', [
-                'message' => 'Erro ao salvar cupom: ' . $e->getMessage(),
-                'type' => 'error'
-            ]);
+        // Se for edição, ignora a própria linha na unique
+        if ($this->isEditing) {
+            $this->rules['code'] = 'required|string|unique:coupons,code,' . $this->couponId;
         }
+
+        $data = $this->validate();
+
+        Coupon::updateOrCreate(
+            ['id' => $this->couponId],
+            [
+                'code'          => $data['code'],
+                'type'          => $data['type'],
+                'value'         => $data['value'],
+                'expires_at'    => $data['expiresAt'] ?? null,
+                'usage_limit'   => $data['usageLimit'] ?? null,
+                'active'        => $data['active'],
+            ]
+        );
+
+        session()->flash('message', $this->isEditing
+            ? 'Cupom atualizado com sucesso.'
+            : 'Cupom criado com sucesso.'
+        );
+
+        $this->resetForm();
+        $this->showModal = false;
     }
 
     public function confirmDelete($id)
@@ -144,22 +138,22 @@ class CouponManager extends Component
     {
         try {
             $coupon = Coupon::findOrFail($this->deleteId);
-            
+
             // Verificar se o cupom está sendo usado em pedidos
             if ($coupon->orders()->count() > 0) {
                 throw new \Exception('Não é possível excluir um cupom que já foi utilizado em pedidos.');
             }
-            
+
             $coupon->delete();
-            
+
             $this->confirmingDelete = false;
             $this->deleteId = null;
-            
+
             $this->dispatch('notify', [
                 'message' => 'Cupom excluído com sucesso!',
                 'type' => 'success'
             ]);
-            
+
         } catch (\Exception $e) {
             $this->dispatch('notify', [
                 'message' => 'Erro ao excluir cupom: ' . $e->getMessage(),
@@ -170,41 +164,30 @@ class CouponManager extends Component
 
     public function resetForm()
     {
-        $this->couponId = null;
-        $this->code = '';
-        $this->type = 'percentage';
-        $this->value = '';
-        $this->description = '';
-        $this->active = true;
-        $this->expiresAt = null;
-        $this->usageLimit = null;
-        $this->minPurchase = null;
-        $this->maxDiscount = null;
-        
-        $this->resetErrorBag();
+        $this->reset([
+            'couponId',
+            'code',
+            'type',
+            'value',
+            'expiresAt',
+            'usageLimit',
+            'active',
+            'isEditing',
+        ]);
+
+        // opcional: resetar página de paginação se necessário
+        $this->resetPage();
     }
 
     public function render()
     {
-        $query = Coupon::query();
-        
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('code', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%');
-            });
-        }
-        
-        if ($this->activeFilter !== '') {
-            $query->where('active', $this->activeFilter === '1');
-        }
-        
-        $query->orderBy($this->sortBy, $this->sortDirection);
-        
+        $query = Coupon::query()
+            ->when($this->search, fn($q) => $q->where('code', 'like', "%{$this->search}%"))
+            ->when($this->activeFilter !== '', fn($q) => $q->where('active', $this->activeFilter))
+            ->orderBy($this->sortBy, $this->sortDirection);
+
         $coupons = $query->paginate($this->perPage);
-        
-        return view('livewire.admin.coupon-manager', [
-            'coupons' => $coupons,
-        ])->layout('layouts.admin', ['title' => 'Gerenciar Cupons']);
+
+        return view('livewire.admin.coupon-manager', compact('coupons'));
     }
 }
