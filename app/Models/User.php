@@ -26,6 +26,7 @@ use App\Models\GroupInvitation;
 use App\Models\Event;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
+use App\Models\Conversation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -248,6 +249,15 @@ class User extends Authenticatable
     public function unreadMessagesCount()
     {
         return $this->receivedMessages()->whereNull('read_at')->count();
+    }
+
+    /**
+     * Conversas do usuário
+     */
+    public function conversations()
+    {
+        return $this->belongsToMany(Conversation::class, 'conversation_user')
+                    ->withTimestamps();
     }
 
     /**
@@ -510,7 +520,7 @@ class User extends Authenticatable
     public function matchedUsers()
     {
         return $this->belongsToMany(User::class, 'user_matches', 'user_id', 'target_user_id')
-                    ->wherePivot('matched', true)
+                    ->wherePivot('is_matched', true)
                     ->withPivot('matched_at')
                     ->withTimestamps();
     }
@@ -522,7 +532,7 @@ class User extends Authenticatable
     {
         return $this->initiatedMatches()
                     ->where('target_user_id', $user->id)
-                    ->where('matched', true)
+                    ->where('is_matched', true)
                     ->exists();
     }
 

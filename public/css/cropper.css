@@ -290,7 +290,8 @@
   cursor: not-allowed;
 }
 
-.cropper-canvas {
+/* Removido tamanho fixo para o canvas do Cropper.js */
+/* .cropper-canvas {
   width: 800px !important;
   height: 500px !important;
-}
+} */

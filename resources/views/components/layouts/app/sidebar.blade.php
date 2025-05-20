@@ -6,6 +6,11 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
+        <!-- Notification Toast -->
+        @livewire('toast-notification')
+
+        <!-- Message Notifier (checks for new messages on all pages) -->
+        @livewire('message-notifier')
 
         @php
             $latestPhoto = auth()->user()->userPhotos()->latest()->first();
@@ -289,9 +294,14 @@
         <!-- Componente de busca modal -->
         <livewire:search-modal />
 
+        <!-- Scripts para correções e notificações -->
+        <script src="{{ asset('js/livewire-fix.js') }}"></script>
+        <script src="{{ asset('js/toast-tester.js') }}"></script>
+        <script src="{{ asset('js/toast-fix.js') }}"></script>
+        <script src="{{ asset('js/test-message-notification.js') }}"></script>
+
         <script>
-            // Correção para o erro de showTooltip
-            window.showTooltip = false;
+            // Correção para o erro de showTooltip já está definida no tooltip-handler.js
 
             // Function to trigger confetti animation - optimized for performance
             window.triggerConfetti = function() {

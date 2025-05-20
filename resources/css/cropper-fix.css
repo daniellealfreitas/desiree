@@ -1,4 +1,4 @@
-/* 
+/*
  * Cropper.js Fix Styles
  * Este arquivo contém estilos para garantir que o Cropper.js funcione corretamente
  */
@@ -77,8 +77,8 @@
   z-index: 50 !important;
 }
 
-/* Garantir que o container do cropper tenha altura adequada */
-.cropper-container-wrapper {
+/* Garantir que o container do cropper tenha altura adequada (exceto para o componente de capa) */
+.cropper-container-wrapper:not(.profile-with-cover .cropper-container-wrapper) {
   height: 400px !important;
   overflow: hidden !important;
 }

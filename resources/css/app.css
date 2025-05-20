@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 @import './cropper-fix.css';
+@import './cover-cropper.css';
 @import './text-colors.css';
 
 @source '../views';

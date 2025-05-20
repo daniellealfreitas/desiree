@@ -57,7 +57,7 @@ class SwipeMatch extends Component
             $user = $match->targetUser;
             return [
                 'user' => $user,
-                'hasMatched' => $match->matched,
+                'hasMatched' => $match->is_matched,
                 'matchedAt' => $match->matched_at
             ];
         })->toArray();
@@ -325,12 +325,12 @@ class SwipeMatch extends Component
             if ($reciprocal) {
                 // Atualiza ambos os registros para indicar que houve match
                 $userMatch->update([
-                    'matched' => true,
+                    'is_matched' => true,
                     'matched_at' => now()
                 ]);
 
                 $reciprocal->update([
-                    'matched' => true,
+                    'is_matched' => true,
                     'matched_at' => now()
                 ]);
 
@@ -341,18 +341,18 @@ class SwipeMatch extends Component
             // Se o usuário deu "pass", verifica se havia um match anterior e remove
             $reciprocal = UserMatch::where('user_id', $target->id)
                 ->where('target_user_id', $me->id)
-                ->where('matched', true)
+                ->where('is_matched', true)
                 ->first();
 
             if ($reciprocal) {
                 // Remove o status de match
                 $userMatch->update([
-                    'matched' => false,
+                    'is_matched' => false,
                     'matched_at' => null
                 ]);
 
                 $reciprocal->update([
-                    'matched' => false,
+                    'is_matched' => false,
                     'matched_at' => null
                 ]);
             }
@@ -402,7 +402,7 @@ class SwipeMatch extends Component
     {
         return UserMatch::where('user_id', Auth::id())
             ->where('target_user_id', $userId)
-            ->where('matched', true)
+            ->where('is_matched', true)
             ->exists();
     }
 

@@ -4,10 +4,15 @@
         @include('partials.head')
         <!-- CSRF Token para requisições AJAX -->
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <!-- Animate.css para animações -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
         <!-- Notification Toast -->
-        <x-notification-toast position="top-right" />
+        @livewire('toast-notification')
+
+        <!-- Message Notifier (checks for new messages on all pages) -->
+        @livewire('message-notifier')
 
         <!-- Flash Messages -->
         <x-flash-messages />

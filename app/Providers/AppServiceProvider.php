@@ -14,6 +14,8 @@ use App\Livewire\UserPosts;
 use App\Livewire\SendCharm;
 use App\Livewire\Leaderboard;
 use App\Livewire\SearchModal;
+use App\Livewire\ToastNotification;
+use App\Livewire\MessageNotifier;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -50,5 +52,14 @@ class AppServiceProvider extends ServiceProvider
 
         // Componente de busca
         Livewire::component('search-modal', SearchModal::class);
+
+        // Componente de mensagens
+        Livewire::component('messages', \App\Livewire\Messages::class);
+
+        // Componente de notificações toast
+        Livewire::component('toast-notification', ToastNotification::class);
+
+        // Componente de notificação de mensagens
+        Livewire::component('message-notifier', MessageNotifier::class);
     }
 }

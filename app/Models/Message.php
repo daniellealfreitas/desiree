@@ -13,8 +13,13 @@ class Message extends Model
     protected $fillable = [
         'sender_id',
         'receiver_id',
+        'conversation_id',
         'body',
         'read_at',
+    ];
+
+    protected $casts = [
+        'read_at' => 'datetime',
     ];
 
     public function sender(): BelongsTo
@@ -25,5 +30,10 @@ class Message extends Model
     public function receiver(): BelongsTo
     {
         return $this->belongsTo(User::class, 'receiver_id');
+    }
+
+    public function conversation(): BelongsTo
+    {
+        return $this->belongsTo(Conversation::class);
     }
 }

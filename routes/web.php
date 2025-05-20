@@ -138,6 +138,11 @@ Route::get('caixa_de_mensagens', function() {
     ->middleware(['auth', 'verified'])
     ->name('caixa_de_mensagens');
 
+// Rota para o componente de mensagens
+Route::get('messages', App\Livewire\Messages::class)
+    ->middleware(['auth', 'verified'])
+    ->name('messages');
+
 Route::view('renovar-vip', 'renovar-vip')
     ->middleware(['auth', 'verified'])
     ->name('renovar-vip');

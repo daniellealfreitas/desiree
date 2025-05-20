@@ -18,7 +18,10 @@
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100 dark:bg-zinc-900">
         <!-- Notification Toast -->
-        <x-notification-toast position="top-right" />
+        @livewire('toast-notification')
+
+        <!-- Message Notifier (checks for new messages on all pages) -->
+        @livewire('message-notifier')
 
         <!-- Sidebar -->
         <div class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-zinc-800 shadow-md transform transition-transform duration-300 lg:translate-x-0" id="sidebar">
@@ -145,6 +148,12 @@
     </div>
 
     @livewireScripts
+
+    <!-- Scripts para correções e notificações -->
+    <script src="{{ asset('js/livewire-fix.js') }}"></script>
+    <script src="{{ asset('js/toast-tester.js') }}"></script>
+    <script src="{{ asset('js/toast-fix.js') }}"></script>
+
     <script>
         // Mobile sidebar toggle
         document.getElementById('openSidebar').addEventListener('click', function() {

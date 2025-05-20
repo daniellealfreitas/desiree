@@ -1,41 +1,11 @@
 {
-  "public/js/cart-events-fix.js": {
-    "file": "assets/cart-events-fix-CfZqrEii.js",
-    "name": "cart-events-fix",
-    "src": "public/js/cart-events-fix.js",
-    "isEntry": true
-  },
-  "public/js/direct-cart-handler.js": {
-    "file": "assets/direct-cart-handler-_w1VCAbX.js",
-    "name": "direct-cart-handler",
-    "src": "public/js/direct-cart-handler.js",
-    "isEntry": true
-  },
-  "public/js/page-reload-fix.js": {
-    "file": "assets/page-reload-fix-DkS2DV6o.js",
-    "name": "page-reload-fix",
-    "src": "public/js/page-reload-fix.js",
-    "isEntry": true
-  },
-  "public/js/reload-detector.js": {
-    "file": "assets/reload-detector-BkkJFNyM.js",
-    "name": "reload-detector",
-    "src": "public/js/reload-detector.js",
-    "isEntry": true
-  },
   "resources/css/app.css": {
-    "file": "assets/app-BumFKcfZ.css",
+    "file": "assets/app-srcOid-N.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
-  "resources/js/alpine-early-init.js": {
-    "file": "assets/alpine-early-init-6z3OniOd.js",
-    "name": "alpine-early-init",
-    "src": "resources/js/alpine-early-init.js",
-    "isEntry": true
-  },
   "resources/js/app.js": {
-    "file": "assets/app-C2bNUv1I.js",
+    "file": "assets/app-D-a5MrIy.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true

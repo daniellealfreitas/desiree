@@ -15,6 +15,7 @@
     x-data="{
         notifications: [],
         add(notification) {
+            console.log('Adding notification:', notification);
             notification.id = Date.now()
             this.notifications.push(notification)
             setTimeout(() => this.remove(notification.id), notification.timeout || 5000)
@@ -28,9 +29,24 @@
         continueShopping() {
             // Fechar a notificação e continuar na página atual
             this.notifications = []
+        },
+        goToMessages() {
+            window.location.href = '{{ route('messages') }}'
         }
     }"
-    @notify.window="add($event.detail)"
+    @notify.window="console.log('Notification event received:', $event.detail); add($event.detail)"
+    x-init="
+        console.log('Notification component initialized');
+        // Test notification on init
+        setTimeout(() => {
+            console.log('Testing notification from component init');
+            add({
+                message: 'Teste de inicialização do componente',
+                type: 'info',
+                timeout: 3000
+            });
+        }, 2000);
+    "
     class="fixed z-50 {{ $positionClasses }} w-full max-w-sm space-y-2 pointer-events-none"
 >
     <template x-for="notification in notifications" :key="notification.id">
@@ -47,7 +63,8 @@
                 'bg-white dark:bg-zinc-800 ring-gray-200 dark:ring-zinc-700': notification.type === 'info',
                 'bg-green-50 dark:bg-green-900 ring-green-200 dark:ring-green-800': notification.type === 'success',
                 'bg-red-50 dark:bg-red-900 ring-red-200 dark:ring-red-800': notification.type === 'error',
-                'bg-yellow-50 dark:bg-yellow-900 ring-yellow-200 dark:ring-yellow-800': notification.type === 'warning'
+                'bg-yellow-50 dark:bg-yellow-900 ring-yellow-200 dark:ring-yellow-800': notification.type === 'warning',
+                'bg-purple-50 dark:bg-purple-900 ring-purple-200 dark:ring-purple-800': notification.type === 'message'
             }"
         >
             <div class="p-4">
@@ -87,6 +104,20 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
                             </svg>
                         </template>
+
+                        <!-- Message Icon (for message notifications) -->
+                        <template x-if="notification.type === 'message'">
+                            <div class="relative">
+                                <template x-if="notification.avatar">
+                                    <img :src="notification.avatar" class="h-8 w-8 rounded-full object-cover" />
+                                </template>
+                                <template x-if="!notification.avatar">
+                                    <svg class="h-6 w-6 text-purple-400 dark:text-purple-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+                                    </svg>
+                                </template>
+                            </div>
+                        </template>
                     </div>
                     <div class="ml-3 w-0 flex-1 pt-0.5">
                         <p
@@ -97,7 +128,8 @@
                                 'text-green-800 dark:text-green-100': notification.type === 'success',
                                 'text-red-800 dark:text-red-100': notification.type === 'error',
                                 'text-yellow-800 dark:text-yellow-100': notification.type === 'warning',
-                                'text-indigo-800 dark:text-indigo-100': notification.type === 'cart'
+                                'text-indigo-800 dark:text-indigo-100': notification.type === 'cart',
+                                'text-purple-800 dark:text-purple-100': notification.type === 'message'
                             }"
                         ></p>
 
@@ -118,6 +150,18 @@
                                 </button>
                             </div>
                         </template>
+
+                        <!-- Botões de ação para notificações de mensagens -->
+                        <template x-if="notification.type === 'message'">
+                            <div class="mt-3 flex space-x-2">
+                                <button
+                                    @click="goToMessages()"
+                                    class="inline-flex items-center rounded-md bg-purple-600 px-2 py-1 text-xs font-medium text-white hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+                                >
+                                    Ver Mensagem
+                                </button>
+                            </div>
+                        </template>
                     </div>
                     <div class="ml-4 flex flex-shrink-0">
                         <button
@@ -128,7 +172,8 @@
                                 'text-green-400 hover:text-green-500 focus:ring-green-400 focus:ring-offset-green-50 dark:text-green-300 dark:hover:text-green-100 dark:focus:ring-green-500 dark:focus:ring-offset-green-900': notification.type === 'success',
                                 'text-red-400 hover:text-red-500 focus:ring-red-400 focus:ring-offset-red-50 dark:text-red-300 dark:hover:text-red-100 dark:focus:ring-red-500 dark:focus:ring-offset-red-900': notification.type === 'error',
                                 'text-yellow-400 hover:text-yellow-500 focus:ring-yellow-400 focus:ring-offset-yellow-50 dark:text-yellow-300 dark:hover:text-yellow-100 dark:focus:ring-yellow-500 dark:focus:ring-offset-yellow-900': notification.type === 'warning',
-                                'text-indigo-400 hover:text-indigo-500 focus:ring-indigo-400 focus:ring-offset-indigo-50 dark:text-indigo-300 dark:hover:text-indigo-100 dark:focus:ring-indigo-500 dark:focus:ring-offset-indigo-900': notification.type === 'cart'
+                                'text-indigo-400 hover:text-indigo-500 focus:ring-indigo-400 focus:ring-offset-indigo-50 dark:text-indigo-300 dark:hover:text-indigo-100 dark:focus:ring-indigo-500 dark:focus:ring-offset-indigo-900': notification.type === 'cart',
+                                'text-purple-400 hover:text-purple-500 focus:ring-purple-400 focus:ring-offset-purple-50 dark:text-purple-300 dark:hover:text-purple-100 dark:focus:ring-purple-500 dark:focus:ring-offset-purple-900': notification.type === 'message'
                             }"
                         >
                             <span class="sr-only">Fechar</span>

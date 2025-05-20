@@ -12,6 +12,12 @@
         </style>
     </head>
     <body class="min-h-screen bg-black">
+        <!-- Notification Toast -->
+        @livewire('toast-notification')
+
+        <!-- Message Notifier (checks for new messages on all pages) -->
+        @livewire('message-notifier')
+
         <!-- Botão de voltar -->
         <div class="fixed top-4 left-4 z-50">
             <a href="{{ route('dashboard') }}" class="flex items-center justify-center w-10 h-10 bg-black bg-opacity-50 rounded-full text-white">
@@ -24,5 +30,13 @@
         {{ $slot }}
 
         @fluxScripts
+
+        <!-- Livewire Scripts -->
+        @livewireScripts
+
+        <!-- Scripts para correções e notificações -->
+        <script src="{{ asset('js/livewire-fix.js') }}"></script>
+        <script src="{{ asset('js/toast-tester.js') }}"></script>
+        <script src="{{ asset('js/toast-fix.js') }}"></script>
     </body>
 </html>

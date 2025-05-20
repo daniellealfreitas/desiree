@@ -6,6 +6,41 @@
         <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
+        <!-- Notification Toast -->
+        <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('toast-notification');
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-0', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+
+        <!-- Message Notifier (checks for new messages on all pages) -->
+        <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('message-notifier');
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-1', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
 
         <?php
             $latestPhoto = auth()->user()->userPhotos()->latest()->first();
@@ -97,7 +132,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('follow-request-notifications');
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-0', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-2', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -113,7 +148,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('notifications', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-1', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-3', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -193,7 +228,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('shop.mini-cart');
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-2', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-4', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -1816,7 +1851,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('friend-status-notifier', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-3', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-5', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -1834,7 +1869,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('search-modal', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-4', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-6', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -1845,9 +1880,14 @@ unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
 
+        <!-- Scripts para correções e notificações -->
+        <script src="<?php echo e(asset('js/livewire-fix.js')); ?>"></script>
+        <script src="<?php echo e(asset('js/toast-tester.js')); ?>"></script>
+        <script src="<?php echo e(asset('js/toast-fix.js')); ?>"></script>
+        <script src="<?php echo e(asset('js/test-message-notification.js')); ?>"></script>
+
         <script>
-            // Correção para o erro de showTooltip
-            window.showTooltip = false;
+            // Correção para o erro de showTooltip já está definida no tooltip-handler.js
 
             // Function to trigger confetti animation - optimized for performance
             window.triggerConfetti = function() {

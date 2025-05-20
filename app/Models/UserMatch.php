@@ -11,13 +11,13 @@ class UserMatch extends Model
         'user_id',
         'target_user_id',
         'liked',
-        'matched',
+        'is_matched',
         'matched_at'
     ];
 
     protected $casts = [
         'liked' => 'boolean',
-        'matched' => 'boolean',
+        'is_matched' => 'boolean',
         'matched_at' => 'datetime',
     ];
 

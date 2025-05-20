@@ -1,0 +1,79 @@
+/**
+ * Estilos específicos para o componente de upload de foto de capa
+ * Estes estilos garantem que o Cropper.js funcione corretamente
+ */
+
+/* Estilos para o container do cropper */
+#crop-container {
+  position: relative !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  height: 500px !important;
+  background-color: #f3f4f6 !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Estilos para a imagem dentro do container */
+#coverImage {
+  display: block !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+/* Estilos para o container do cropper */
+.profile-with-cover .cropper-container {
+  position: relative !important;
+  overflow: hidden !important;
+  touch-action: none !important;
+  user-select: none !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  direction: ltr !important;
+  background-color: transparent !important;
+}
+
+/* Estilos para o canvas do cropper */
+.profile-with-cover .cropper-canvas {
+  position: absolute !important;
+  overflow: hidden !important;
+}
+
+/* Estilos para a área de visualização */
+.profile-with-cover .cropper-view-box {
+  display: block !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  height: 100% !important;
+  outline: 1px solid #39f !important;
+  outline-color: rgba(51, 153, 255, 0.75) !important;
+}
+
+/* Estilos para a área de recorte */
+.profile-with-cover .cropper-crop-box {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+  min-width: 100px !important;
+  min-height: 100px !important;
+}
+
+/* Estilos para o modo escuro */
+.dark #crop-container {
+  background-color: #1f2937 !important;
+}
+
+.dark .profile-with-cover .cropper-face {
+  background-color: #000 !important;
+}
+
+.dark .profile-with-cover .cropper-view-box {
+  outline-color: rgba(59, 130, 246, 0.75) !important;
+}
+
+/* Estilos responsivos */
+@media (max-width: 640px) {
+  #crop-container {
+    height: 300px !important;
+  }
+}
