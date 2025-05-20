@@ -2,6 +2,8 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         @include('partials.head')
+        <!-- CSRF Token para requisições AJAX -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
         <!-- Notification Toast -->
@@ -89,7 +91,7 @@
                         <div class="p-0 text-sm font-normal">
                             <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                                 <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="{{ auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
+                                    <img src="{{ auth()->user()->userPhotos->first() ? asset(auth()->user()->userPhotos->first()->photo_path) : asset('images/users/avatar.jpg') }}"
                                          class="h-full w-full object-cover"
                                          alt="{{ auth()->user()->name }}">
                                 </span>
@@ -165,8 +167,5 @@
         {{ $slot }}
 
         @fluxScripts
-
-        <!-- CSRF Token para requisições AJAX -->
-        <meta name="csrf-token" content="{{ csrf_token() }}">
     </body>
 </html>

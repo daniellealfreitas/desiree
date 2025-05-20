@@ -12,6 +12,10 @@
 <!-- Cropper.js CSS -->
 <link href="<?php echo e(asset('css/cropper.css')); ?>" rel="stylesheet" />
 
+<!-- Livewire Styles -->
+<?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
+
+
 <!-- Scripts personalizados -->
 <?php if(auth()->guard()->check()): ?>
 <!-- Script de geolocalização automática -->

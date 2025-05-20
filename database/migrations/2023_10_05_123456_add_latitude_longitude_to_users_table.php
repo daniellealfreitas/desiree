@@ -8,15 +8,25 @@ class AddLatitudeLongitudeToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->decimal('latitude', 10, 7)->nullable()->after('level');
-            $table->decimal('longitude', 10, 7)->nullable()->after('latitude');
+            if (!Schema::hasColumn('users', 'latitude')) {
+                $table->decimal('latitude', 10, 7)->nullable()->after('level');
+            }
+            if (!Schema::hasColumn('users', 'longitude')) {
+                $table->decimal('longitude', 10, 7)->nullable()->after('latitude');
+            }
         });
     }
 
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn(['latitude', 'longitude']);
+            $columns = [];
+            if (Schema::hasColumn('users', 'latitude')) $columns[] = 'latitude';
+            if (Schema::hasColumn('users', 'longitude')) $columns[] = 'longitude';
+
+            if (!empty($columns)) {
+                $table->dropColumn($columns);
+            }
         });
     }
 }

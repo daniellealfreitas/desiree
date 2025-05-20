@@ -28,8 +28,8 @@
                                     >
                                         <div class="flex flex-col items-center">
                                             <x-flux::icon name="{{ $charm['icon'] }}" class="w-8 h-8 mb-2 {{ $selectedCharm == $type ? 'text-red-500' : 'text-gray-500' }}" />
-                                            <div class="font-bold">{{ $charm['name'] }}</div>
-                                            <div class="text-sm">R$ {{ number_format($charm['price'], 2, ',', '.') }}</div>
+                                            <div class="font-bold text-gray-300">{{ $charm['name'] }}</div>
+                                            <div class="text-sm text-gray-400">R$ {{ number_format($charm['price'], 2, ',', '.') }}</div>
                                             <div class="text-xs text-gray-500 mt-1">{{ $charm['description'] }}</div>
                                         </div>
                                     </button>
@@ -50,7 +50,7 @@
                             <textarea
                                 wire:model.defer="message"
                                 rows="2"
-                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 dark:bg-gray-800 dark:border-gray-600"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 dark:bg-zinc-700 dark:border-gray-600 text-gray-300"
                                 placeholder="Escreva uma mensagem pessoal..."
                             ></textarea>
                             @error('message')
@@ -76,9 +76,14 @@
             <flux:modal.footer>
                 <div class="flex justify-between w-full">
                     <div>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">
-                            Seu saldo: R$ {{ number_format(auth()->user()->wallet_balance, 2, ',', '.') }}
-                        </p>
+                        <div class="flex items-center gap-2">
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                Seu saldo: R$ {{ number_format($walletBalance, 2, ',', '.') }}
+                            </p>
+                            <button wire:click="refreshWalletBalance" class="text-gray-400 hover:text-gray-600" title="Atualizar saldo">
+                                <x-flux::icon name="arrow-path" class="w-4 h-4" />
+                            </button>
+                        </div>
                     </div>
                     <div class="flex space-x-2">
                         <flux:button wire:click="closeModal" variant="primary">

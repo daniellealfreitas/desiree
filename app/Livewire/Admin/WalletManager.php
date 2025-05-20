@@ -471,6 +471,49 @@ public function addFunds()
         ]);
     }
 
+    /**
+     * Cria uma nova carteira para o usuário
+     */
+    public function createWallet($userId)
+    {
+        try {
+            $user = User::findOrFail($userId);
+
+            // Verificar se o usuário já tem uma carteira
+            if ($user->wallet()->exists()) {
+                $this->dispatch('notify', [
+                    'message' => "O usuário já possui uma carteira!",
+                    'type' => 'info'
+                ]);
+                return;
+            }
+
+            // Criar uma nova carteira
+            $wallet = $user->wallet()->create([
+                'balance' => 0.00,
+                'active' => true,
+            ]);
+
+            $this->dispatch('notify', [
+                'message' => "Carteira criada com sucesso para {$user->name}!",
+                'type' => 'success'
+            ]);
+
+            // Forçar a atualização da lista de usuários e outros componentes relacionados
+            $this->dispatch('walletUpdated');
+
+            // Atualizar o componente de saldo da carteira no header, se existir
+            $this->dispatch('walletBalanceUpdated');
+        } catch (\Exception $e) {
+            logger()->error('Erro ao criar carteira: ' . $e->getMessage());
+
+            $this->dispatch('notify', [
+                'message' => 'Erro ao criar carteira: ' . $e->getMessage(),
+                'type' => 'error'
+            ]);
+        }
+    }
+
     public function toggleWalletStatus($walletId)
     {
         try {

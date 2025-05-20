@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
                                     <livewire:user-status-indicator :userId="$user->id" />
                                 </div>
                                 <div>
-                                    <a href="/{{ $user->username }}" class="font-semibold hover:underline">{{ $user->name }}</a>
+                                    <a href="/{{ $user->username }}" class="font-semibold hover:underline text-gray-300">{{ $user->name }}</a>
                                     <p class="text-sm text-gray-500">{{ '@' . $user->username }}</p>
                                 </div>
                             </div>
@@ -44,7 +44,7 @@ use Illuminate\Support\Facades\Auth;
             </flux:modal.body>
 
             <flux:modal.footer>
-                <x-flux.button wire:click="closeModal" variant="secondary">Fechar</x-flux.button>
+                <x-flux.button wire:click="closeModal" variant="primary">Fechar</x-flux.button>
             </flux:modal.footer>
         </flux:modal>
     @endif

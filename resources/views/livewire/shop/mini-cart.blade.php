@@ -15,21 +15,9 @@
             <div class="p-2">
                 <div class="flex justify-between items-center mb-2">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-white">Meu Carrinho</h3>
-                    <button
-                        wire:click="loadCart"
-                        wire:loading.attr="disabled"
-                        wire:target="loadCart"
-                        class="text-xs text-blue-500 hover:text-blue-700 dark:hover:text-blue-400"
-                        title="Atualizar carrinho"
-                    >
-                        <flux:icon name="arrow-path" class="h-4 w-4" />
-                    </button>
                 </div>
 
-                <!-- Debug info -->
-                <div class="text-xs text-gray-500 dark:text-gray-400 mb-2">
-                    ID: {{ $cart->id }} | Itens: {{ $itemCount }} | Total: R$ {{ number_format($totalAmount, 2, ',', '.') }}
-                </div>
+                <!-- Removida informação de debug -->
 
                 @if($cart->items->isEmpty())
                     <div class="py-4 text-center">

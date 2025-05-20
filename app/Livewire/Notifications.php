@@ -20,6 +20,7 @@ class Notifications extends Component
         // Busca apenas notificações não lidas
         $this->notifications = auth()->user()->notifications()
             ->where('read', false)
+            ->whereIn('type', ['like', 'message', 'points']) // Incluir notificações de pontos
             ->with(['sender', 'post'])
             ->latest()
             ->take(5)

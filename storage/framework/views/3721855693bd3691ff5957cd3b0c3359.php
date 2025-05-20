@@ -92,7 +92,7 @@ if (isset($__slots)) unset($__slots);
         x-transition:enter-start="opacity-0 scale-90"
         x-transition:enter-end="opacity-100 scale-100"
         x-show="show"
-        class="relative w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+        class="relative w-full bg-white dark:bg-zinc-800 shadow-lg rounded-lg overflow-hidden">
 
         <div id="profile_header" class="relative w-full">
             
@@ -100,7 +100,7 @@ if (isset($__slots)) unset($__slots);
 
             <div class="absolute left-8 top-1/2 -translate-y-1/2 flex items-center gap-6">
                 <div class="relative w-48 h-48 rounded-full border-4 border-white overflow-hidden shadow-xl">
-                    <img src="<?php echo e($this->avatar() ?? asset('images/default-avatar.jpg')); ?>" class="w-full h-full object-cover" /> <?php
+                    <img src="<?php echo e($this->avatar() ?? asset('images/users/avatar.jpg')); ?>" class="w-full h-full object-cover" /> <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
@@ -177,6 +177,7 @@ if (isset($__slots)) unset($__slots);
 <?php $component = $__componentOriginalc04b147acd0e65cc1a77f86fb0e81580; ?>
 <?php unset($__componentOriginalc04b147acd0e65cc1a77f86fb0e81580); ?>
 <?php endif; ?>
+
                     <?php if (isset($component)) { $__componentOriginalc04b147acd0e65cc1a77f86fb0e81580 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc04b147acd0e65cc1a77f86fb0e81580 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::button.index','data' => ['variant' => 'ghost','icon' => 'video-camera','wire:click' => 'showUserVideos']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>

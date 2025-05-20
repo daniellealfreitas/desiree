@@ -8,6 +8,8 @@
         <div class="col-span-1 space-y-6">
             <!-- Perfil -->
             <livewire:user-profile :user="Auth::user()" />
+            <!-- Ranking -->
+            <livewire:leaderboard />
             <!-- Últimos Acessos e Perfis Sugeridos -->
             <div class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
                 <livewire:recent-users />

@@ -243,6 +243,54 @@ class ProductDetail extends Component
         }
     }
 
+    /**
+     * Adiciona ou remove um produto relacionado da lista de desejos
+     */
+    public function toggleWishlist($productId)
+    {
+        // Verificar se o usuário está autenticado
+        if (!auth()->check()) {
+            $this->dispatch('notify', [
+                'message' => 'Você precisa estar logado para adicionar à lista de desejos!',
+                'type' => 'error'
+            ]);
+            return;
+        }
+
+        $user = auth()->user();
+
+        // Verificar se o produto já está na lista de desejos
+        if ($user->wishlistedProducts()->where('product_id', $productId)->exists()) {
+            // Remover da lista de desejos
+            $user->wishlistedProducts()->detach($productId);
+
+            $this->dispatch('notify', [
+                'message' => 'Produto removido da lista de desejos!',
+                'type' => 'success'
+            ]);
+        } else {
+            // Adicionar à lista de desejos
+            $user->wishlistedProducts()->attach($productId);
+
+            $this->dispatch('notify', [
+                'message' => 'Produto adicionado à lista de desejos!',
+                'type' => 'success'
+            ]);
+        }
+    }
+
+    /**
+     * Verifica se um produto está na lista de desejos do usuário
+     */
+    public function isInWishlist($productId)
+    {
+        if (!auth()->check()) {
+            return false;
+        }
+
+        return auth()->user()->wishlistedProducts()->where('product_id', $productId)->exists();
+    }
+
     public function render()
     {
         $relatedProducts = Product::where('category_id', $this->product->category_id)

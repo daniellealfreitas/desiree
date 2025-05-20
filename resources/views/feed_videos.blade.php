@@ -20,7 +20,21 @@
                     ],
                     'likes_count' => $post->likes()->count(),
                     'comments_count' => $post->comments()->count() ?? 0,
-                    'liked_by_user' => $post->likes()->where('user_id', auth()->id())->exists()
+                    'liked_by_user' => $post->likes()->where('user_id', auth()->id())->exists(),
+                    'showComments' => false,
+                    'comments' => $post->comments()->with(['user.userPhotos'])->latest()->take(5)->get()->map(function($comment) {
+                        return [
+                            'id' => $comment->id,
+                            'body' => $comment->body,
+                            'created_at' => $comment->created_at->diffForHumans(),
+                            'user' => [
+                                'id' => $comment->user->id,
+                                'name' => $comment->user->name,
+                                'username' => $comment->user->username,
+                                'avatar' => $comment->user->userPhotos->first() ? asset('storage/' . $comment->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg')
+                            ]
+                        ];
+                    })->toArray()
                 ];
             })) }},
             isPlaying: true,
@@ -112,15 +126,7 @@
                 }
             },
 
-            likePost(postId) {
-                // Aqui você pode implementar a lógica de like com Livewire
-                // Por enquanto, apenas alteramos o estado visual
-                const postIndex = this.posts.findIndex(post => post.id === postId);
-                if (postIndex !== -1) {
-                    this.posts[postIndex].liked_by_user = !this.posts[postIndex].liked_by_user;
-                    this.posts[postIndex].likes_count += this.posts[postIndex].liked_by_user ? 1 : -1;
-                }
-            }
+            // Função removida pois agora usamos o Livewire para gerenciar likes
         }"
         class="h-screen w-full bg-black overflow-hidden"
         @keydown.arrow-down.window="nextVideo()"
@@ -161,46 +167,105 @@
                             </div>
                             <p class="text-white text-sm mb-2" x-text="post.title"></p>
                             <p class="text-gray-300 text-xs" x-text="post.content"></p>
+
+                            <!-- Seção de comentários (visível apenas quando showComments é true) -->
+                            <div
+                                x-show="post.showComments"
+                                class="mt-4 bg-black bg-opacity-50 rounded-lg p-4 pointer-events-auto"
+                                x-transition:enter="transition ease-out duration-300"
+                                x-transition:enter-start="opacity-0 transform scale-95"
+                                x-transition:enter-end="opacity-100 transform scale-100"
+                            >
+                                <!-- Formulário de comentário -->
+                                <form @submit.prevent="$wire.addComment(post.id, $el.querySelector('input').value); $el.querySelector('input').value = '';" class="flex gap-2 mb-4">
+                                    <input
+                                        type="text"
+                                        class="flex-1 p-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white"
+                                        placeholder="Escreva um comentário..."
+                                    >
+                                    <button type="submit" class="flex items-center space-x-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+                                        <x-flux::icon
+                                            icon="paper-airplane"
+                                            variant="solid"
+                                            class="w-4 h-4"
+                                        />
+                                    </button>
+                                </form>
+
+                                <!-- Lista de comentários -->
+                                <div class="space-y-3 max-h-60 overflow-y-auto">
+                                    <template x-for="comment in post.comments" :key="comment.id">
+                                        <div class="flex items-start space-x-3 p-3 bg-zinc-800 rounded-lg">
+                                            <img :src="comment.user.avatar" class="w-8 h-8 rounded-full object-cover">
+                                            <div>
+                                                <p class="font-semibold text-gray-300" x-text="comment.user.username"></p>
+                                                <p class="text-gray-100" x-text="comment.body"></p>
+                                                <p class="text-gray-500 text-xs" x-text="comment.created_at"></p>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Botões de ação -->
                         <div class="absolute bottom-20 right-4 flex flex-col items-center space-y-6 pointer-events-auto">
                             <!-- Botão de like -->
-                            <button
-                                class="flex flex-col items-center"
-                                @click.stop="likePost(post.id)"
-                            >
-                                <svg
-                                    class="w-8 h-8"
-                                    :class="post.liked_by_user ? 'text-red-500 fill-current' : 'text-white'"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                            <div>
+                                <button
+                                    @click.stop="$wire.likePost(post.id)"
+                                    class="flex flex-col items-center"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                                    ></path>
-                                </svg>
-                                <span class="text-white text-xs mt-1" x-text="post.likes_count"></span>
-                            </button>
+                                    <div class="relative">
+                                        <x-flux::icon
+                                            icon="heart"
+                                            variant="outline"
+                                            class="w-8 h-8 text-white"
+                                            x-show="!post.liked_by_user"
+                                        />
+                                        <x-flux::icon
+                                            icon="heart"
+                                            variant="solid"
+                                            class="w-8 h-8 text-red-500"
+                                            x-show="post.liked_by_user"
+                                        />
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-white text-xs mt-1" x-text="post.likes_count"></span>
+                                        <span class="text-white text-xs" x-text="post.liked_by_user ? 'Curtido' : 'Curtir'"></span>
+                                    </div>
+                                </button>
+                            </div>
 
                             <!-- Botão de comentários -->
-                            <button class="flex flex-col items-center">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                                </svg>
-                                <span class="text-white text-xs mt-1" x-text="post.comments_count"></span>
-                            </button>
+                            <div>
+                                <button
+                                    @click.stop="post.showComments = !post.showComments"
+                                    class="flex flex-col items-center"
+                                >
+                                    <x-flux::icon
+                                        icon="chat-bubble-left"
+                                        variant="outline"
+                                        class="w-8 h-8 text-white"
+                                    />
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-white text-xs mt-1" x-text="post.comments_count"></span>
+                                        <span class="text-white text-xs">Comentar</span>
+                                    </div>
+                                </button>
+                            </div>
 
                             <!-- Botão de compartilhar -->
-                            <button class="flex flex-col items-center">
-                                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
-                                </svg>
-                            </button>
+                            <div>
+                                <button class="flex flex-col items-center">
+                                    <x-flux::icon
+                                        icon="share"
+                                        variant="outline"
+                                        class="w-8 h-8 text-white"
+                                    />
+                                    <span class="text-white text-xs mt-1">Compartilhar</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
 

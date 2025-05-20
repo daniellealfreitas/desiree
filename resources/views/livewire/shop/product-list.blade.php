@@ -147,7 +147,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="mt-2">
+                                    <div class="mt-2 space-y-2">
                                         @if($product->isAvailable())
                                             <flux:button
                                                 wire:click="addToCart({{ $product->id }})"
@@ -171,6 +171,23 @@
                                                 Indisponível
                                             </flux:button>
                                         @endif
+
+                                        <flux:button
+                                            wire:click="toggleWishlist({{ $product->id }})"
+                                            wire:loading.attr="disabled"
+                                            wire:target="toggleWishlist({{ $product->id }})"
+                                            variant="outline"
+                                            size="sm"
+                                            class="w-full"
+                                        >
+                                            @if($this->isInWishlist($product->id))
+                                                <flux:icon name="heart" variant="solid" class="h-4 w-4 mr-1 text-red-500" />
+                                                Remover dos Desejos
+                                            @else
+                                                <flux:icon name="heart" class="h-4 w-4 mr-1" />
+                                                Adicionar aos Desejos
+                                            @endif
+                                        </flux:button>
                                     </div>
                                 </div>
                             @endforeach

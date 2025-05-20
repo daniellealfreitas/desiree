@@ -9,10 +9,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('sexo', ['casal', 'homem', 'mulher'])->nullable()->after('username');
-            $table->date('aniversario')->nullable()->after('sexo');
-            $table->boolean('privado')->default(false)->after('aniversario');
-            $table->text('bio')->nullable()->after('privado');
+            if (!Schema::hasColumn('users', 'sexo')) {
+                $table->enum('sexo', ['casal', 'homem', 'mulher'])->nullable()->after('username');
+            }
+            if (!Schema::hasColumn('users', 'aniversario')) {
+                $table->date('aniversario')->nullable()->after('sexo');
+            }
+            if (!Schema::hasColumn('users', 'privado')) {
+                $table->boolean('privado')->default(false)->after('aniversario');
+            }
+            if (!Schema::hasColumn('users', 'bio')) {
+                $table->text('bio')->nullable()->after('privado');
+            }
         });
     }
 

@@ -35,6 +35,28 @@ class ProfileComponent extends Component
 
         // Set the current user status
         $this->userStatus = $this->user->status;
+
+        // Registrar a visita ao perfil
+        $this->registerProfileVisit();
+    }
+
+    /**
+     * Registra a visita ao perfil
+     */
+    protected function registerProfileVisit()
+    {
+        // Verificar se o usuário está autenticado
+        if (!Auth::check()) {
+            return;
+        }
+
+        // Não registrar visitas ao próprio perfil
+        if (Auth::id() === $this->user->id) {
+            return;
+        }
+
+        // Registrar a visita
+        Auth::user()->visitProfile($this->user);
     }
 
     public function avatar()
@@ -49,7 +71,7 @@ class ProfileComponent extends Component
         $path = UserPhoto::where('user_id', $userId)
             ->latest()
             ->value('photo_path');
-        return $path ? Storage::url($path) : asset('images/default-avatar.jpg');
+        return $path ? Storage::url($path) : asset('images/users/avatar.jpg');
     }
 
     public function cover()

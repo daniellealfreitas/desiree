@@ -2,12 +2,14 @@
 <html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>" class="<?php echo e(session('appearance', 'dark')); ?>">
     <head>
         <?php echo $__env->make('partials.head', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+        <!-- CSRF Token para requisições AJAX -->
+        <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
 
         <?php
             $latestPhoto = auth()->user()->userPhotos()->latest()->first();
-            $avatarUrl = $latestPhoto ? asset($latestPhoto->photo_path) : asset('images/default-avatar.jpg');
+            $avatarUrl = $latestPhoto ? asset($latestPhoto->photo_path) : asset('images/users/avatar.jpg');
         ?>
 
         <?php if (isset($component)) { $__componentOriginale96c14d638c792103c11b984a4ed1896 = $component; } ?>
@@ -204,14 +206,14 @@ if (isset($__slots)) unset($__slots);
 
                 <?php if (isset($component)) { $__componentOriginalc4cbba45ed073bedf6d5fbbd59b58e48 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.item','data' => ['icon' => 'magnifying-glass','href' => '#','label' => 'Search']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navbar.item','data' => ['icon' => 'magnifying-glass','href' => '#','label' => 'Buscar','xOn:click.prevent' => '$dispatch(\'open-search-modal\')']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::navbar.item'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['icon' => 'magnifying-glass','href' => '#','label' => 'Search']); ?>
+<?php $component->withAttributes(['icon' => 'magnifying-glass','href' => '#','label' => 'Buscar','x-on:click.prevent' => '$dispatch(\'open-search-modal\')']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginalc4cbba45ed073bedf6d5fbbd59b58e48)): ?>
@@ -444,14 +446,14 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginal5027d420cfeeb03dd925cfc08ae44851 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal5027d420cfeeb03dd925cfc08ae44851 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::menu.item','data' => ['icon' => 'arrow-right-start-on-rectangle','href' => '#']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::menu.item','data' => ['icon' => 'arrow-right-start-on-rectangle','href' => route('profile.visitors')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::menu.item'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['icon' => 'arrow-right-start-on-rectangle','href' => '#']); ?>Meus Visitantes <?php echo $__env->renderComponent(); ?>
+<?php $component->withAttributes(['icon' => 'arrow-right-start-on-rectangle','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('profile.visitors'))]); ?>Meus Visitantes <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal5027d420cfeeb03dd925cfc08ae44851)): ?>
 <?php $attributes = $__attributesOriginal5027d420cfeeb03dd925cfc08ae44851; ?>
@@ -1006,6 +1008,28 @@ if (isset($__slots)) unset($__slots);
 <?php endif; ?>
                     <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'eye','href' => route('profile.visitors'),'current' => request()->routeIs('profile.visitors'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::navlist.item'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'eye','href' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('profile.visitors')),'current' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(request()->routeIs('profile.visitors')),'wire:navigate' => true]); ?>
+                        <?php echo e(__('Meus Visitantes')); ?>
+
+                     <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $attributes = $__attributesOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__attributesOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalda376aa217444bbd92367ba1444eb3b8)): ?>
+<?php $component = $__componentOriginalda376aa217444bbd92367ba1444eb3b8; ?>
+<?php unset($__componentOriginalda376aa217444bbd92367ba1444eb3b8); ?>
+<?php endif; ?>
+                    <?php if (isset($component)) { $__componentOriginalda376aa217444bbd92367ba1444eb3b8 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalda376aa217444bbd92367ba1444eb3b8 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::navlist.item','data' => ['icon' => 'magnifying-glass-circle','href' => route('busca'),'current' => request()->routeIs('busca'),'wire:navigate' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('flux::navlist.item'); ?>
 <?php if ($component->shouldRender()): ?>
@@ -1533,6 +1557,33 @@ if (isset($__slots)) unset($__slots);
 <?php unset($__componentOriginal4a4f7aa062a095c651c2f80bb685a42a); ?>
 <?php endif; ?>
 
+            <!-- Mobile Search Button -->
+            <button
+                class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none"
+                x-on:click.prevent="$dispatch('open-search-modal')"
+            >
+                <?php if (isset($component)) { $__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::icon.index','data' => ['name' => 'magnifying-glass','class' => 'w-5 h-5']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['name' => 'magnifying-glass','class' => 'w-5 h-5']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2)): ?>
+<?php $attributes = $__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2; ?>
+<?php unset($__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2)): ?>
+<?php $component = $__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2; ?>
+<?php unset($__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2); ?>
+<?php endif; ?>
+            </button>
+
             <?php if (isset($component)) { $__componentOriginal2b4bb2cd4b8f1a3c08bae49ea918b888 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal2b4bb2cd4b8f1a3c08bae49ea918b888 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::dropdown','data' => ['position' => 'top','align' => 'start']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -1754,6 +1805,10 @@ if (isset($__slots)) unset($__slots);
 <?php echo app('flux')->scripts(); ?>
 
 
+        <!-- Livewire Scripts -->
+        <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::scripts(); ?>
+
+
         <!-- Componente de notificação de status de amigos -->
         <?php
 $__split = function ($name, $params = []) {
@@ -1772,91 +1827,176 @@ unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
 
+        <!-- Componente de busca modal -->
+        <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('search-modal', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1108464796-4', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+
         <script>
-            // Function to trigger confetti animation
+            // Correção para o erro de showTooltip
+            window.showTooltip = false;
+
+            // Function to trigger confetti animation - optimized for performance
             window.triggerConfetti = function() {
-                // Create a canvas element dynamically
+                // Create a canvas element with all styles before adding to DOM
                 const canvas = document.createElement('canvas');
-                document.body.appendChild(canvas);
-                canvas.style.position = 'fixed';
-                canvas.style.top = '0';
-                canvas.style.left = '0';
-                canvas.style.width = '100%';
-                canvas.style.height = '100%';
-                canvas.style.pointerEvents = 'none';
+
+                // Set all styles before appending to reduce reflows
+                Object.assign(canvas.style, {
+                    position: 'fixed',
+                    top: '0',
+                    left: '0',
+                    width: '100%',
+                    height: '100%',
+                    pointerEvents: 'none',
+                    zIndex: '9999'
+                });
+
+                // Get context and set dimensions once
                 const ctx = canvas.getContext('2d');
-                const confettiCount = 300;
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                // Now append to DOM after all styles are set
+                document.body.appendChild(canvas);
+
+                // Use a smaller number of particles for better performance
+                const confettiCount = 200;
                 const confetti = [];
 
-                // Initialize confetti particles
+                // Pre-calculate random values to avoid doing it in the animation loop
                 for (let i = 0; i < confettiCount; i++) {
                     confetti.push({
                         x: Math.random() * canvas.width,
                         y: Math.random() * canvas.height - canvas.height,
-                        r: Math.random() * 6 + 2,
-                        dx: Math.random() * 4 - 2,
-                        dy: Math.random() * 4 + 2,
+                        r: Math.random() * 4 + 2, // Slightly smaller particles
+                        dx: Math.random() * 3 - 1.5,
+                        dy: Math.random() * 3 + 1,
                         color: `hsl(${Math.random() * 360}, 100%, 50%)`
                     });
                 }
 
-                // Resize canvas to match the window size
-                function resizeCanvas() {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                }
-                resizeCanvas();
-                window.addEventListener('resize', resizeCanvas);
+                // Throttled resize handler
+                let resizeTimeout;
+                const handleResize = () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                    }, 100);
+                };
 
-                // Animation loop
+                window.addEventListener('resize', handleResize);
+
+                // Use requestAnimationFrame for smooth animation
+                let animationId;
                 function animate() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    confetti.forEach(p => {
+
+                    // Batch drawing operations
+                    for (let i = 0; i < confetti.length; i++) {
+                        const p = confetti[i];
                         ctx.beginPath();
                         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
                         ctx.fillStyle = p.color;
                         ctx.fill();
+
+                        // Update position
                         p.x += p.dx;
                         p.y += p.dy;
                         if (p.y > canvas.height) p.y = -p.r;
-                    });
-                    requestAnimationFrame(animate);
-                }
-                animate();
+                    }
 
-                // Remove canvas after 2 seconds
+                    animationId = requestAnimationFrame(animate);
+                }
+
+                // Start animation
+                animationId = requestAnimationFrame(animate);
+
+                // Clean up after animation
                 setTimeout(() => {
-                    window.removeEventListener('resize', resizeCanvas);
+                    cancelAnimationFrame(animationId);
+                    window.removeEventListener('resize', handleResize);
                     canvas.remove();
                 }, 2000);
             };
 
-            // Function to trigger XP popup
+            // Function to trigger XP popup - optimized
             window.triggerXpPopup = function(points) {
-                // Create a popup element dynamically
+                // Create popup with all styles before adding to DOM
                 const popup = document.createElement('div');
                 popup.textContent = `+${points} XP!`;
-                popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-4xl font-bold bg-blue-500 px-6 py-3 rounded-lg shadow-lg animate-pulse';
+
+                // Apply all styles at once
+                Object.assign(popup.style, {
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    color: 'white',
+                    fontSize: '2rem',
+                    fontWeight: 'bold',
+                    backgroundColor: '#3b82f6',
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '0.5rem',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    animation: 'pulse 2s infinite',
+                    zIndex: '10000'
+                });
+
+                // Add keyframes for pulse animation if not already present
+                if (!document.getElementById('xp-popup-style')) {
+                    const style = document.createElement('style');
+                    style.id = 'xp-popup-style';
+                    style.textContent = `
+                        @keyframes pulse {
+                            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                // Append to DOM after all styles are set
                 document.body.appendChild(popup);
 
-                // Remove popup after 2 seconds
-                setTimeout(() => {
-                    popup.remove();
-                }, 2000);
+                // Remove after animation
+                setTimeout(() => popup.remove(), 2000);
             };
 
             // Listener para o evento reward-earned (usando a sintaxe do Livewire 3)
             document.addEventListener('livewire:initialized', () => {
                 // No Livewire 3, usamos Livewire.on em vez de Livewire.addEventListener
                 Livewire.on('reward-earned', (data) => {
-                    window.triggerConfetti();
-                    window.triggerXpPopup(data.points);
+                    // Use requestIdleCallback if available for non-critical UI updates
+                    if (window.requestIdleCallback) {
+                        requestIdleCallback(() => {
+                            window.triggerConfetti();
+                            window.triggerXpPopup(data.points);
+                        });
+                    } else {
+                        // Fallback to setTimeout for browsers that don't support requestIdleCallback
+                        setTimeout(() => {
+                            window.triggerConfetti();
+                            window.triggerXpPopup(data.points);
+                        }, 0);
+                    }
                 });
             });
         </script>
-
-        <!-- CSRF Token para requisições AJAX -->
-        <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
     </body>
 </html>
 <?php /**PATH C:\xampp\htdocs\desiree2\resources\views/components/layouts/app/sidebar.blade.php ENDPATH**/ ?>

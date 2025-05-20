@@ -78,6 +78,48 @@
                                 </div>
                             </div>
                         </div>
+                    <?php elseif($notification->type === 'points'): ?>
+                        <?php
+                            $pointsData = json_decode($notification->message, true);
+                            $points = $pointsData['points'] ?? 0;
+                            $description = $pointsData['description'] ?? '';
+                            $actionType = $pointsData['action_type'] ?? '';
+                        ?>
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                                <?php if (isset($component)) { $__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'e60dd9d2c3a62d619c9acb38f20d5aa5::icon.index','data' => ['icon' => 'trophy','class' => 'w-5 h-5 text-blue-600 dark:text-blue-400']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('flux::icon'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['icon' => 'trophy','class' => 'w-5 h-5 text-blue-600 dark:text-blue-400']); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2)): ?>
+<?php $attributes = $__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2; ?>
+<?php unset($__attributesOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2)): ?>
+<?php $component = $__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2; ?>
+<?php unset($__componentOriginalc7d5f44bf2a2d803ed0b55f72f1f82e2); ?>
+<?php endif; ?>
+                            </div>
+                            <div class="text-sm">
+                                <div class="flex items-center gap-1">
+                                    <span class="font-semibold text-blue-600 dark:text-blue-400">+<?php echo e($points); ?></span>
+                                    <span>pontos</span>
+                                </div>
+                                <p><?php echo e($description); ?></p>
+                                <div class="text-xs text-gray-500">
+                                    <?php echo e($notification->created_at->diffForHumans()); ?>
+
+                                </div>
+                            </div>
+                        </div>
                     <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
                  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

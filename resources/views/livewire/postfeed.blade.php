@@ -272,7 +272,7 @@ $deletePost = action(function ($postId) {
                     <img src="{{ !empty($post->user->userPhotos->first()) ? Storage::url($post->user->userPhotos->first()->photo_path) : asset('images/users/default.jpg') }}"
                          class="w-10 h-10 rounded-full object-cover">
                     <div>
-                        <h4 class="font-semibold">{{ $post->user->name }}</h4>
+                        <h4 class="font-semibold text-gray-300">{{ $post->user->name }}</h4>
                         <p class="text-sm text-gray-500">
                             <a href="/{{ $post->user->username }}" class="hover:underline"> {{ '@'.$post->user->username }}</a>
                         </p>
@@ -313,7 +313,7 @@ $deletePost = action(function ($postId) {
             <div class="mt-3 flex items-center space-x-2">
                 <button
                     wire:click="toggleLike({{ $post->id }})"
-                    class="flex items-center space-x-1 {{ $post->isLikedBy(auth()->user()) ? 'text-red-600' : 'text-gray-500' }}"
+                    class="flex items-center space-x-1 {{ $post->isLikedBy(auth()->user()) ? 'text-red-600' : 'text-gray-300' }}"
                 >
                     <x-flux::icon
                         icon="heart"
@@ -323,7 +323,7 @@ $deletePost = action(function ($postId) {
                     <span>{{ $post->isLikedBy(auth()->user()) ? 'Curtido' : 'Curtir' }}</span>
                 </button>
                 <div class="relative group">
-                    <span>{{ $post->likedByUsers->count() }} Curtidas</span>
+                    <span class="text-gray-300">{{ $post->likedByUsers->count() }} Curtidas</span>
 
                     <!-- Tooltip com lista de usuários -->
                     @if($post->likedByUsers->count() > 0)
@@ -348,7 +348,7 @@ $deletePost = action(function ($postId) {
                     <input
                         wire:model="newComment.{{ $post->id }}"
                         type="text"
-                        class="flex-1 p-2 border border-neutral-200 dark:border-neutral-700 rounded-lg"
+                        class="flex-1 p-2 border border-neutral-200 dark:border-neutral-700 rounded-lg text-gray-300"
                         placeholder="Escreva um comentário..."
                     >
                     <button type="submit" class="flex items-center space-x-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
@@ -367,7 +367,7 @@ $deletePost = action(function ($postId) {
                         <img src="{{ !empty($comment->user->userPhotos->first()) ? Storage::url($comment->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
                              class="w-8 h-8 rounded-full object-cover">
                         <div>
-                            <p class="font-semibold">
+                            <p class="font-semibold text-gray-300">
                                 <a href="/{{ $comment->user->username }}" class="hover:underline">
                                     {{ $comment->user->username }}
                                 </a>

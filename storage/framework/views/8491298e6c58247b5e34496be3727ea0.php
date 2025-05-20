@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
             <li class="flex items-center justify-between space-x-3">
                 <div class="relative flex items-center space-x-3 ">
                     <div class="relative">
-                        <img src="<?php echo e(asset($user['user_photos'][0]['photo_path'] ?? 'images/default-avatar.jpg')); ?>" class="w-10 h-10 rounded-full object-cover">
+                        <img src="<?php echo e(asset($user['user_photos'][0]['photo_path'] ?? 'images/users/avatar.jpg')); ?>" class="w-10 h-10 rounded-full object-cover">
                         <div class="absolute top-0 right-0">
                             <?php
 $__split = function ($name, $params = []) {
@@ -43,10 +43,10 @@ if (isset($__slots)) unset($__slots);
                 <!--[if BLOCK]><![endif]--><?php if($user['id'] !== Auth::id()): ?>
                     <button wire:click="toggleFollow(<?php echo e($user['id']); ?>)"
                             class="<?php echo \Illuminate\Support\Arr::toCssClasses([
-                                'px-4 py-2 rounded text-sm font-medium',
-                                'bg-yellow-500 text-white' => $requestStatus[$user['id']] === 'pending',
+                                'px-2 py-1 rounded text-sm ',
+                                'bg-yellow-500 text-gray-800' => $requestStatus[$user['id']] === 'pending',
                                 'bg-gray-200 text-gray-800 cursor-not-allowed' => $requestStatus[$user['id']] === 'accepted',
-                                'bg-blue-500 text-white hover:bg-blue-600' => !$requestStatus[$user['id']]
+                                'bg-purple-500 text-white hover:bg-purple-600' => !$requestStatus[$user['id']]
                             ]); ?>">
                         <!--[if BLOCK]><![endif]--><?php if($requestStatus[$user['id']] === 'pending'): ?>
                             <?php echo e(__('Solicitado')); ?>

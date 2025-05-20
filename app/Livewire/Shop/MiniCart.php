@@ -72,13 +72,14 @@ class MiniCart extends Component
     public function mount()
     {
         $this->loadCart();
-        $this->dispatch('mini-cart-mounted');
+        // Removido o dispatch para evitar atualizações desnecessárias
         logger()->info('MiniCart montado', ['user_id' => Auth::id(), 'session_id' => Session::getId()]);
     }
 
     public function loadCart()
     {
-        logger()->info('MiniCart: Carregando carrinho', ['user_id' => Auth::id(), 'session_id' => Session::getId()]);
+        // Reduzido para debug para evitar logs excessivos
+        logger()->debug('MiniCart: Carregando carrinho');
 
         if (Auth::check()) {
             // Usuário logado - buscar ou criar carrinho
@@ -100,12 +101,6 @@ class MiniCart extends Component
 
         // Atualizar contadores
         $this->updateCounters();
-
-        logger()->info('MiniCart: Carrinho carregado', [
-            'cart_id' => $this->cart->id,
-            'item_count' => $this->itemCount,
-            'total_amount' => $this->totalAmount
-        ]);
     }
 
     protected function processAddToCart($data)

@@ -78,8 +78,22 @@ class SendCharm extends Component
     {
         $user = Auth::user();
         if ($user) {
-            $wallet = $user->wallet;
-            $this->walletBalance = $wallet->balance;
+            // Recarregar o usuário para garantir dados atualizados
+            $user->refresh();
+
+            // Obter a carteira e recarregá-la para garantir o saldo mais recente
+            $wallet = $user->wallet()->first();
+            if ($wallet) {
+                $wallet->refresh();
+                $this->walletBalance = $wallet->balance;
+            } else {
+                // Caso não tenha carteira, criar uma nova
+                $wallet = $user->wallet()->create([
+                    'balance' => 0.00,
+                    'active' => true,
+                ]);
+                $this->walletBalance = 0.00;
+            }
         }
     }
 

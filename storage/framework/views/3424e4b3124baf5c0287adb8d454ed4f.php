@@ -15,7 +15,7 @@
 
     <form wire:submit.prevent="store" enctype="multipart/form-data">
         <textarea wire:model.defer="content" rows="3"
-            class="w-full p-3 border border-gray-300 rounded-lg"
+            class="w-full p-3 border border-gray-500 rounded-lg text-gray-300"
             placeholder="Compartilhe o que você pensa com fotos ou vídeos..."></textarea>
 
         <!--[if BLOCK]><![endif]--><?php if($image): ?>
@@ -104,7 +104,7 @@
                     </span>
                 <?php endif; ?><!--[if ENDBLOCK]><![endif]-->
             </div>
-            <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-lg disabled:opacity-50"
+            <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg disabled:opacity-50"
                 wire:loading.attr="disabled"
                 wire:loading.class="opacity-50">
                 <span wire:loading.remove>Postar</span>
@@ -114,7 +114,7 @@
 
         <div wire:loading wire:target="image,video" class="mt-2">
             <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                <div class="bg-red-600 h-2.5 rounded-full" style="width: 100%"></div>
+                <div class="bg-purple-600  h-2.5 rounded-full" style="width: 100%"></div>
             </div>
             <div class="text-sm text-gray-500 mt-1">Carregando arquivo...</div>
         </div>

@@ -2,12 +2,14 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ session('appearance', 'dark') }}">
     <head>
         @include('partials.head')
+        <!-- CSRF Token para requisições AJAX -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
     <body class="min-h-screen bg-white dark:bg-zinc-800">
 
         @php
             $latestPhoto = auth()->user()->userPhotos()->latest()->first();
-            $avatarUrl = $latestPhoto ? asset($latestPhoto->photo_path) : asset('images/default-avatar.jpg');
+            $avatarUrl = $latestPhoto ? asset($latestPhoto->photo_path) : asset('images/users/avatar.jpg');
         @endphp
 
         <flux:header container class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
@@ -29,7 +31,7 @@
                 <!-- Mini Cart -->
                 @livewire('shop.mini-cart')
 
-                <flux:navbar.item icon="magnifying-glass" href="#" label="Search" />
+                <flux:navbar.item icon="magnifying-glass" href="#" label="Buscar" x-on:click.prevent="$dispatch('open-search-modal')" />
                 <flux:navbar.item class="max-lg:hidden" icon="cog-6-tooth" :href="route('settings.profile')" label="Settings" />
                 <flux:navbar.item class="max-lg:hidden" icon="information-circle" href="#" label="Help" />
             </flux:navbar>
@@ -56,7 +58,7 @@
                         @endif
                     </flux:menu.item>
                     <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('settings.profile')">Configurações</flux:menu.item>
-                    <flux:menu.item icon="arrow-right-start-on-rectangle" href="#">Meus Visitantes</flux:menu.item>
+                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('profile.visitors')">Meus Visitantes</flux:menu.item>
                     <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('renovar-vip')">Renovar VIP</flux:menu.item>
                     <flux:menu.item icon="wallet" :href="route('wallet.index')">
                         <div class="flex items-center justify-between w-full">
@@ -132,6 +134,9 @@
                     @endif
                     <flux:navlist.item icon="trophy" :href="route('points.history')" :current="request()->routeIs('points.history')" wire:navigate>
                         {{ __('Pontuação') }}
+                    </flux:navlist.item>
+                    <flux:navlist.item icon="eye" :href="route('profile.visitors')" :current="request()->routeIs('profile.visitors')" wire:navigate>
+                        {{ __('Meus Visitantes') }}
                     </flux:navlist.item>
                     <flux:navlist.item icon="magnifying-glass-circle" :href="route('busca')" :current="request()->routeIs('busca')" wire:navigate>
                         {{ __('Busca') }}
@@ -220,6 +225,14 @@
 
             <flux:spacer />
 
+            <!-- Mobile Search Button -->
+            <button
+                class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none"
+                x-on:click.prevent="$dispatch('open-search-modal')"
+            >
+                <x-flux::icon name="magnifying-glass" class="w-5 h-5" />
+            </button>
+
             <flux:dropdown position="top" align="start">
                 <flux:profile
                     :initials="auth()->user()->initials()"
@@ -267,93 +280,166 @@
 
         @fluxScripts
 
+        <!-- Livewire Scripts -->
+        @livewireScripts
+
         <!-- Componente de notificação de status de amigos -->
         <livewire:friend-status-notifier />
 
+        <!-- Componente de busca modal -->
+        <livewire:search-modal />
+
         <script>
-            // Function to trigger confetti animation
+            // Correção para o erro de showTooltip
+            window.showTooltip = false;
+
+            // Function to trigger confetti animation - optimized for performance
             window.triggerConfetti = function() {
-                // Create a canvas element dynamically
+                // Create a canvas element with all styles before adding to DOM
                 const canvas = document.createElement('canvas');
-                document.body.appendChild(canvas);
-                canvas.style.position = 'fixed';
-                canvas.style.top = '0';
-                canvas.style.left = '0';
-                canvas.style.width = '100%';
-                canvas.style.height = '100%';
-                canvas.style.pointerEvents = 'none';
+
+                // Set all styles before appending to reduce reflows
+                Object.assign(canvas.style, {
+                    position: 'fixed',
+                    top: '0',
+                    left: '0',
+                    width: '100%',
+                    height: '100%',
+                    pointerEvents: 'none',
+                    zIndex: '9999'
+                });
+
+                // Get context and set dimensions once
                 const ctx = canvas.getContext('2d');
-                const confettiCount = 300;
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+
+                // Now append to DOM after all styles are set
+                document.body.appendChild(canvas);
+
+                // Use a smaller number of particles for better performance
+                const confettiCount = 200;
                 const confetti = [];
 
-                // Initialize confetti particles
+                // Pre-calculate random values to avoid doing it in the animation loop
                 for (let i = 0; i < confettiCount; i++) {
                     confetti.push({
                         x: Math.random() * canvas.width,
                         y: Math.random() * canvas.height - canvas.height,
-                        r: Math.random() * 6 + 2,
-                        dx: Math.random() * 4 - 2,
-                        dy: Math.random() * 4 + 2,
+                        r: Math.random() * 4 + 2, // Slightly smaller particles
+                        dx: Math.random() * 3 - 1.5,
+                        dy: Math.random() * 3 + 1,
                         color: `hsl(${Math.random() * 360}, 100%, 50%)`
                     });
                 }
 
-                // Resize canvas to match the window size
-                function resizeCanvas() {
-                    canvas.width = window.innerWidth;
-                    canvas.height = window.innerHeight;
-                }
-                resizeCanvas();
-                window.addEventListener('resize', resizeCanvas);
+                // Throttled resize handler
+                let resizeTimeout;
+                const handleResize = () => {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        canvas.width = window.innerWidth;
+                        canvas.height = window.innerHeight;
+                    }, 100);
+                };
 
-                // Animation loop
+                window.addEventListener('resize', handleResize);
+
+                // Use requestAnimationFrame for smooth animation
+                let animationId;
                 function animate() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    confetti.forEach(p => {
+
+                    // Batch drawing operations
+                    for (let i = 0; i < confetti.length; i++) {
+                        const p = confetti[i];
                         ctx.beginPath();
                         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
                         ctx.fillStyle = p.color;
                         ctx.fill();
+
+                        // Update position
                         p.x += p.dx;
                         p.y += p.dy;
                         if (p.y > canvas.height) p.y = -p.r;
-                    });
-                    requestAnimationFrame(animate);
-                }
-                animate();
+                    }
 
-                // Remove canvas after 2 seconds
+                    animationId = requestAnimationFrame(animate);
+                }
+
+                // Start animation
+                animationId = requestAnimationFrame(animate);
+
+                // Clean up after animation
                 setTimeout(() => {
-                    window.removeEventListener('resize', resizeCanvas);
+                    cancelAnimationFrame(animationId);
+                    window.removeEventListener('resize', handleResize);
                     canvas.remove();
                 }, 2000);
             };
 
-            // Function to trigger XP popup
+            // Function to trigger XP popup - optimized
             window.triggerXpPopup = function(points) {
-                // Create a popup element dynamically
+                // Create popup with all styles before adding to DOM
                 const popup = document.createElement('div');
                 popup.textContent = `+${points} XP!`;
-                popup.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-4xl font-bold bg-blue-500 px-6 py-3 rounded-lg shadow-lg animate-pulse';
+
+                // Apply all styles at once
+                Object.assign(popup.style, {
+                    position: 'fixed',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    color: 'white',
+                    fontSize: '2rem',
+                    fontWeight: 'bold',
+                    backgroundColor: '#3b82f6',
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '0.5rem',
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    animation: 'pulse 2s infinite',
+                    zIndex: '10000'
+                });
+
+                // Add keyframes for pulse animation if not already present
+                if (!document.getElementById('xp-popup-style')) {
+                    const style = document.createElement('style');
+                    style.id = 'xp-popup-style';
+                    style.textContent = `
+                        @keyframes pulse {
+                            0%, 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                            50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+                        }
+                    `;
+                    document.head.appendChild(style);
+                }
+
+                // Append to DOM after all styles are set
                 document.body.appendChild(popup);
 
-                // Remove popup after 2 seconds
-                setTimeout(() => {
-                    popup.remove();
-                }, 2000);
+                // Remove after animation
+                setTimeout(() => popup.remove(), 2000);
             };
 
             // Listener para o evento reward-earned (usando a sintaxe do Livewire 3)
             document.addEventListener('livewire:initialized', () => {
                 // No Livewire 3, usamos Livewire.on em vez de Livewire.addEventListener
                 Livewire.on('reward-earned', (data) => {
-                    window.triggerConfetti();
-                    window.triggerXpPopup(data.points);
+                    // Use requestIdleCallback if available for non-critical UI updates
+                    if (window.requestIdleCallback) {
+                        requestIdleCallback(() => {
+                            window.triggerConfetti();
+                            window.triggerXpPopup(data.points);
+                        });
+                    } else {
+                        // Fallback to setTimeout for browsers that don't support requestIdleCallback
+                        setTimeout(() => {
+                            window.triggerConfetti();
+                            window.triggerXpPopup(data.points);
+                        }, 0);
+                    }
                 });
             });
         </script>
-
-        <!-- CSRF Token para requisições AJAX -->
-        <meta name="csrf-token" content="{{ csrf_token() }}">
     </body>
 </html>

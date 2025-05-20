@@ -106,6 +106,19 @@ class UserPoint extends Model
         // Atualizar ranking_points na tabela users (para compatibilidade)
         $userPoint->user->increment('ranking_points', $points);
 
+        // Criar notificação de pontos para o usuário
+        \App\Models\Notification::create([
+            'user_id' => $userId,
+            'sender_id' => $userId, // O próprio usuário é o remetente para notificações de pontos
+            'type' => 'points',
+            'message' => json_encode([
+                'points' => $points,
+                'description' => $description,
+                'action_type' => $actionType
+            ]),
+            'read' => false
+        ]);
+
         // Registrar no log
         return \App\Models\UserPointLog::create([
             'user_id' => $userId,

@@ -12,6 +12,8 @@ use App\Livewire\UserFollowing;
 use App\Livewire\UserFollowers;
 use App\Livewire\UserPosts;
 use App\Livewire\SendCharm;
+use App\Livewire\Leaderboard;
+use App\Livewire\SearchModal;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         Livewire::component('user-followers', UserFollowers::class);
         Livewire::component('user-posts', UserPosts::class);
         Livewire::component('send-charm', SendCharm::class);
+        Livewire::component('leaderboard', Leaderboard::class);
 
         // Componentes de grupos
         Livewire::component('groups.create-group', \App\Livewire\Groups\CreateGroup::class);
@@ -44,5 +47,8 @@ class AppServiceProvider extends ServiceProvider
 
         // Componentes de loja
         Livewire::component('shop.mini-cart', \App\Livewire\Shop\MiniCart::class);
+
+        // Componente de busca
+        Livewire::component('search-modal', SearchModal::class);
     }
 }

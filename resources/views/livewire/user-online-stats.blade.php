@@ -1,27 +1,27 @@
-<div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
+<div wire:poll.300s class="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
     <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Estatísticas de Tempo Online</h3>
-    
+
     <div class="flex space-x-2 mb-4">
-        <button 
-            wire:click="setPeriod('day')" 
+        <button
+            wire:click="setPeriod('day')"
             class="px-3 py-1 text-sm rounded-md {{ $period === 'day' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300' }}"
         >
             Hoje
         </button>
-        <button 
-            wire:click="setPeriod('week')" 
+        <button
+            wire:click="setPeriod('week')"
             class="px-3 py-1 text-sm rounded-md {{ $period === 'week' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300' }}"
         >
             Esta Semana
         </button>
-        <button 
-            wire:click="setPeriod('month')" 
+        <button
+            wire:click="setPeriod('month')"
             class="px-3 py-1 text-sm rounded-md {{ $period === 'month' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300' }}"
         >
             Este Mês
         </button>
     </div>
-    
+
     <div class="space-y-4">
         @if($period === 'day')
             <div class="grid grid-cols-3 gap-4">

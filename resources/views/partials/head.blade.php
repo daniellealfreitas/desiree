@@ -12,6 +12,9 @@
 <!-- Cropper.js CSS -->
 <link href="{{ asset('css/cropper.css') }}" rel="stylesheet" />
 
+<!-- Livewire Styles -->
+@livewireStyles
+
 <!-- Scripts personalizados -->
 @auth
 <!-- Script de geolocalização automática -->

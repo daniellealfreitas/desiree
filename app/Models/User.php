@@ -29,6 +29,7 @@ use App\Models\WalletTransaction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -565,23 +566,37 @@ class User extends Authenticatable
      */
     public function getWalletAttribute()
     {
-        // First try to find the existing wallet
-        $wallet = $this->wallet()->first();
+        try {
+            // Verificar se a tabela de wallets existe
+            if (!\Schema::hasTable('wallets')) {
+                logger()->warning('Tabela de wallets não existe. Não foi possível obter wallet para o usuário: ' . $this->id);
+                return null;
+            }
 
-        if ($wallet) {
-            // Existing wallet found, return it
-            return $wallet;
-        } else {
-            // No wallet found, create a new one with default values
-            logger()->info('Creating new wallet for user', [
+            // First try to find the existing wallet
+            $wallet = $this->wallet()->first();
+
+            if ($wallet) {
+                // Existing wallet found, return it
+                return $wallet;
+            } else {
+                // No wallet found, create a new one with default values
+                logger()->info('Creating new wallet for user', [
+                    'user_id' => $this->id,
+                    'initial_balance' => 0.00
+                ]);
+
+                return $this->wallet()->create([
+                    'balance' => 0.00,
+                    'active' => true,
+                ]);
+            }
+        } catch (\Exception $e) {
+            logger()->error('Erro ao obter/criar wallet: ' . $e->getMessage(), [
                 'user_id' => $this->id,
-                'initial_balance' => 0.00
+                'exception' => $e
             ]);
-
-            return $this->wallet()->create([
-                'balance' => 0.00,
-                'active' => true,
-            ]);
+            return null;
         }
     }
 
@@ -590,6 +605,43 @@ class User extends Authenticatable
      */
     public function getFormattedWalletBalanceAttribute()
     {
-        return 'R$ ' . number_format($this->wallet->balance, 2, ',', '.');
+        $wallet = $this->wallet;
+        if ($wallet) {
+            return 'R$ ' . number_format($wallet->balance, 2, ',', '.');
+        }
+        return 'R$ 0,00';
+    }
+
+    /**
+     * Visitas que este usuário fez a outros perfis
+     */
+    public function profileVisitsMade(): HasMany
+    {
+        return $this->hasMany(ProfileVisit::class, 'visitor_id');
+    }
+
+    /**
+     * Visitas que outros usuários fizeram ao perfil deste usuário
+     */
+    public function profileVisitsReceived(): HasMany
+    {
+        return $this->hasMany(ProfileVisit::class, 'visited_id');
+    }
+
+    /**
+     * Registra uma visita ao perfil de outro usuário
+     */
+    public function visitProfile(User $user): void
+    {
+        // Não registrar visitas ao próprio perfil
+        if ($this->id === $user->id) {
+            return;
+        }
+
+        // Registrar a visita
+        $this->profileVisitsMade()->create([
+            'visited_id' => $user->id,
+            'visited_at' => now(),
+        ]);
     }
 }

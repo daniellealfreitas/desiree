@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
         x-transition:enter-start="opacity-0 scale-90"
         x-transition:enter-end="opacity-100 scale-100"
         x-show="show"
-        class="relative w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
+        class="relative w-full bg-white dark:bg-zinc-800 shadow-lg rounded-lg overflow-hidden">
 
         <div id="profile_header" class="relative w-full">
             {{-- Foto de capa Backgrond cover --}}
@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Auth;
 
             <div class="absolute left-8 top-1/2 -translate-y-1/2 flex items-center gap-6">
                 <div class="relative w-48 h-48 rounded-full border-4 border-white overflow-hidden shadow-xl">
-                    <img src="{{ $this->avatar() ?? asset('images/default-avatar.jpg') }}" class="w-full h-full object-cover" /> <livewire:user-status-indicator :userId="$user->id" />
+                    <img src="{{ $this->avatar() ?? asset('images/users/avatar.jpg') }}" class="w-full h-full object-cover" /> <livewire:user-status-indicator :userId="$user->id" />
                 </div>
                 <div class="bg-zinc-800 opacity-50 p-4 rounded-lg shadow-lg">
                     <h2 class="text-3xl font-bold text-white drop-shadow-lg">{{ $user->name }}</h2>
@@ -44,6 +44,7 @@ use Illuminate\Support\Facades\Auth;
                     <flux:button variant="ghost" icon="photo" wire:click="showUserImages">
                         Imagens ({{ $this->imagesCount() }})
                     </flux:button>
+
                     <flux:button variant="ghost" icon="video-camera" wire:click="showUserVideos">
                         Vídeos ({{ $this->videosCount() }})
                     </flux:button>

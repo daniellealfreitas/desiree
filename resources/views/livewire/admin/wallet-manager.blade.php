@@ -129,16 +129,28 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <span class="{{ $user->wallet->balance > 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400' }}" wire:key="wallet-balance-{{ $user->id }}-{{ time() }}">
-                                    R$ {{ number_format($user->wallet->balance, 2, ',', '.') }}
-                                </span>
+                                @if($user->wallet)
+                                    <span class="{{ $user->wallet->balance > 0 ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400' }}" wire:key="wallet-balance-{{ $user->id }}-{{ time() }}">
+                                        R$ {{ number_format($user->wallet->balance, 2, ',', '.') }}
+                                    </span>
+                                @else
+                                    <span class="text-gray-500 dark:text-gray-400">
+                                        R$ 0,00
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
-                                       {{ $user->wallet->active ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' :
-                                       'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' }}">
-                                    {{ $user->wallet->active ? 'Ativa' : 'Inativa' }}
-                                </span>
+                                @if($user->wallet)
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full
+                                        {{ $user->wallet->active ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' :
+                                        'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200' }}">
+                                        {{ $user->wallet->active ? 'Ativa' : 'Inativa' }}
+                                    </span>
+                                @else
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200">
+                                        Não criada
+                                    </span>
+                                @endif
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end space-x-2">
@@ -159,13 +171,19 @@
                                         <x-flux::icon name="list-bullet" class="w-4 h-4" />
                                     </x-flux::button>
 
-                                    <x-flux::button wire:click="toggleWalletStatus({{ $user->wallet->id }})" color="{{ $user->wallet->active ? 'danger' : 'success' }}" size="xs">
-                                        @if($user->wallet->active)
-                                            <x-flux::icon name="lock-closed" class="w-4 h-4" />
-                                        @else
-                                            <x-flux::icon name="lock-open" class="w-4 h-4" />
-                                        @endif
-                                    </x-flux::button>
+                                    @if($user->wallet)
+                                        <x-flux::button wire:click="toggleWalletStatus({{ $user->wallet->id }})" color="{{ $user->wallet->active ? 'danger' : 'success' }}" size="xs">
+                                            @if($user->wallet->active)
+                                                <x-flux::icon name="lock-closed" class="w-4 h-4" />
+                                            @else
+                                                <x-flux::icon name="lock-open" class="w-4 h-4" />
+                                            @endif
+                                        </x-flux::button>
+                                    @else
+                                        <x-flux::button wire:click="createWallet({{ $user->id }})" color="success" size="xs">
+                                            <x-flux::icon name="plus" class="w-4 h-4" />
+                                        </x-flux::button>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

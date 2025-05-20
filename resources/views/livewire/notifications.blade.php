@@ -33,6 +33,28 @@
                                 </div>
                             </div>
                         </div>
+                    @elseif($notification->type === 'points')
+                        @php
+                            $pointsData = json_decode($notification->message, true);
+                            $points = $pointsData['points'] ?? 0;
+                            $description = $pointsData['description'] ?? '';
+                            $actionType = $pointsData['action_type'] ?? '';
+                        @endphp
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900 flex items-center justify-center">
+                                <x-flux::icon icon="trophy" class="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                            </div>
+                            <div class="text-sm">
+                                <div class="flex items-center gap-1">
+                                    <span class="font-semibold text-blue-600 dark:text-blue-400">+{{ $points }}</span>
+                                    <span>pontos</span>
+                                </div>
+                                <p>{{ $description }}</p>
+                                <div class="text-xs text-gray-500">
+                                    {{ $notification->created_at->diffForHumans() }}
+                                </div>
+                            </div>
+                        </div>
                     @endif
                 </flux:menu.item>
             @empty

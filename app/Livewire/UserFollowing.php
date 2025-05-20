@@ -54,7 +54,7 @@ class UserFollowing extends Component
         $path = UserPhoto::where('user_id', $userId)
             ->latest()
             ->value('photo_path');
-        return $path ? Storage::url($path) : asset('images/default-avatar.jpg');
+        return $path ? Storage::url($path) : asset('images/users/avatar.jpg');
     }
 
     public function closeModal()

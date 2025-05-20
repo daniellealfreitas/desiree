@@ -11,10 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('user_matches', function (Blueprint $table) {
-            $table->boolean('matched')->default(false)->after('liked');
-            $table->timestamp('matched_at')->nullable()->after('matched');
-        });
+        if (Schema::hasTable('user_matches')) {
+            Schema::table('user_matches', function (Blueprint $table) {
+                if (!Schema::hasColumn('user_matches', 'matched')) {
+                    $table->boolean('matched')->default(false)->after('liked');
+                }
+                if (!Schema::hasColumn('user_matches', 'matched_at')) {
+                    $table->timestamp('matched_at')->nullable()->after('matched');
+                }
+            });
+        }
     }
 
     /**
@@ -22,8 +28,16 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('user_matches', function (Blueprint $table) {
-            $table->dropColumn(['matched', 'matched_at']);
-        });
+        if (Schema::hasTable('user_matches')) {
+            Schema::table('user_matches', function (Blueprint $table) {
+                $columns = [];
+                if (Schema::hasColumn('user_matches', 'matched')) $columns[] = 'matched';
+                if (Schema::hasColumn('user_matches', 'matched_at')) $columns[] = 'matched_at';
+
+                if (!empty($columns)) {
+                    $table->dropColumn($columns);
+                }
+            });
+        }
     }
 };

@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Storage;
 
 <div>
     @if($showModal)
-        <flux:modal wire:model="showModal" size="xl">
+        <flux:modal wire:model="showModal" size="xl" >
             <flux:modal.header>
                 <flux:heading size="sm">Postagens de {{ User::find($userId)->name }}</flux:heading>
             </flux:modal.header>
@@ -64,7 +64,7 @@ use Illuminate\Support\Facades\Storage;
             </flux:modal.body>
 
             <flux:modal.footer>
-                <x-flux.button wire:click="closeModal" variant="secondary">Fechar</x-flux.button>
+                <x-flux.button wire:click="closeModal" variant="primary">Fechar</x-flux.button>
             </flux:modal.footer>
         </flux:modal>
     @endif

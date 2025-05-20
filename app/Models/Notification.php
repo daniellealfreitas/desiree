@@ -12,7 +12,9 @@ class Notification extends Model
         'type',
         'post_id',
         'message',
-        'read'
+        'read',
+        'points',
+        'action_type'
     ];
 
     public function user()

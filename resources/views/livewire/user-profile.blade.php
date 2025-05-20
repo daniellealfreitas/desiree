@@ -48,36 +48,58 @@ new class extends Component {
         $path = $coverPhoto->cropped_photo_path ?? $coverPhoto->photo_path;
         return $path ? Storage::url($path) : null;
     }
+
+    public function showUserPosts(): void
+    {
+        $this->dispatch('show-user-posts', userId: $this->user->id);
+    }
+
+    public function showUserFollowing(): void
+    {
+        $this->dispatch('show-user-following', userId: $this->user->id);
+    }
+
+    public function showUserFollowers(): void
+    {
+        $this->dispatch('show-user-followers', userId: $this->user->id);
+    }
 }; ?>
 
-<div id="Container" class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
-    <div id="capa" class="relative h-32 bg-cover bg-center rounded-t-lg"
-        style="background:url({{ $this->cover() ?? asset('images/users/capa.jpg') }}); background-size: cover; background-position: center;">
-    </div>
-    <div id="container_user"  class="relative z-10 -mt-12 flex flex-col items-center">
-        <div id="avatar"   class="relative">
-            <img src="{{ $this->avatar() ?? asset('images/users/avatar.jpg') }}"
-            alt="Foto de Perfil" class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
-            <livewire:user-status-indicator :userId="$user->id" />
+<div>
+    {{-- Componentes modais necessários --}}
+    <livewire:user-posts />
+    <livewire:user-following />
+    <livewire:user-followers />
+
+    <div id="Container" class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
+        <div id="capa" class="relative h-32 bg-cover bg-center rounded-t-lg"
+            style="background:url({{ $this->cover() ?? asset('images/users/capa.jpg') }}); background-size: cover; background-position: center;">
         </div>
-        <h2 class="text-title text-xl font-semibold mt-2">{{ $user->name }}</h2>
-        <p class="text-body-light">
-            <a href="{{ route('user.profile', ['username' => $user->username]) }}" class="text-link hover:underline">
-                {{ '@' . $user->username }}
-            </a>
-        </p>
-        <div id="info_user" class="mt-4 flex justify-around w-full">
-            <div class="text-center">
-                <p class="text-subtitle text-lg font-semibold">{{ $this->postsCount() }}</p>
-                <p class="text-body-lighter">Posts</p>
+        <div id="container_user"  class="relative z-10 -mt-12 flex flex-col items-center">
+            <div id="avatar"   class="relative">
+                <img src="{{ $this->avatar() ?? asset('images/users/avatar.jpg') }}"
+                alt="Foto de Perfil" class="w-24 h-24 rounded-full border-4 border-white shadow-lg">
+                <livewire:user-status-indicator :userId="$user->id" />
             </div>
-            <div class="text-center">
-                <p class="text-subtitle text-lg font-semibold">{{ $this->followingCount() }}</p>
-                <p class="text-body-lighter">Seguindo</p>
-            </div>
-            <div class="text-center">
-                <p class="text-subtitle text-lg font-semibold">{{ $this->followersCount() }}</p>
-                <p class="text-body-lighter">Seguidores</p>
+            <h2 class="text-title text-xl font-semibold mt-2">{{ $user->name }}</h2>
+            <p class="text-body-light">
+                <a href="{{ route('user.profile', ['username' => $user->username]) }}" class="text-link hover:underline">
+                    {{ '@' . $user->username }}
+                </a>
+            </p>
+            <div id="info_user" class="mt-4 flex justify-around w-full">
+                <div class="text-center cursor-pointer" wire:click="showUserPosts">
+                    <p class="text-subtitle text-lg font-semibold">{{ $this->postsCount() }}</p>
+                    <p class="text-body-lighter hover:text-link hover:underline">Posts</p>
+                </div>
+                <div class="text-center cursor-pointer" wire:click="showUserFollowing">
+                    <p class="text-subtitle text-lg font-semibold">{{ $this->followingCount() }}</p>
+                    <p class="text-body-lighter hover:text-link hover:underline">Seguindo</p>
+                </div>
+                <div class="text-center cursor-pointer" wire:click="showUserFollowers">
+                    <p class="text-subtitle text-lg font-semibold">{{ $this->followersCount() }}</p>
+                    <p class="text-body-lighter hover:text-link hover:underline">Seguidores</p>
+                </div>
             </div>
         </div>
     </div>

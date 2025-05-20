@@ -25,6 +25,7 @@ use App\Livewire\UserPointsHistory;
 use App\Models\Message;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\LocationController;
+use App\Livewire\Debug\FileUploadDebug;
 
 Route::get('/', function () {
     return view('home');
@@ -60,7 +61,7 @@ Route::get('feed_imagens', function () {
     return view('feed_imagens', compact('posts'));
 })->middleware(['auth', 'verified'])->name('feed_imagens');
 
-Route::get('feed_videos', App\Livewire\ReelsFeed::class)
+Route::get('feed_videos', App\Livewire\VideoFeed::class)
     ->middleware(['auth', 'verified'])
     ->name('feed_videos');
 
@@ -212,6 +213,9 @@ Route::middleware(['auth'])->prefix('examples')->group(function () {
     Route::get('/color-guide', function () {
         return view('color-guide');
     })->name('examples.color-guide');
+
+    // Depuração de upload de arquivo
+    Route::get('/file-upload-debug', App\Livewire\Debug\FileUploadDebug::class)->name('examples.file-upload-debug');
 });
 
 // Rotas de administração
@@ -281,6 +285,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pontos/{userId}', function ($userId) {
         return view('points-history', ['userId' => $userId]);
     })->name('points.history.user');
+
+    // Rota para visualizar visitantes do perfil
+    Route::get('/meus-visitantes', function () {
+        return view('profile-visitors');
+    })->name('profile.visitors');
 });
 
 
@@ -307,3 +316,6 @@ Route::get('post/{post}', function (Post $post) {
 
 
 require __DIR__.'/auth.php';
+
+// Rotas de teste
+require __DIR__.'/test-notifications.php';

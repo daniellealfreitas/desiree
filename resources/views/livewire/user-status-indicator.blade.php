@@ -31,7 +31,7 @@
         }
     }"
     x-init="setupInactivityDetection()"
-    @click="showTooltip=!showTooltip"
+    @click="showTooltip = !showTooltip"
 >
     <span
         class="absolute right-0 top-0 w-3 h-3 rounded-full border border-white shadow-md

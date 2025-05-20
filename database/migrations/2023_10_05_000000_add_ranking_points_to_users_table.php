@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -9,14 +9,18 @@ class AddRankingPointsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('ranking_points')->default(0)->after('email');
+            if (!Schema::hasColumn('users', 'ranking_points')) {
+                $table->integer('ranking_points')->default(0)->after('email');
+            }
         });
     }
 
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('ranking_points');
+            if (Schema::hasColumn('users', 'ranking_points')) {
+                $table->dropColumn('ranking_points');
+            }
         });
     }
 }

@@ -196,7 +196,7 @@
                             </div>
                         @endif
 
-                        
+
 
                         @if($product->is_digital)
                             <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/30 rounded-md">
@@ -269,6 +269,25 @@
                                     </p>
                                 @endif
                             </div>
+                        </div>
+
+                        <div class="mt-2">
+                            <flux:button
+                                wire:click="toggleWishlist({{ $relatedProduct->id }})"
+                                wire:loading.attr="disabled"
+                                wire:target="toggleWishlist({{ $relatedProduct->id }})"
+                                variant="outline"
+                                size="sm"
+                                class="w-full"
+                            >
+                                @if($this->isInWishlist($relatedProduct->id))
+                                    <flux:icon name="heart" variant="solid" class="h-4 w-4 mr-1 text-red-500" />
+                                    Remover dos Desejos
+                                @else
+                                    <flux:icon name="heart" class="h-4 w-4 mr-1" />
+                                    Adicionar aos Desejos
+                                @endif
+                            </flux:button>
                         </div>
                     </div>
                     @endforeach

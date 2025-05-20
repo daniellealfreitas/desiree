@@ -12,7 +12,7 @@
                     <h2 class="text-lg font-medium text-gray-900 dark:text-white">Saldo Disponível</h2>
                     <x-flux::icon name="wallet" class="h-6 w-6 text-indigo-500" />
                 </div>
-                <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">R$ {{ number_format($wallet->balance, 2, ',', '.') }}</p>
+                <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">R$ {{ $wallet ? number_format($wallet->balance, 2, ',', '.') : '0,00' }}</p>
                 <div class="mt-4 flex space-x-2">
                     <a href="{{ route('wallet.add-funds') }}" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-medium text-white hover:bg-indigo-700">
                         <x-flux::icon name="plus" class="mr-1 h-4 w-4" />
@@ -36,7 +36,7 @@
                     @php
                         $recentTransactions = $transactions->take(3);
                     @endphp
-                    
+
                     @forelse($recentTransactions as $transaction)
                         <div class="flex items-center justify-between border-b border-gray-100 pb-2 dark:border-zinc-700">
                             <div>
@@ -77,7 +77,7 @@
         <div class="mt-8 rounded-lg bg-white p-6 shadow-sm dark:bg-zinc-800">
             <div class="mb-4 flex items-center justify-between">
                 <h2 class="text-lg font-medium text-gray-900 dark:text-white">Histórico de Transações</h2>
-                
+
                 <div class="flex space-x-2">
                     <button wire:click="setFilter('all')" class="rounded-md px-3 py-1.5 text-sm font-medium {{ $filter === 'all' ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 dark:bg-zinc-700 dark:text-white dark:ring-zinc-600 dark:hover:bg-zinc-600' }}">
                         Todas

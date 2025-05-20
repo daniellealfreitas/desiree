@@ -72,4 +72,22 @@
         </div>
         <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Carregando arquivo...</div>
     </div>
+
+    <div wire:loading.error {{ $attributes->wire('model') }} class="mt-2">
+        <div class="text-sm text-red-500 dark:text-red-400 mt-1">
+            Erro ao carregar o arquivo. Por favor, tente novamente.
+        </div>
+    </div>
 </div>
+
+<script>
+    document.addEventListener('livewire:initialized', () => {
+        Livewire.hook('upload:error', (message, component) => {
+            console.error('Upload error:', message);
+        });
+
+        Livewire.hook('upload:finished', (response, component) => {
+            console.log('Upload finished successfully');
+        });
+    });
+</script>

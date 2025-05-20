@@ -32,13 +32,12 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
-            <!-- Últimos Acessos e Perfis Sugeridos -->
-            <div class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
-                <?php
+            <!-- Ranking -->
+            <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('recent-users', []);
+[$__name, $__params] = $__split('leaderboard', []);
 
 $__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-1', $__slots ?? [], get_defined_vars());
 
@@ -50,11 +49,13 @@ unset($__params);
 unset($__split);
 if (isset($__slots)) unset($__slots);
 ?>
+            <!-- Últimos Acessos e Perfis Sugeridos -->
+            <div class="pb-6 border border-neutral-200 dark:border-neutral-700 relative rounded-lg shadow-md">
                 <?php
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('recent-images', []);
+[$__name, $__params] = $__split('recent-users', []);
 
 $__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-2', $__slots ?? [], get_defined_vars());
 
@@ -70,9 +71,25 @@ if (isset($__slots)) unset($__slots);
 $__split = function ($name, $params = []) {
     return [$name, $params];
 };
-[$__name, $__params] = $__split('recent-videos', []);
+[$__name, $__params] = $__split('recent-images', []);
 
 $__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-3', $__slots ?? [], get_defined_vars());
+
+echo $__html;
+
+unset($__html);
+unset($__name);
+unset($__params);
+unset($__split);
+if (isset($__slots)) unset($__slots);
+?>
+                <?php
+$__split = function ($name, $params = []) {
+    return [$name, $params];
+};
+[$__name, $__params] = $__split('recent-videos', []);
+
+$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-4', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -92,7 +109,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('create-post', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-4', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-5', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 
@@ -108,7 +125,7 @@ $__split = function ($name, $params = []) {
 };
 [$__name, $__params] = $__split('postfeed', []);
 
-$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-5', $__slots ?? [], get_defined_vars());
+$__html = app('livewire')->mount($__name, $__params, 'lw-1618034876-6', $__slots ?? [], get_defined_vars());
 
 echo $__html;
 

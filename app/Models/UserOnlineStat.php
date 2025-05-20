@@ -41,7 +41,7 @@ class UserOnlineStat extends Model
         // Set date to startOfDay to ensure consistent date format without time components
         $today = Carbon::today()->startOfDay();
         $todayStr = $today->format('Y-m-d');
-        
+
         // Debug log to trace data formats
         \Log::debug('UserOnlineStat::getOrCreateForToday', [
             'user_id' => $userId,
@@ -51,27 +51,56 @@ class UserOnlineStat extends Model
             'now' => now()->toDateTimeString(),
             'current_timezone' => config('app.timezone')
         ]);
-        
+
         try {
             // First try to find existing record with an exact date match
             $existingRecord = self::where('user_id', $userId)
                 ->whereDate('date', $todayStr)
                 ->first();
-                
+
             if ($existingRecord) {
                 \Log::debug('Found existing record for today', [
                     'record_id' => $existingRecord->id,
                     'date' => $existingRecord->date->toDateString()
                 ]);
+
+                // Atualizar o tempo decorrido desde a última mudança de status
+                if ($existingRecord->current_status !== 'offline' && $existingRecord->last_status_change) {
+                    $now = now();
+                    $minutesElapsed = $now->diffInMinutes($existingRecord->last_status_change);
+
+                    if ($minutesElapsed > 0) {
+                        switch ($existingRecord->current_status) {
+                            case 'online':
+                                $existingRecord->minutes_online += $minutesElapsed;
+                                break;
+                            case 'away':
+                                $existingRecord->minutes_away += $minutesElapsed;
+                                break;
+                            case 'dnd':
+                                $existingRecord->minutes_dnd += $minutesElapsed;
+                                break;
+                        }
+
+                        $existingRecord->last_status_change = $now;
+                    }
+                }
+
+                // Garantir que os valores nunca sejam negativos
+                $existingRecord->minutes_online = max(0, $existingRecord->minutes_online);
+                $existingRecord->minutes_away = max(0, $existingRecord->minutes_away);
+                $existingRecord->minutes_dnd = max(0, $existingRecord->minutes_dnd);
+                $existingRecord->save();
+
                 return $existingRecord;
             }
-            
+
             // If no existing record, create a new one
             \Log::debug('Creating new record for today', [
                 'user_id' => $userId,
                 'date' => $todayStr
             ]);
-            
+
             return self::create([
                 'user_id' => $userId,
                 'date' => $todayStr,
@@ -88,20 +117,20 @@ class UserOnlineStat extends Model
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             // One more attempt to find the record in case it was created
             // between our check and create operations (race condition)
             $existingRecord = self::where('user_id', $userId)
                 ->whereDate('date', $todayStr)
                 ->first();
-                
+
             if ($existingRecord) {
                 \Log::debug('Found existing record after error', [
                     'record_id' => $existingRecord->id
                 ]);
                 return $existingRecord;
             }
-            
+
             // If we can't find it, rethrow the exception
             throw $e;
         }
@@ -117,40 +146,40 @@ class UserOnlineStat extends Model
                 'user_id' => $userId,
                 'new_status' => $newStatus
             ]);
-            
+
             $stats = self::getOrCreateForToday($userId);
             $now = now();
-            
+
             // Se houver um status anterior, calcular o tempo decorrido
             if ($stats->last_status_change) {
                 $minutesElapsed = $now->diffInMinutes($stats->last_status_change);
-                
+
                 \Log::debug('Minutes elapsed since last status change', [
                     'minutes' => $minutesElapsed,
                     'last_change' => $stats->last_status_change->toDateTimeString(),
                     'now' => $now->toDateTimeString(),
                     'current_status' => $stats->current_status,
                 ]);
-                
+
                 // Adicionar o tempo ao status anterior
                 switch ($stats->current_status) {
                     case 'online':
-                        $stats->minutes_online += $minutesElapsed;
+                        $stats->minutes_online = max(0, $stats->minutes_online + $minutesElapsed);
                         break;
                     case 'away':
-                        $stats->minutes_away += $minutesElapsed;
+                        $stats->minutes_away = max(0, $stats->minutes_away + $minutesElapsed);
                         break;
                     case 'dnd':
-                        $stats->minutes_dnd += $minutesElapsed;
+                        $stats->minutes_dnd = max(0, $stats->minutes_dnd + $minutesElapsed);
                         break;
                     // Não contabilizamos tempo offline
                 }
             }
-            
+
             // Atualizar para o novo status
             $stats->current_status = $newStatus;
             $stats->last_status_change = $now;
-            
+
             \Log::debug('Saving stats after status change', [
                 'stats_id' => $stats->id,
                 'date' => $stats->date->toDateString(),
@@ -159,9 +188,9 @@ class UserOnlineStat extends Model
                 'minutes_away' => $stats->minutes_away,
                 'minutes_dnd' => $stats->minutes_dnd
             ]);
-            
+
             $stats->save();
-            
+
             return $stats;
         } catch (\Exception $e) {
             \Log::error('Error in UserOnlineStat::updateOnStatusChange', [
@@ -189,13 +218,13 @@ class UserOnlineStat extends Model
     {
         $startOfWeek = Carbon::now()->startOfWeek()->startOfDay();
         $endOfWeek = Carbon::now()->endOfWeek()->startOfDay();
-        
+
         \Log::debug('Getting current week stats', [
             'user_id' => $userId,
             'start_of_week' => $startOfWeek->format('Y-m-d'),
             'end_of_week' => $endOfWeek->format('Y-m-d')
         ]);
-        
+
         return self::where('user_id', $userId)
             ->whereDate('date', '>=', $startOfWeek->format('Y-m-d'))
             ->whereDate('date', '<=', $endOfWeek->format('Y-m-d'))
@@ -209,13 +238,13 @@ class UserOnlineStat extends Model
     {
         $startOfMonth = Carbon::now()->startOfMonth()->startOfDay();
         $endOfMonth = Carbon::now()->endOfMonth()->startOfDay();
-        
+
         \Log::debug('Getting current month stats', [
             'user_id' => $userId,
             'start_of_month' => $startOfMonth->format('Y-m-d'),
             'end_of_month' => $endOfMonth->format('Y-m-d')
         ]);
-        
+
         return self::where('user_id', $userId)
             ->whereDate('date', '>=', $startOfMonth->format('Y-m-d'))
             ->whereDate('date', '<=', $endOfMonth->format('Y-m-d'))

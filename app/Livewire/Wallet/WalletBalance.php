@@ -25,7 +25,14 @@ class WalletBalance extends Component
 
     public function refreshBalance()
     {
-        $this->balance = Auth::user()->wallet->balance;
+        $user = Auth::user();
+        $wallet = $user->wallet;
+
+        if ($wallet) {
+            $this->balance = $wallet->balance;
+        } else {
+            $this->balance = 0;
+        }
     }
 
     public function render()
