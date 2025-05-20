@@ -7,27 +7,27 @@
         @endif
 
         <div>
-            <label for="title" class="block text-sm font-medium text-gray-700">Título do Conto:</label>
-            <input wire:model="title" id="title" type="text" class="w-full mt-1 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label for="title" class="block text-sm font-medium text-gray-300">Título do Conto:</label>
+            <input wire:model="title" id="title" type="text" class="w-full mt-1 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-300">
             @error('title') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div>
-            <label for="category_id" class="block text-sm font-medium text-gray-700">Categoria:</label>
-            <select wire:model="category_id" id="category_id" class="w-full mt-1 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <label for="category_id" class="block text-sm font-medium text-gray-300">Categoria:</label>
+            <select wire:model="category_id" id="category_id" class="w-full mt-1 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-300 bg-zinc-800">
                 <option value="">Selecione uma categoria</option>
                 @foreach($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    <option class="text-gray-300" value="{{ $category->id }}">{{ $category->title }}</option>
                 @endforeach
             </select>
             @error('category_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div>
-            <label for="content" class="block text-sm font-medium text-gray-700">Conteúdo do Conto:</label>
-            <textarea wire:model="content" id="content" rows="6" class="w-full mt-1 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            <label for="content" class="block text-sm font-medium text-gray-300">Conteúdo do Conto:</label>
+            <textarea wire:model="content" id="content" rows="6" class="w-full mt-1 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-300" ></textarea>
             @error('content') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-        </div>
+        </div>  
 
         <div>
             <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Atualizar Conto</button>

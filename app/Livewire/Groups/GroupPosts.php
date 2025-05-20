@@ -71,7 +71,7 @@ class GroupPosts extends Component
         $data = [
             'content' => $this->content,
             'user_id' => Auth::id(),
-            'group_id' => $this->group->id,
+            // 'group_id' => $this->group->id,
         ];
         
         // Handle image upload

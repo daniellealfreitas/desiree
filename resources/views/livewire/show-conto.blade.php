@@ -2,7 +2,7 @@
     <div class="container mx-auto w-full p-6">
         @if(isset($conto))
             <div class="shadow rounded-lg p-6">
-                <h1 class="text-3xl font-bold mb-2">{{ $conto->title }}</h1>
+                <h1 class="text-3xl font-bold mb-2 text-gray-300">{{ $conto->title }}</h1>
                 <span class="text-sm text-gray-500">
                     Por {{ $conto->user->name ?? 'Autor desconhecido' }} 
                     em {{ $conto->created_at->format('d/m/Y') }}
@@ -12,12 +12,12 @@
                         {{ $conto->category->name ?? 'Sem categoria' }}
                     </span>
                 </div>
-                <div class="prose max-w-none">
+                <div class="prose max-w-none text-gray-300">
                     {{ $conto->content }}
                 </div>
                 @if(auth()->check() && auth()->id() === $conto->user_id)
                     <div class="mt-4 flex space-x-2">
-                        <a href="{{ route('contos.edit', $conto->id) }}" class="px-4 py-2 text-sm font-medium text-white bg-yellow-500 rounded hover:bg-yellow-600 transition">
+                        <a href="{{ route('contos.edit', $conto->id) }}" class="px-4 py-2 text-sm font-medium text-gray-500 bg-yellow-500 rounded hover:bg-yellow-600 transition">
                             Editar
                         </a>
                         <form action="{{ route('contos.destroy', $conto->id) }}" method="POST" class="inline-block">

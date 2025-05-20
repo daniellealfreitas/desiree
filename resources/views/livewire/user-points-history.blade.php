@@ -1,9 +1,7 @@
 <div>
     <div class="bg-white dark:bg-zinc-800 rounded-lg shadow-md overflow-hidden">
         <!-- Cabeçalho com estatísticas -->
-        <div class="p-6 border-b border-neutral-200 dark:border-neutral-700">
-            <h2 class="text-xl font-semibold mb-4">Histórico de Pontuação</h2>
-            
+        <div class="p-6 border-b border-neutral-200 dark:border-neutral-700">            
             <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
                 <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
                     <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ number_format($totalPoints) }}</div>
@@ -34,11 +32,11 @@
             <!-- Sequência de dias -->
             <div class="flex items-center mb-4">
                 <div class="mr-2">
-                    <x-flux::icon icon="calendar" class="w-5 h-5 text-orange-500" />
+                    <x-flux::icon icon="calendar" class="w-5 h-5 text-purple-500" />
                 </div>
                 <div>
-                    <span class="font-semibold">{{ $streakDays }} {{ $streakDays == 1 ? 'dia' : 'dias' }}</span> 
-                    <span class="text-gray-600 dark:text-gray-400">consecutivos de atividade</span>
+                    <span class="font-semibold text-gray-300">{{ $streakDays }} {{ $streakDays == 1 ? 'dia' : 'dias' }}</span> 
+                    <span class="text-gray-600 dark:text-gray-400"> consecutivos de atividade</span>
                 </div>
             </div>
             
@@ -91,7 +89,7 @@
                     <div class="flex-grow">
                         <div class="flex justify-between items-start">
                             <div>
-                                <p class="font-medium">{{ $log->formatted_description }}</p>
+                                <p class="font-medium text-gray-300">{{ $log->formatted_description }}</p>
                                 <p class="text-sm text-gray-600 dark:text-gray-400">{{ $log->time_ago }}</p>
                             </div>
                             
@@ -106,7 +104,7 @@
                             </div>
                             
                             @if($log->ranking_position)
-                                <div class="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+                                <div class="text-sm bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-gray-300">
                                     Posição #{{ $log->ranking_position }}
                                 </div>
                             @endif

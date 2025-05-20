@@ -111,7 +111,7 @@
     <!-- Conteúdo da aba selecionada -->
     <div>
         @if($tab === 'posts')
-            <livewire:groups.group-posts :group="$group" :key="'posts-'.$group->id" />
+            {{-- <livewire:groups.group-posts :group="$group" :key="'posts-'.$group->id" /> --}}
         @elseif($tab === 'members')
             <livewire:groups.group-members :group="$group" :key="'members-'.$group->id" />
         @elseif($tab === 'invitations' && $isMember)

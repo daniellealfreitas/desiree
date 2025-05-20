@@ -19,7 +19,7 @@
         <div>
             <flux:label>Título do Conto:</flux:label>
             <input wire:model="title" type="text" placeholder="Minha experiência na Desiree Club" 
-                   class="w-full mt-0.5 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500">
+                   class="w-full mt-0.5 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-300">
             @error('title') 
                 <span class="text-red-500 text-sm">{{ $message }}</span>
             @enderror
@@ -27,10 +27,10 @@
 
         <div>
             <flux:label>Categoria:</flux:label>
-            <select wire:model="category_id" class="w-full mt-0.5 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-800">
+            <select wire:model="category_id" class="w-full mt-0.5 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-zinc-800 text-gray-300">
                 <option value="">Selecione uma categoria</option>
                 @foreach($categories as $category)
-                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    <option value="{{ $category->id }}">{{ $category->title }}</option>
                 @endforeach
             </select>
             @error('category_id')
@@ -41,7 +41,7 @@
         <div>
             <flux:label>Conteúdo do Conto:</flux:label>
             <textarea wire:model="content"
-                      class="w-full mt-0.5 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      class="w-full mt-0.5 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-300"
                       rows="10" placeholder="Digite o texto do conto aqui..."></textarea>
             @error('content')
                 <span class="text-red-500 text-sm">{{ $message }}</span>

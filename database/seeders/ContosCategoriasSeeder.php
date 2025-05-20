@@ -11,29 +11,29 @@ class ContosCategoriasSeeder extends Seeder
     {
         $categories = [
             [
-                'name' => 'Romance',
+                'title' => 'Romance',
                 'description' => 'Contos românticos e histórias de amor',
-                'slug' => 'romance'
+                
             ],
             [
-                'name' => 'Erótico',
+                'title' => 'Erótico',
                 'description' => 'Contos com conteúdo erótico e sensual',
-                'slug' => 'erotico'
+                
             ],
             [
-                'name' => 'Fantasia',
+                'title' => 'Fantasia',
                 'description' => 'Histórias que envolvem elementos fantásticos',
-                'slug' => 'fantasia'
+                
             ],
             [
-                'name' => 'Aventura',
+                'title' => 'Aventura',
                 'description' => 'Contos de aventura e ação',
-                'slug' => 'aventura'
+                
             ],
             [
-                'name' => 'Drama',
+                'title' => 'Drama',
                 'description' => 'Histórias dramáticas e emocionantes',
-                'slug' => 'drama'
+                
             ]
         ];
 

@@ -17,7 +17,7 @@ class StatesTableSeeder extends Seeder
     public function run()
     {
         // Desabilitar verificação de chave estrangeira
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::statement('PRAGMA foreign_keys = OFF;');
         
         // Limpar a tabela
         DB::table('states')->truncate();
@@ -191,7 +191,7 @@ class StatesTableSeeder extends Seeder
         ]);
 
         // Reabilitar verificação de chave estrangeira
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+         DB::statement('PRAGMA foreign_keys = ON;');
     }
 
 }

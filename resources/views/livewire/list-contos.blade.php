@@ -4,7 +4,7 @@
         <flux:radio.group wire:model.live="selectedCategory" label="Filtrar por categoria" variant="segmented">
             <flux:radio value="">Todas as categorias</flux:radio>
             @foreach($categories as $category)
-                <flux:radio value="{{ $category->id }}">{{ $category->name }}</flux:radio>
+                <flux:radio value="{{ $category->id }}">{{ $category->title }}</flux:radio>
             @endforeach
         </flux:radio.group>
     </div>
@@ -25,27 +25,27 @@
                                              class="w-10 h-10 rounded-full">
                                     </a>
                                     <div>
-                                        <a href="{{ route('user.profile', $conto->user->username) }}" class="font-semibold hover:underline">
+                                        <a href="{{ route('user.profile', $conto->user->username) }}" class="font-semibold hover:underline text-gray-300">
                                             {{ $conto->user->name }}
                                         </a>
-                                        <div class="text-sm">
+                                        <div class="text-sm text-gray-200">
                                             {{ '@' . $conto->user->username }}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-xs text-gray-500">
+                            <div class="text-xs text-gray-300">
                                 {{ $conto->category->name }}
                             </div>
                         </div>
 
                         <div class="break-inside-avoid-page mt-2">
                             <h3 class="text-lg font-semibold p-1">
-                                <a href="{{ route('contos.show', $conto->id) }}" class="hover:text-sky-600 hover:underline">
+                                <a href="{{ route('contos.show', $conto->id) }}" class="hover:text-sky-600 hover:underline text-gray-300">
                                     {{ $conto->title }}
                                 </a>
                             </h3>
-                            <div class="prose dark:prose-invert max-w-none">
+                            <div class="prose dark:prose-invert max-w-none text-gray-300">
                                 {!! Str::limit(strip_tags($conto->content), 100) !!}
                             </div>
                             <div class="flex justify-betweem-items-center gap-3">
