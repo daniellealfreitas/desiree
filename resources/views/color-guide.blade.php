@@ -2,7 +2,7 @@
     <div class="container mx-auto px-4 py-8">
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Guia de Cores de Texto</h1>
-            <p class="text-gray-600 dark:text-gray-400">Este guia apresenta as classes de cores de texto padronizadas para o projeto, garantindo consistência visual e boa legibilidade em todos os temas.</p>
+            <p class="text-gray-600 dark:text-gray-400">Este guia apresenta as classes de cores de texto padronizadas para o projeto, garantindo   visual e boa legibilidade em todos os temas.</p>
         </div>
 
         <x-color-guide />
