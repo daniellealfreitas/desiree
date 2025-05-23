@@ -13,8 +13,8 @@ $getRecentUsers = function () {
     $this->recentUsers = User::with(['userPhotos' => function($query) {
         $query->latest()->take(1);
     }])
-    ->select('id', 'name', 'username', 'last_login_at') // Added 'username'
-    ->orderBy('last_login_at', 'desc')
+    ->select('id', 'name', 'username') // Added 'uszrname'
+    ->orderBy('name', 'desc')
     ->get()
     ->map(function ($user) {
         // Ensure 'username' is included in the user data

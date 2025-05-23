@@ -12,6 +12,7 @@
 <!-- Cropper.js CSS -->
 <link href="<?php echo e(asset('css/cropper.css')); ?>" rel="stylesheet" />
 
+
 <!-- Livewire Styles -->
 <?php echo \Livewire\Mechanisms\FrontendAssets\FrontendAssets::styles(); ?>
 

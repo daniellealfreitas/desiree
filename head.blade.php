@@ -12,7 +12,6 @@
 <!-- Cropper.js CSS -->
 <link href="{{ asset('css/cropper.css') }}" rel="stylesheet" />
 
-
 <!-- Livewire Styles -->
 @livewireStyles
 

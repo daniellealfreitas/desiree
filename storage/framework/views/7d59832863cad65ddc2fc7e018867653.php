@@ -1,3 +1,6 @@
+<?php
+    
+?>
 <!DOCTYPE html>
 <html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>" class="<?php echo e(session('appearance', 'dark')); ?>">
     <head>
@@ -43,8 +46,9 @@ if (isset($__slots)) unset($__slots);
 ?>
 
         <?php
+            use Illuminate\Support\Facades\Storage;
             $latestPhoto = auth()->user()->userPhotos()->latest()->first();
-            $avatarUrl = $latestPhoto ? asset($latestPhoto->photo_path) : asset('images/users/avatar.jpg');
+            $avatarUrl = $latestPhoto ? Storage::url($latestPhoto->photo_path) : asset('images/users/avatar.jpg');
         ?>
 
         <?php if (isset($component)) { $__componentOriginale96c14d638c792103c11b984a4ed1896 = $component; } ?>

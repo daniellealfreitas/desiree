@@ -1,3 +1,6 @@
+@php
+    
+@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ session('appearance', 'dark') }}">
     <head>
@@ -13,8 +16,9 @@
         @livewire('message-notifier')
 
         @php
+            use Illuminate\Support\Facades\Storage;
             $latestPhoto = auth()->user()->userPhotos()->latest()->first();
-            $avatarUrl = $latestPhoto ? asset($latestPhoto->photo_path) : asset('images/users/avatar.jpg');
+            $avatarUrl = $latestPhoto ? Storage::url($latestPhoto->photo_path) : asset('images/users/avatar.jpg');
         @endphp
 
         <flux:header container class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
