@@ -107,7 +107,7 @@
                         <div class="flex items-center">
                             <a href="{{ route('user.profile', $post->user->username) }}" class="flex-shrink-0">
                                 <img
-                                    src="{{ $post->user->userPhotos->first() ? asset('storage/' . $post->user->userPhotos->first()->photo_path) : asset('images/default-avatar.jpg') }}"
+                                    src="{{ $this->getAvatar($post->user->id) }}"
                                     alt="{{ $post->user->name }}"
                                     class="w-10 h-10 rounded-full object-cover"
                                 >
@@ -205,24 +205,85 @@
                     <div class="px-4 py-2 border-t border-gray-200 dark:border-gray-700 flex">
                         <button
                             class="flex-1 flex items-center justify-center py-1 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md"
-                            wire:click="$dispatch('toggleLike', { id: {{ $post->id }} })"
+                            wire:click="toggleLike({{ $post->id }})"
                         >
                             @if($post->isLikedBy(auth()->user()))
                                 <x-flux::icon icon="heart" variant="solid" class="w-5 h-5 mr-2 text-red-500" />
-                                <span>Curtido</span>
+                                <span>Curtido ({{ $post->likedByUsers->count() }})</span>
                             @else
                                 <x-flux::icon icon="heart" class="w-5 h-5 mr-2" />
-                                <span>Curtir</span>
+                                <span>Curtir ({{ $post->likedByUsers->count() }})</span>
                             @endif
                         </button>
 
                         <button
                             class="flex-1 flex items-center justify-center py-1 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-md"
-                            wire:click="$dispatch('focusComment', { id: {{ $post->id }} })"
+                            wire:click="focusComment({{ $post->id }})"
                         >
                             <x-flux::icon icon="chat-bubble-left" class="w-5 h-5 mr-2" />
-                            <span>Comentar</span>
+                            <span>Comentar ({{ $post->comments->count() }})</span>
                         </button>
+                    </div>
+
+                    <!-- Seção de comentários -->
+                    <div class="px-4 py-2 border-t border-gray-200 dark:border-gray-700">
+                        <!-- Formulário de comentário -->
+                        <form wire:submit.prevent="addComment({{ $post->id }})" class="mb-4">
+                            <div class="flex gap-2">
+                                <input
+                                    wire:model="newComment.{{ $post->id }}"
+                                    type="text"
+                                    class="flex-1 p-2 border border-gray-300 dark:border-gray-700 dark:bg-zinc-800 rounded-lg text-gray-700 dark:text-gray-300"
+                                    placeholder="Escreva um comentário..."
+                                    @if(isset($showComments[$post->id]) && $showComments[$post->id])
+                                        x-data="{}"
+                                        x-init="$el.focus()"
+                                    @endif
+                                >
+                                <button
+                                    type="submit"
+                                    class="flex items-center space-x-1 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                                >
+                                    <x-flux::icon icon="paper-airplane" class="w-4 h-4" />
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Lista de comentários -->
+                        @if($post->comments->count() > 0)
+                            <div class="space-y-3 mt-2">
+                                @foreach($post->comments->take(3) as $comment)
+                                    <div class="flex items-start space-x-2">
+                                        <div class="flex-shrink-0">
+                                            <img
+                                                src="{{ $this->getAvatar($comment->user->id) }}"
+                                                alt="{{ $comment->user->name }}"
+                                                class="h-8 w-8 rounded-full object-cover"
+                                            >
+                                        </div>
+                                        <div class="flex-1 bg-gray-100 dark:bg-zinc-700 rounded-lg p-2">
+                                            <div class="font-medium text-gray-900 dark:text-white text-sm">
+                                                {{ $comment->user->name }}
+                                            </div>
+                                            <div class="text-gray-700 dark:text-gray-300 text-sm">
+                                                {{ $comment->body }}
+                                            </div>
+                                            <div class="text-gray-500 dark:text-gray-400 text-xs mt-1">
+                                                {{ $comment->created_at->diffForHumans() }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+
+                                @if($post->comments->count() > 3)
+                                    <div class="text-center">
+                                        <a href="#" class="text-blue-600 dark:text-blue-400 text-sm">
+                                            Ver todos os {{ $post->comments->count() }} comentários
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
+                        @endif
                     </div>
                 </div>
             @endforeach

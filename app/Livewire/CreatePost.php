@@ -82,6 +82,7 @@ class CreatePost extends Component
                 'image' => $imagePath,
                 'video' => $videoPath,
                 'user_id' => auth()->id(),
+                'group_id' => null, // Definindo explicitamente como null para posts fora de grupos
             ]);
 
             if ($post) {

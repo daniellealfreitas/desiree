@@ -216,6 +216,6 @@ class UserManager extends Component
 
         return view('livewire.admin.user-manager', [
             'users' => $users,
-        ])->layout('layouts.admin', ['title' => 'Gerenciar Usuários']);
+        ])->layout('layouts.app', ['title' => 'Gerenciar Usuários']);
     }
 }

@@ -29,7 +29,7 @@ class PostController extends Controller {
         Post::create([
             'content' => $request->content,
             'user_id' => auth()->id(),
-            // 'group_id' => $group->id,
+            'group_id' => $group->id,
         ]);
 
         // Increment user points

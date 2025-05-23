@@ -623,6 +623,6 @@ public function addFunds()
         return view('livewire.admin.wallet-manager', [
             'users' => $users,
             'transactions' => $this->activeModal === 'transactions' ? $this->getUserTransactions() : null,
-        ])->layout('layouts.admin', ['title' => 'Gerenciar Carteiras']);
+        ])->layout('layouts.app', ['title' => 'Gerenciar Carteiras']);
     }
 }
