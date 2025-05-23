@@ -40,7 +40,6 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        // Only admins can create events
         if (!Auth::user()->isAdmin()) {
             return redirect()->route('events.index')
                 ->with('error', 'Você não tem permissão para criar eventos.');
