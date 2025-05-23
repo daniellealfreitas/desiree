@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class EventController extends Controller
 {
@@ -83,23 +84,41 @@ class EventController extends Controller
     /**
      * Display the specified event.
      */
-    public function show($slug)
-    {
-        $event = Event::where('slug', $slug)->firstOrFail();
 
-        // Get related events (same day of week, upcoming)
-        $dayOfWeek = Carbon::parse($event->date)->dayOfWeek;
 
-        $relatedEvents = Event::where('id', '!=', $event->id)
-            ->where('is_active', true)
-            ->whereRaw("strftime('%w', date) = ?", [$dayOfWeek])
-            ->where('date', '>=', now()->format('Y-m-d'))
-            ->orderBy('date')
-            ->limit(3)
-            ->get();
+public function show($slug)
+{
+    $event = Event::where('slug', $slug)->firstOrFail();
 
-        return view('events.show', compact('event', 'relatedEvents'));
+    // Detecção do banco de dados em uso
+    $driver = DB::getDriverName();
+
+    // Pega o dia da semana do evento
+    $carbonDay = Carbon::parse($event->date)->dayOfWeek;
+
+    if ($driver === 'mysql') {
+        // MySQL: WEEKDAY() → segunda = 0 ... domingo = 6
+        $dayOfWeek = $carbonDay === 0 ? 6 : $carbonDay - 1;
+        $query = "WEEKDAY(`date`) = ?";
+    } elseif ($driver === 'sqlite') {
+        // SQLite: strftime('%w', date) → domingo = 0 ... sábado = 6
+        $dayOfWeek = $carbonDay;
+        $query = "strftime('%w', date) = ?";
+    } else {
+        abort(500, "Banco de dados não suportado: $driver");
     }
+
+    $relatedEvents = Event::where('id', '!=', $event->id)
+        ->where('is_active', true)
+        ->whereRaw($query, [$dayOfWeek])
+        ->whereDate('date', '>=', now())
+        ->orderBy('date')
+        ->limit(3)
+        ->get();
+
+    return view('events.show', compact('event', 'relatedEvents'));
+}
+
 
     /**
      * Show the form for editing the specified event.
