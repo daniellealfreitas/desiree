@@ -148,7 +148,7 @@
                             </div>
                         </div>
                         <p class="text-white text-sm mb-2" x-text="post.title"></p>
-                        <p class="text-gray-300 text-xs" x-text="post.content"></p>
+                        <p class="text-gray-100 text-xs" x-text="post.content"></p>
 
                         <!-- Seção de comentários (visível apenas quando showComments é true) -->
                         <div
