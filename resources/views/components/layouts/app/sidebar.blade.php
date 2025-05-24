@@ -1,6 +1,3 @@
-@php
-
-@endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ session('appearance', 'dark') }}">
     <head>
@@ -21,70 +18,7 @@
             $avatarUrl = $latestPhoto ? Storage::url($latestPhoto->photo_path) : asset('images/users/avatar.jpg');
         @endphp
 
-        <!-- Header principal (oculto em mobile) -->
-        <flux:header container class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700 max-lg:hidden">
-            <flux:navbar class="-mb-px">
-                <flux:navbar.item icon="map-pin" :href="route('radar')" >Radar</flux:navbar.item>
-                <flux:navbar.item icon="inbox" badge="{{ auth()->user()->unreadMessagesCount() }}" :href="route('caixa_de_mensagens')">Mensagens</flux:navbar.item>
 
-                @livewire('follow-request-notifications')
-                <livewire:notifications />
-            </flux:navbar>
-            <flux:spacer />
-            <flux:navbar class="me-4">
-                <flux:navbar.item icon="currency-dollar" :href="route('wallet.index')" wire:navigate>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-sm font-medium text-green-400 dark:text-green-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
-                    </div>
-                </flux:navbar.item>
-                <!-- Mini Cart -->
-                @livewire('shop.mini-cart')
-
-                <flux:navbar.item icon="magnifying-glass" href="#" label="Buscar" x-on:click.prevent="$dispatch('open-search-modal')" />
-                <flux:navbar.item icon="cog-6-tooth" :href="route('settings.profile')" label="Settings" />
-                <flux:navbar.item icon="information-circle" href="#" label="Help" />
-            </flux:navbar>
-            <flux:dropdown position="top" align="start">
-                <flux:profile :avatar="$avatarUrl" />
-                <flux:menu>
-                    <flux:menu.radio.group>
-                        <flux:menu.radio checked>{{ auth()->user()->name }}</flux:menu.radio>
-                    </flux:menu.radio.group>
-
-                    <flux:menu.separator />
-                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="'/' . auth()->user()->username">Meu Perfil</flux:menu.item>
-                    <flux:menu.item icon="user-plus" :href="route('follow.requests')" wire:navigate>
-                        Solicitações para seguir
-                        @php
-                            $pendingCount = \App\Models\FollowRequest::where('receiver_id', auth()->id())
-                                ->where('status', 'pending')
-                                ->count();
-                        @endphp
-                        @if($pendingCount > 0)
-                            <span class="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
-                                {{ $pendingCount }}
-                            </span>
-                        @endif
-                    </flux:menu.item>
-                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('settings.profile')">Configurações</flux:menu.item>
-                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('profile.visitors')">Meus Visitantes</flux:menu.item>
-                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('renovar-vip')">Renovar VIP</flux:menu.item>
-                    <flux:menu.item icon="wallet" :href="route('wallet.index')">
-                        <div class="flex items-center justify-between w-full">
-                            <span>Minha Carteira</span>
-                            <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
-                        </div>
-                    </flux:menu.item>
-                    <flux:menu.item icon="credit-card" :href="route('meus-pagamentos')">Meus Pagamentos</flux:menu.item>
-                    <form method="POST" action="{{ route('logout') }}" class="w-full">
-                        @csrf
-                        <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
-                            {{ __('Sair') }}
-                        </flux:menu.item>
-                    </form>
-                </flux:menu>
-            </flux:dropdown>
-        </flux:header>
 
         <flux:sidebar sticky stashable class="border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
@@ -228,6 +162,71 @@
             </flux:dropdown>
         </flux:sidebar>
 
+        <!-- Header principal (oculto em mobile) -->
+        <flux:header container class="bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700 max-lg:hidden">
+            <flux:navbar class="-mb-px">
+                <flux:navbar.item icon="map-pin" :href="route('radar')" >Radar</flux:navbar.item>
+                <flux:navbar.item icon="inbox" badge="{{ auth()->user()->unreadMessagesCount() }}" :href="route('caixa_de_mensagens')">Mensagens</flux:navbar.item>
+
+                @livewire('follow-request-notifications')
+                <livewire:notifications />
+            </flux:navbar>
+            <flux:spacer />
+            <flux:navbar class="me-4">
+                <flux:navbar.item icon="currency-dollar" :href="route('wallet.index')" wire:navigate>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-sm font-medium text-green-400 dark:text-green-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
+                    </div>
+                </flux:navbar.item>
+                <!-- Mini Cart -->
+                @livewire('shop.mini-cart')
+
+                <flux:navbar.item icon="magnifying-glass" href="#" label="Buscar" x-on:click.prevent="$dispatch('open-search-modal')" />
+                <flux:navbar.item icon="cog-6-tooth" :href="route('settings.profile')" label="Settings" />
+                <flux:navbar.item icon="information-circle" href="#" label="Help" />
+            </flux:navbar>
+            <flux:dropdown position="top" align="start">
+                <flux:profile :avatar="$avatarUrl" />
+                <flux:menu>
+                    <flux:menu.radio.group>
+                        <flux:menu.radio checked>{{ auth()->user()->name }}</flux:menu.radio>
+                    </flux:menu.radio.group>
+
+                    <flux:menu.separator />
+                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="'/' . auth()->user()->username">Meu Perfil</flux:menu.item>
+                    <flux:menu.item icon="user-plus" :href="route('follow.requests')" wire:navigate>
+                        Solicitações para seguir
+                        @php
+                            $pendingCount = \App\Models\FollowRequest::where('receiver_id', auth()->id())
+                                ->where('status', 'pending')
+                                ->count();
+                        @endphp
+                        @if($pendingCount > 0)
+                            <span class="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
+                                {{ $pendingCount }}
+                            </span>
+                        @endif
+                    </flux:menu.item>
+                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('settings.profile')">Configurações</flux:menu.item>
+                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('profile.visitors')">Meus Visitantes</flux:menu.item>
+                    <flux:menu.item icon="arrow-right-start-on-rectangle" :href="route('renovar-vip')">Renovar VIP</flux:menu.item>
+                    <flux:menu.item icon="wallet" :href="route('wallet.index')">
+                        <div class="flex items-center justify-between w-full">
+                            <span>Minha Carteira</span>
+                            <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
+                        </div>
+                    </flux:menu.item>
+                    <flux:menu.item icon="credit-card" :href="route('meus-pagamentos')">Meus Pagamentos</flux:menu.item>
+                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                        @csrf
+                        <flux:menu.item as="button" type="submit" icon="arrow-right-start-on-rectangle" class="w-full">
+                            {{ __('Sair') }}
+                        </flux:menu.item>
+                    </form>
+                </flux:menu>
+            </flux:dropdown>
+        </flux:header>
+
         <!-- Mobile User Menu (visível apenas em mobile) -->
         <flux:header class="lg:hidden bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-700">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
@@ -261,66 +260,34 @@
 
                 <flux:menu class="w-[280px]">
                     <flux:menu.radio.group>
-                        <div class="p-0 text-sm font-normal">
-                            <div class="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                                <span class="relative flex h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-                                    <img src="{{ $avatarUrl }}"
-                                         class="h-full w-full object-cover"
-                                         alt="{{ auth()->user()->name }}">
-                                </span>
+                        <flux:menu.radio checked>{{ auth()->user()->name }}</flux:menu.radio>
+                    </flux:menu.radio.group>
 
-                                <div class="grid flex-1 text-left text-sm leading-tight">
-                                    <span class="truncate font-semibold">{{ auth()->user()->name }}</span>
-                                    <span class="truncate text-xs">{{ auth()->user()->email }}</span>
-                                </div>
-                            </div>
+                    <flux:menu.separator />
+                    <flux:menu.item icon="user" :href="'/' . auth()->user()->username" wire:navigate>Meu Perfil</flux:menu.item>
+                    <flux:menu.item icon="user-plus" :href="route('follow.requests')" wire:navigate>
+                        Solicitações para seguir
+                        @php
+                            $pendingCount = \App\Models\FollowRequest::where('receiver_id', auth()->id())
+                                ->where('status', 'pending')
+                                ->count();
+                        @endphp
+                        @if($pendingCount > 0)
+                            <span class="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
+                                {{ $pendingCount }}
+                            </span>
+                        @endif
+                    </flux:menu.item>
+                    <flux:menu.item icon="cog" :href="route('settings.profile')" wire:navigate>Configurações</flux:menu.item>
+                    <flux:menu.item icon="eye" :href="route('profile.visitors')" wire:navigate>Meus Visitantes</flux:menu.item>
+                    <flux:menu.item icon="star" :href="route('renovar-vip')" wire:navigate>Renovar VIP</flux:menu.item>
+                    <flux:menu.item icon="wallet" :href="route('wallet.index')" wire:navigate>
+                        <div class="flex items-center justify-between w-full">
+                            <span>Minha Carteira</span>
+                            <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
                         </div>
-                    </flux:menu.radio.group>
-
-                    <flux:menu.separator />
-
-                    <!-- Navegação principal -->
-                    <flux:menu.radio.group>
-                        <flux:menu.item :href="'/' . auth()->user()->username" icon="user" wire:navigate>{{ __('Meu Perfil') }}</flux:menu.item>
-                        <flux:menu.item :href="route('follow.requests')" icon="user-plus" wire:navigate>
-                            {{ __('Solicitações') }}
-                            @php
-                                $pendingCount = \App\Models\FollowRequest::where('receiver_id', auth()->id())
-                                    ->where('status', 'pending')
-                                    ->count();
-                            @endphp
-                            @if($pendingCount > 0)
-                                <span class="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
-                                    {{ $pendingCount }}
-                                </span>
-                            @endif
-                        </flux:menu.item>
-                        <flux:menu.item :href="route('caixa_de_mensagens')" icon="inbox" wire:navigate>
-                            {{ __('Mensagens') }}
-                            @if(auth()->user()->unreadMessagesCount() > 0)
-                                <span class="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded-full">
-                                    {{ auth()->user()->unreadMessagesCount() }}
-                                </span>
-                            @endif
-                        </flux:menu.item>
-                        <flux:menu.item :href="route('radar')" icon="map-pin" wire:navigate>{{ __('Radar') }}</flux:menu.item>
-                        <flux:menu.item :href="route('grupos.index')" icon="user-group" wire:navigate>{{ __('Grupos') }}</flux:menu.item>
-                        <flux:menu.item :href="route('events.index')" icon="calendar-days" wire:navigate>{{ __('Eventos') }}</flux:menu.item>
-                    </flux:menu.radio.group>
-
-                    <flux:menu.separator />
-
-                    <!-- Configurações e conta -->
-                    <flux:menu.radio.group>
-                        <flux:menu.item :href="route('wallet.index')" icon="wallet" wire:navigate>
-                            <div class="flex items-center justify-between w-full">
-                                <span>{{ __('Carteira') }}</span>
-                                <span class="text-sm font-medium text-indigo-600 dark:text-indigo-400">R$ {{ number_format(auth()->user()->wallet->balance, 2, ',', '.') }}</span>
-                            </div>
-                        </flux:menu.item>
-                        <flux:menu.item :href="route('settings.profile')" icon="cog" wire:navigate>{{ __('Configurações') }}</flux:menu.item>
-                        <flux:menu.item :href="route('profile.visitors')" icon="eye" wire:navigate>{{ __('Visitantes') }}</flux:menu.item>
-                    </flux:menu.radio.group>
+                    </flux:menu.item>
+                    <flux:menu.item icon="credit-card" :href="route('meus-pagamentos')" wire:navigate>Meus Pagamentos</flux:menu.item>
 
                     <flux:menu.separator />
 
