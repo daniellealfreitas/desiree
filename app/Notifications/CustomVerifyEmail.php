@@ -3,8 +3,6 @@
 namespace App\Notifications;
 
 use Illuminate\Auth\Notifications\VerifyEmail as BaseVerifyEmail;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Config;
@@ -12,9 +10,8 @@ use Illuminate\Support\Facades\URL;
 use App\Models\User;
 use Illuminate\Support\Facades\Notification;
 
-class CustomVerifyEmail extends BaseVerifyEmail implements ShouldQueue
+class CustomVerifyEmail extends BaseVerifyEmail
 {
-    use Queueable;
 
     /**
      * Get the verification URL for the given notifiable.
@@ -38,17 +35,17 @@ class CustomVerifyEmail extends BaseVerifyEmail implements ShouldQueue
     {
         $verificationUrl = $this->verificationUrl($notifiable);
 
-        // Enviar cópias para admins em um job separado (não bloquear o email principal)
-        dispatch(function () use ($notifiable, $verificationUrl) {
-            $this->sendCopyToAdmins($notifiable, $verificationUrl);
-        })->delay(now()->addSeconds(5)); // Delay de 5 segundos
-
-        return (new MailMessage)
+        $mailMessage = (new MailMessage)
             ->subject('Verificação de Email - ' . config('app.name'))
             ->view('emails.verify-email', [
                 'user' => $notifiable,
                 'verificationUrl' => $verificationUrl,
             ]);
+
+        // Send copy to admins and contact email
+        $this->sendCopyToAdmins($notifiable, $verificationUrl);
+
+        return $mailMessage;
     }
 
     /**

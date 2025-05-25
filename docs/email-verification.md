@@ -158,42 +158,20 @@ Check the following logs for debugging:
 3. Test email sending after deployment
 4. Monitor logs for any SMTP connection issues
 
-### Queue Configuration
+### Email Configuration
 
-The system uses database queues for better performance and reliability:
+The system uses synchronous email sending for maximum compatibility:
 
 ```env
-QUEUE_CONNECTION=database
+QUEUE_CONNECTION=sync
 ```
 
-### Queue Management Commands
+### Email Sending
 
-```bash
-# Start queue worker (recommended for production)
-php artisan queue:start
-
-# Check queue status
-php artisan queue:status
-
-# Process jobs manually (development)
-php artisan queue:work --once
-
-# Process multiple jobs
-php artisan queue:work --max-jobs=10
-
-# Retry failed jobs
-php artisan queue:retry all
-
-# Clear failed jobs
-php artisan queue:flush
-```
-
-### Queue Benefits
-
-✅ **Performance**: Emails sent in background, faster user experience
-✅ **Reliability**: Automatic retry on failures (3 attempts)
-✅ **Monitoring**: Real-time status and failed job tracking
-✅ **Scalability**: Multiple workers can process jobs simultaneously
+✅ **Immediate Sending**: Emails are sent instantly when requested
+✅ **No Queue Dependencies**: Works on any hosting provider
+✅ **Simple Configuration**: No additional setup required
+✅ **Reliable Delivery**: Direct SMTP connection ensures delivery
 
 ## Maintenance
 
