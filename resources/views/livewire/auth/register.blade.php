@@ -72,11 +72,12 @@ new #[Layout('components.layouts.auth')] class extends Component
             // Registrar o evento
             event(new Registered($user));
 
-            // Fazer login
+            // Fazer login para que o usuário possa acessar a página de verificação
             Auth::login($user);
 
-            // Redirecionar
-            $this->redirectIntended(route('dashboard', absolute: false), navigate: true);
+            // Redirecionar para página de verificação de email com mensagem de sucesso
+            session()->flash('status', 'registration-success');
+            $this->redirect(route('verification.notice'), navigate: true);
         } catch (\Exception $e) {
             // Log do erro
             \Illuminate\Support\Facades\Log::error('Erro no registro: ' . $e->getMessage());

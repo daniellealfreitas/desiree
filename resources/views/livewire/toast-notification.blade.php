@@ -9,13 +9,12 @@
             // Comentado para evitar loop de refresh
             // if ($wire) $wire.refreshComponent();
         });
-
         // Log para debug
         console.log('Toast notification component initialized');
     "
 >
     <!-- Botão de teste escondido, acessível apenas via código -->
-    <div class="hidden">
+    <div class="">
         <button
             id="toast-test-button"
             wire:click="testToast"

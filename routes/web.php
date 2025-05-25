@@ -31,6 +31,81 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+// Rota de teste para debug
+Route::get('/debug-auth', function () {
+    if (auth()->check()) {
+        $user = auth()->user();
+        return "Usuário logado: {$user->email} | Verificado: " . ($user->hasVerifiedEmail() ? 'SIM' : 'NÃO');
+    }
+    return "Usuário não logado";
+});
+
+// Rota de teste simples para verificação
+Route::get('/test-verify-simple', function () {
+    if (!auth()->check()) {
+        return 'Usuário não logado - <a href="/login">Fazer login</a>';
+    }
+
+    return 'Página de verificação funcionando! Usuário: ' . auth()->user()->email;
+});
+
+// Rota de verificação de email (principal)
+Route::get('/verify-email', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    $user = auth()->user();
+
+    // Se já está verificado, redireciona para dashboard
+    if ($user->hasVerifiedEmail()) {
+        return redirect()->route('dashboard')->with('success', 'Seu email já foi verificado!');
+    }
+
+    return view('auth.verify-email');
+})->name('verification.notice');
+
+// Rota alternativa para verificação de email
+Route::get('/verificar-email', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    $user = auth()->user();
+
+    // Se já está verificado, redireciona para dashboard
+    if ($user->hasVerifiedEmail()) {
+        return redirect()->route('dashboard')->with('success', 'Seu email já foi verificado!');
+    }
+
+    return view('auth.verify-email');
+})->name('verification.alternative');
+
+// Rota para reenviar email de verificação
+Route::post('/email/verification-notification', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    $user = auth()->user();
+
+    if ($user->hasVerifiedEmail()) {
+        return redirect()->route('dashboard');
+    }
+
+    $user->sendEmailVerificationNotification();
+
+    return back()->with('status', 'verification-link-sent');
+})->middleware('throttle:6,1')->name('verification.send');
+
+// Rota de verificação de email (backup)
+Route::get('/verify-email-backup', function () {
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+    return view('auth.verify-email');
+})->name('verification.backup');
+
 
 Route::get('/checkout', function () {
     return view('checkout');
@@ -38,36 +113,36 @@ Route::get('/checkout', function () {
 
 
 Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified.redirect'])
     ->name('dashboard');
 
 Route::view('busca', 'busca')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified.redirect'])
     ->name('busca');
 
 
 Route::get('/contos', function () {
     return view('contos');
-})->middleware(['auth', 'verified'])->name('contos');
+})->middleware(['auth', 'verified.redirect'])->name('contos');
 
 Route::get('/contos/{id}', function($id) {
     $conto = App\Models\Conto::with(['user', 'category'])->find($id);
     return view('livewire.show-conto', compact('conto'));
-})->middleware(['auth', 'verified'])->name('contos.show');
+})->middleware(['auth', 'verified.redirect'])->name('contos.show');
 
 
 Route::get('feed_imagens', function () {
     $posts = Post::whereNotNull('image')->get();
     return view('feed_imagens', compact('posts'));
-})->middleware(['auth', 'verified'])->name('feed_imagens');
+})->middleware(['auth', 'verified.redirect'])->name('feed_imagens');
 
 Route::get('feed_videos', App\Livewire\VideoFeed::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified.redirect'])
     ->name('feed_videos');
 
 
 // Rotas de eventos
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified.redirect'])->group(function () {
     Route::get('/eventos', [App\Http\Controllers\EventController::class, 'index'])->name('events.index');
     Route::get('/eventos/{slug}', [App\Http\Controllers\EventController::class, 'show'])->name('events.show');
     Route::post('/eventos/{event}/registrar', [App\Http\Controllers\EventAttendeeController::class, 'register'])->name('events.register');
@@ -128,27 +203,27 @@ Route::prefix('grupos')->name('grupos.')->middleware(['auth', 'verified'])->grou
 
 
 Route::view('bate_papo', 'bate_papo')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified.redirect'])
     ->name('bate_papo');
 
 
 Route::get('caixa_de_mensagens', function() {
     return view('caixa_de_mensagens');
 })
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified.redirect'])
     ->name('caixa_de_mensagens');
 
 // Rota para o componente de mensagens
 Route::get('messages', App\Livewire\Messages::class)
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified.redirect'])
     ->name('messages');
 
 Route::view('renovar-vip', 'renovar-vip')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified.redirect'])
     ->name('renovar-vip');
 
 // Rotas de assinatura VIP
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified.redirect'])->group(function () {
     Route::post('/vip/checkout', [App\Http\Controllers\VipSubscriptionController::class, 'createCheckoutSession'])->name('vip.checkout');
     Route::get('/vip/pagamento/sucesso/{subscription}', [App\Http\Controllers\VipSubscriptionController::class, 'paymentSuccess'])->name('vip.payment.success');
     Route::get('/vip/pagamento/cancelar/{subscription}', [App\Http\Controllers\VipSubscriptionController::class, 'paymentCancel'])->name('vip.payment.cancel');
@@ -158,11 +233,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::post('/stripe/webhook', [App\Http\Controllers\StripeWebhookController::class, 'handleWebhook']);
 
 Route::view('mindmap', 'mindmap')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified.redirect'])
     ->name('mindmap');
 
 Route::view('pesquisas', 'pesquisas')
-    ->middleware(['auth', 'verified'])
+    ->middleware(['auth', 'verified.redirect'])
     ->name('pesquisas');
 
 Route::view('loja-virtual', 'loja-virtual')

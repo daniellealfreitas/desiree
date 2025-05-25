@@ -6,6 +6,7 @@ use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Symfony\Component\HttpFoundation\Response;
 
 class RedirectIfAuthenticated
@@ -21,6 +22,14 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
+                $user = Auth::guard($guard)->user();
+
+                // Se o usuário está logado mas não verificado, redireciona para verificação
+                if ($user instanceof MustVerifyEmail && !$user->hasVerifiedEmail()) {
+                    return redirect()->route('verification.notice');
+                }
+
+                // Se está verificado, redireciona para dashboard
                 return redirect()->route('dashboard');
             }
         }

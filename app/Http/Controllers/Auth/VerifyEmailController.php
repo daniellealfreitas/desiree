@@ -15,7 +15,8 @@ class VerifyEmailController extends Controller
     public function __invoke(EmailVerificationRequest $request): RedirectResponse
     {
         if ($request->user()->hasVerifiedEmail()) {
-            return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+            return redirect()->intended(route('dashboard', absolute: false))
+                ->with('success', 'Seu email já foi verificado anteriormente. Bem-vindo de volta!');
         }
 
         if ($request->user()->markEmailAsVerified()) {
@@ -23,8 +24,12 @@ class VerifyEmailController extends Controller
             $user = $request->user();
 
             event(new Verified($user));
+
+            return redirect()->intended(route('dashboard', absolute: false))
+                ->with('success', 'Email verificado com sucesso! Bem-vindo ao ' . config('app.name') . '!');
         }
 
-        return redirect()->intended(route('dashboard', absolute: false).'?verified=1');
+        return redirect()->intended(route('dashboard', absolute: false))
+            ->with('error', 'Não foi possível verificar seu email. Tente novamente.');
     }
 }
